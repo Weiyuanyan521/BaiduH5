@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:background="@color/bai"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="47dp">
+        <TextView
+            android:id="@+id/tab_homepage"
+            android:gravity="center"
+            android:text="首页"
+            android:textColor="@color/color_selector_tabmain"
+            android:textSize="10sp"
+            android:drawableTop="@drawable/drawable_selector_tab_homepage"
+            android:paddingTop="6dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tab_vidopage"
+            android:gravity="center"
+            android:text="视频"
+            android:textColor="@color/color_selector_tabmain"
+            android:textSize="10sp"
+            android:drawableTop="@drawable/drawable_selector_tab_homepage"
+            android:paddingTop="6dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tab_imagepage"
+            android:gravity="center"
+            android:text="图片"
+            android:textColor="@color/color_selector_tabmain"
+            android:textSize="10sp"
+            android:drawableTop="@drawable/drawable_selector_tab_homepage"
+            android:paddingTop="6dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tab_personpage"
+            android:gravity="center"
+            android:text="关于"
+            android:textColor="@color/color_selector_tabmain"
+            android:textSize="10sp"
+            android:drawableTop="@drawable/drawable_selector_tab_personpage"
+            android:paddingTop="6dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_above="@id/bottom_bar"
+        android:background="@color/actionbar_content_divier_color"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_above="@id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <!--<com.haokan.baiduh5.custompage.Custom_Homepage-->
+        <!--android:visibility="gone"-->
+        <!--android:id="@+id/main_homepage"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+    <!--<com.haokan.baiduh5.custompage.Custom_Videopage-->
+        <!--android:visibility="invisible"-->
+        <!--android:id="@+id/main_videopage"-->
+        <!--android:layout_above="@id/divider"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+    <!--<WebView-->
+        <!--android:visibility="invisible"-->
+        <!--android:id="@+id/main_imagepage"-->
+        <!--android:layout_above="@id/divider"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"   >-->
+    <!--</WebView>-->
+
+    <!--<com.haokan.baiduh5.custompage.Custom_Personpage-->
+        <!--android:visibility="gone"-->
+        <!--android:id="@+id/main_personpage"-->
+        <!--android:layout_above="@id/divider"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+    <!--<include-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_above="@id/divider"-->
+        <!--android:id="@+id/layout_loading"-->
+        <!--layout="@layout/layout_loading_withbg"/>-->
+</RelativeLayout>
