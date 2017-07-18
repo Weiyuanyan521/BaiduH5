@@ -19,8 +19,8 @@ import java.util.ArrayList;
 public class FragmentHomePage extends FragmentBase{
     private View mView;
     private AdapterHomepageVp mAdaperMainHomepage;
-    private final String[] mImgFenLei = new String[] {"推荐", "娱乐", "图片", "搞笑", "美女", "时尚", "热点", "科技", "体育", "军事", "汽车", "财经"};
-    private final String[] mImgFLIds  = new String[] {"1022", "1001", "1003","1025", "1024", "1009", "1021", "1013", "1002", "1012", "1007","1006"};
+    private final String[] mImgFenLei = new String[] {"推荐", "娱乐", "搞笑", "美女", "时尚", "热点", "科技", "体育", "军事", "汽车", "财经"};
+    private final String[] mImgFLIds  = new String[] {"1022", "1001","1025", "1024", "1009", "1021", "1013", "1002", "1012", "1007","1006"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

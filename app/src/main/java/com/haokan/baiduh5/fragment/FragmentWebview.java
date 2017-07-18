@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
 import android.webkit.SslErrorHandler;
@@ -37,6 +39,7 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
     private String mWeb_Url;
 
     public static FragmentWebview newInstance(TypeBean type) {
+        LogHelper.d("wangzixu", "FragmentWebview newInstance");
         Bundle args = new Bundle();
         args.putParcelable(TYPE_BEAN, type);
         FragmentWebview f = new FragmentWebview();
@@ -64,12 +67,15 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
     private void loadData() {
         showLoadingLayout();
         if (mTypeBean != null) {
-            mWeb_Url = "https://cpu.baidu.com/" + mTypeBean.id + "/270872471";
+            mWeb_Url = "https://cpu.baidu.com/wap/" + mTypeBean.id + "/270872471"
+                    +
+                    "?chk=1"
+                    ;
         } else {
             mWeb_Url = "https://image.baidu.com";
         }
 
-//        LogHelper.i("WebViewActivity", "loadData mweburl = " + mWeb_Url);
+        LogHelper.i("WebViewFagment", "loadData mweburl = " + mWeb_Url);
         if (mWeb_Url.startsWith("www")) {
             mWeb_Url = "http://" + mWeb_Url;
         }
@@ -111,9 +117,8 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setAppCacheEnabled(true);
-//        settings.setAppCachePath(CacheManager.getWebViewAppCacheDir(getApplicationContext()).getAbsolutePath());
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        settings.setAppCacheMaxSize(1024 * 1024 * 200);
+        settings.setAppCacheMaxSize(1024 * 1024 * 100);
         settings.setAllowFileAccess(true);
         settings.setBuiltInZoomControls(false);
         settings.setDatabaseEnabled(true);
@@ -121,6 +126,10 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
         settings.setGeolocationEnabled(true);
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
+        }
 
         mWebView.setDownloadListener(new DownloadListener() {//实现文件下载功能
             @Override
@@ -166,6 +175,14 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
             public void onPageFinished(WebView view, String url) {
                 mWeb_Url = url;
                 LogHelper.i(mTypeBean.toString(), "onPageFinished mweburl = " + url);
+
+                if (url.equals("http://m.levect.com/appcpu.html?siteId=270872471&channelId=1057")) {
+                    String web_Url = "https://cpu.baidu.com/wap/" + mTypeBean.id + "/270872471"
+//                    +
+//                    "?chk=1"
+                    ;
+                    mWebView.loadUrl(web_Url);
+                }
 //                dismissAllPromptLayout();
 //                String title = mWebView.getTitle();
 //                if (!TextUtils.isEmpty(title)) {
@@ -179,12 +196,6 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-//                LogHelper.i("WebViewActivity", "onProgressChanged newProgress = " + newProgress);
-//                if (newProgress > 0 && newProgress < 80) {
-//                    showLoadingLayout();
-//                } else {
-//                    dismissAllPromptLayout();
-//                }
                 if (newProgress > 60) {
                     dismissAllPromptLayout();
                 }
@@ -202,6 +213,8 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
                 callback.invoke(origin, true, false);
             }
         });
+
+        mWebView.setBackgroundColor(1);
     }
 
     /**

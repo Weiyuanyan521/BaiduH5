@@ -7,12 +7,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
@@ -30,6 +32,8 @@ import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
+
+import java.net.URLEncoder;
 
 public class ActivityWebview extends ActivityBase implements View.OnClickListener {
     public static final String KEY_INTENT_WEB_URL = "url";
@@ -70,7 +74,13 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private void loadData() {
         if (getIntent().getData() != null) {
             Uri uri = getIntent().getData();
-            mWeb_Url = uri.getQueryParameter(KEY_INTENT_WEB_URL);
+            String url = uri.getQueryParameter(KEY_INTENT_WEB_URL);
+            try {
+                mWeb_Url = "http://m.levect.com/appcpudetail.html?url=" + URLEncoder.encode(url, "UTF-8");
+            } catch (Exception e) {
+                e.printStackTrace();
+                mWeb_Url = url;
+            }
         } else {
             mWeb_Url = getIntent().getStringExtra(KEY_INTENT_WEB_URL);
         }
@@ -80,13 +90,12 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
             return;
         }
 
-//        LogHelper.i("WebViewActivity", "loadData mweburl = " + mWeb_Url);
+        LogHelper.i("WebViewActivity", "loadData mweburl = " + mWeb_Url);
         if (mWeb_Url.startsWith("www")) {
             mWeb_Url = "http://" + mWeb_Url;
         }
         if (mWeb_Url.startsWith("http") || mWeb_Url.startsWith("https")) {
             mProgressHorizontal.setVisibility(View.VISIBLE);
-            mProgressHorizontal.setProgress(5);
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -102,7 +111,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         ImageView back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(this);
 
-        mTvClose = findViewById(R.id.tv_close);
+        mTvClose = findViewById(R.id.close);
         mTvClose.setOnClickListener(this);
 
         mTitle = (TextView) findViewById(R.id.title);
@@ -115,7 +124,6 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private void initWebView() {
         mWebView.setHorizontalScrollBarEnabled(false);//水平不显示
         mWebView.setVerticalScrollBarEnabled(false); //垂直不显示
-//        mWebView.addJavascriptInterface(this, "netdisk");
 
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -124,7 +132,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         settings.setAppCacheEnabled(true);
 //        settings.setAppCachePath(CacheManager.getWebViewAppCacheDir(getApplicationContext()).getAbsolutePath());
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        settings.setAppCacheMaxSize(1024 * 1024 * 200);
+        settings.setAppCacheMaxSize(1024 * 1024 * 100);
         settings.setAllowFileAccess(true);
         settings.setBuiltInZoomControls(false);
         settings.setDatabaseEnabled(true);
@@ -132,6 +140,10 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         settings.setGeolocationEnabled(true);
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
+        }
 
         mWebView.setDownloadListener(new DownloadListener() {//实现文件下载功能
             @Override
@@ -155,20 +167,6 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                     return true;
                 }
             }
-
-//            @Override
-//            public void onLoadResource(WebView view, String url) {
-//                LogHelper.i("WebViewActivity", "onLoadResource mweburl = " + url);
-//                super.onLoadResource(view, url);
-//            }
-
-//            @Override
-//            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-//                if (url.contains("/detail/")) {
-//                    LogHelper.i("WebViewActivity", "shouldInterceptRequest mweburl = " + url);
-//                }
-//                return super.shouldInterceptRequest(view,url);
-//            }
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -198,7 +196,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress > 0 && newProgress < 100) {
+                if (newProgress > 0 && newProgress < 90) {
                     mProgressHorizontal.setVisibility(View.VISIBLE);
                     mProgressHorizontal.setProgress(newProgress);
                 } else {
@@ -221,9 +219,9 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         int id = v.getId();
         switch (id) {
             case R.id.back:
-                mWebView.goBack();
+                onBackPressed();
                 break;
-            case R.id.tv_close:
+            case R.id.close:
                 finish();
                 overridePendingTransition(R.anim.activity_in_left2right, R.anim.activity_out_left2right);
                 break;

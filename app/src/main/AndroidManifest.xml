@@ -26,10 +26,13 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data android:value="596d83f182b6354e8e0016a8" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="Default" android:name="UMENG_CHANNEL"/>
 
         <activity
             android:name=".activity.ActivitySplash"
@@ -40,6 +43,10 @@
             </intent-filter>
         </activity>
 
+        <!--好看的广告sdk-->
+        <activity android:name="com.haokan.sdk.Activity.WebViewActivity"
+                  android:screenOrientation="portrait"/>
+
         <activity
             android:name=".activity.ActivityMain"
             android:launchMode="singleTask"
@@ -48,6 +55,11 @@
 
         <activity
             android:name=".activity.ActivityWebview"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".activity.ActivityAboutUs"
             android:screenOrientation="portrait">
         </activity>
     </application>

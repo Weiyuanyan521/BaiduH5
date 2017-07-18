@@ -9,48 +9,47 @@
     <LinearLayout
         android:id="@+id/title_layout"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="44dp"
         android:orientation="horizontal"
         android:layout_alignParentTop="true"
         android:background="@color/bai" >
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="44dp"
+            android:layout_width="38dp"
             android:layout_height="match_parent"
             android:scaleType="center"
-            android:background="@drawable/drawable_selector_touming"
+            android:background="@drawable/drawable_selector_touming_borderless"
             android:src="@drawable/icon_back_1" />
 
-        <TextView
-            android:id="@+id/tv_close"
-            android:text="@string/close"
-            android:gravity="center"
-            android:layout_toRightOf="@id/back"
-            android:paddingLeft="3dp"
-            android:paddingRight="7dp"
-            android:textSize="14sp"
-            android:textColor="@color/color_selector_333333"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="38dp"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:background="@drawable/drawable_selector_touming_borderless"
+            android:src="@drawable/close" />
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:text=""
-            android:layout_centerInParent="true"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:maxLines="1"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="5dp"
             android:ellipsize="end"
-            android:textColor="#7f7f7f"
+            android:textColor="#666666"
             android:textSize="15sp" />
-        <View
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#cccccc"/>
     </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_below="@id/title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
 
     <ProgressBar
         android:id="@+id/progress_horizontal"
@@ -63,7 +62,7 @@
 
     <WebView
         android:id="@+id/webView"
-        android:layout_below="@+id/progress_horizontal"
+        android:layout_below="@+id/divider"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"   >
     </WebView>

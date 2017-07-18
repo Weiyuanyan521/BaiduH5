@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionbar_h"
         app:tabMinWidth="1dp"
-        app:tabIndicatorHeight="1dp"
+        app:tabIndicatorHeight="0dp"
         app:tabIndicatorColor="@color/colorMainStatus"
         app:tabMode="scrollable"
         app:tabTextColor="#555555"

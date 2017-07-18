@@ -4,4 +4,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
+    </WebView>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/tv_copy_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="false"
+            android:layout_marginBottom="20dp"
+            android:text="@string/app_copyright"
+            android:textColor="#999999"
+            android:textSize="10sp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="50dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="14dp"
+                android:text="@string/haokan_slogan"
+                android:textColor="#666666"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <com.haokan.sdk.view.MediaView
+        android:layout_above="@id/rl_bottom"
+        android:id="@+id/ad_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/jumpad"
+        android:layout_width="63dp"
+        android:layout_height="27dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/drawable_selector_splash_jumpbtn"
+        android:gravity="center"
+        android:text="@string/skip"
+        android:textColor="@color/bai"
+        android:textSize="13sp" />
 </RelativeLayout>

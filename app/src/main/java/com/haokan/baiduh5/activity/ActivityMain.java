@@ -5,13 +5,15 @@ import android.os.SystemClock;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.haokan.baiduh5.R;
+import com.haokan.baiduh5.bean.TypeBean;
+import com.haokan.baiduh5.fragment.FragmentBase;
 import com.haokan.baiduh5.fragment.FragmentHomePage;
+import com.haokan.baiduh5.fragment.FragmentPersonpagePage;
 import com.haokan.baiduh5.fragment.FragmentVideoPage;
-import com.haokan.baiduh5.util.StatusBarUtil;
+import com.haokan.baiduh5.fragment.FragmentWebview;
 import com.haokan.baiduh5.util.ToastManager;
 
 
@@ -26,13 +28,14 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     private TextView mTabPersonpage;
     private FragmentHomePage mHomePage;
     private FragmentVideoPage mVideoPage;
-    private WebView mWebView;
+    private FragmentWebview mImagePage;
+    private FragmentPersonpagePage mPersonPage;
+    private FragmentBase mCurrentFragment;
     private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
-        StatusBarUtil.setStatusBarBgColor(this, R.color.colorMainStatus);
         setContentView(R.layout.activity_main);
         initView();
     }
@@ -56,6 +59,9 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v == mTabHomepage) {
+            if (mCurrentFragment != null && mHomePage == mCurrentFragment) {
+                return;
+            }
             FragmentTransaction fragmentTransaction =  mFragmentManager.beginTransaction();
             if (mHomePage == null) {
                 mHomePage = new FragmentHomePage();
@@ -63,17 +69,20 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             } else {
                 fragmentTransaction.show(mHomePage);
             }
-
-            if (mVideoPage != null) {
-                fragmentTransaction.hide(mVideoPage);
+            if (mCurrentFragment != null) {
+                fragmentTransaction.hide(mCurrentFragment);
             }
             fragmentTransaction.commitNowAllowingStateLoss();
+            mCurrentFragment = mHomePage;
 
             mTabHomepage.setSelected(true);
             mTabVideopage.setSelected(false);
             mTabImagepage.setSelected(false);
             mTabPersonpage.setSelected(false);
         } else if (v == mTabVideopage) {
+            if (mCurrentFragment != null && mVideoPage == mCurrentFragment) {
+                return;
+            }
             FragmentTransaction fragmentTransaction =  mFragmentManager.beginTransaction();
             if (mVideoPage == null) {
                 mVideoPage = new FragmentVideoPage();
@@ -82,49 +91,63 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
                 fragmentTransaction.show(mVideoPage);
             }
 
-            if (mHomePage != null) {
-                fragmentTransaction.hide(mHomePage);
+            if (mCurrentFragment != null) {
+                fragmentTransaction.hide(mCurrentFragment);
             }
             fragmentTransaction.commitNowAllowingStateLoss();
+            mCurrentFragment = mVideoPage;
 
             mTabHomepage.setSelected(false);
             mTabVideopage.setSelected(true);
             mTabImagepage.setSelected(false);
             mTabPersonpage.setSelected(false);
         } else if (v == mTabImagepage) {
-//            if (mWebView.getVisibility() == View.VISIBLE) {
-//                return;
-//            }
-//            mTabHomepage.setSelected(false);
-//            mTabVideopage.setSelected(false);
-//            mTabImagepage.setSelected(true);
-//            mTabPersonpage.setSelected(false);
-//
-//            if (!mIsLoadedWeb) {
-//                mIsLoadedWeb = true;
-//                showLoadingLayout();
-//                mWebView.loadUrl("https://cpu.baidu.com/1003/270872471");
-//            }
-//
-//            mHomePage.setVisibility(View.INVISIBLE);
-//            mVideoPage.setVisibility(View.INVISIBLE);
-//            mWebView.setVisibility(View.VISIBLE);
-//            mPersonPage.setVisibility(View.INVISIBLE);
+            if (mCurrentFragment != null && mImagePage == mCurrentFragment) {
+                return;
+            }
+            FragmentTransaction fragmentTransaction =  mFragmentManager.beginTransaction();
+            if (mImagePage == null) {
+                TypeBean bean = new TypeBean();
+                bean.name = "图集";
+                bean.id = "1003";
+                mImagePage = FragmentWebview.newInstance(bean);
+                fragmentTransaction.add(R.id.fragment_container, mImagePage);
+            } else {
+                fragmentTransaction.show(mImagePage);
+            }
+
+            if (mCurrentFragment != null) {
+                fragmentTransaction.hide(mCurrentFragment);
+            }
+            fragmentTransaction.commitNowAllowingStateLoss();
+            mCurrentFragment = mImagePage;
+
+            mTabHomepage.setSelected(false);
+            mTabVideopage.setSelected(false);
+            mTabImagepage.setSelected(true);
+            mTabPersonpage.setSelected(false);
         } else if (v == mTabPersonpage) {
-//            if (mPersonPage != null && mPersonPage.getVisibility() == View.VISIBLE) {
-//                return;
-//            }
-//            mTabHomepage.setSelected(false);
-//            mTabVideopage.setSelected(false);
-//            mTabImagepage.setSelected(false);
-//            mTabPersonpage.setSelected(true);
-//
-//            mPersonPage.init(this);
-//
-//            mHomePage.setVisibility(View.INVISIBLE);
-//            mVideoPage.setVisibility(View.INVISIBLE);
-//            mWebView.setVisibility(View.INVISIBLE);
-//            mPersonPage.setVisibility(View.VISIBLE);
+            if (mCurrentFragment != null && mPersonPage == mCurrentFragment) {
+                return;
+            }
+            FragmentTransaction fragmentTransaction =  mFragmentManager.beginTransaction();
+            if (mPersonPage == null) {
+                mPersonPage = new FragmentPersonpagePage();
+                fragmentTransaction.add(R.id.fragment_container, mPersonPage);
+            } else {
+                fragmentTransaction.show(mPersonPage);
+            }
+            mPersonPage.updataCacheSize();
+            if (mCurrentFragment != null) {
+                fragmentTransaction.hide(mCurrentFragment);
+            }
+            fragmentTransaction.commitNowAllowingStateLoss();
+            mCurrentFragment = mPersonPage;
+
+            mTabHomepage.setSelected(false);
+            mTabVideopage.setSelected(false);
+            mTabImagepage.setSelected(false);
+            mTabPersonpage.setSelected(true);
         }
     }
 

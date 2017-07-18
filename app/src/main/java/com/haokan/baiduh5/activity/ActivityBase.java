@@ -3,7 +3,9 @@ package com.haokan.baiduh5.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
 import com.haokan.baiduh5.util.ToastManager;
+import com.umeng.analytics.MobclickAgent;
 
 
 /**
@@ -19,10 +21,12 @@ public class ActivityBase extends AppCompatActivity {
 
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
     }
 
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override
