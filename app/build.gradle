@@ -14,8 +14,41 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('haokankey')
+            storePassword "fr33d0m"
+            keyAlias "好看新闻"
+            keyPassword "fr33d0m"
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        //abortOnError false
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4G"
     }
 }
 
