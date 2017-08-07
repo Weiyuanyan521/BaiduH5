@@ -345,4 +345,5 @@ public class CommonUtil {
             return Values.ImageSize.SIZE_1080x1920;
         }
     }
+
 }

@@ -54,11 +54,12 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <com.haokan.sdk.view.MediaView
+    <FrameLayout
+        android:id="@+id/adwrapper"
         android:layout_above="@id/rl_bottom"
-        android:id="@+id/ad_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+    </FrameLayout>
 
     <TextView
         android:visibility="gone"

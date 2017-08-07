@@ -13,6 +13,11 @@ import com.umeng.analytics.MobclickAgent;
  */
 public class ActivityBase extends AppCompatActivity {
     protected volatile boolean mIsDestory;
+    protected boolean mHasFragment = false;
+
+    public void setHasFragment(boolean hasFragment) {
+        mHasFragment = hasFragment;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

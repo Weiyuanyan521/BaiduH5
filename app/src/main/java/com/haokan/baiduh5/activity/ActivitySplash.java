@@ -3,7 +3,6 @@ package com.haokan.baiduh5.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -11,10 +10,10 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
@@ -24,25 +23,19 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 
+import com.baidu.mobads.SplashAd;
+import com.baidu.mobads.SplashAdListener;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
-import com.haokan.baiduh5.util.Values;
-import com.haokan.sdk.HaokanADManager;
-import com.haokan.sdk.callback.AdClickListener;
-import com.haokan.sdk.callback.EffectiveAdListener;
-import com.haokan.sdk.callback.HaokanADInterface;
-import com.haokan.sdk.model.AdData;
-import com.haokan.sdk.utils.AdTypeCommonUtil;
-import com.haokan.sdk.view.MediaView;
 
 public class ActivitySplash extends ActivityBase implements View.OnClickListener {
     public static final String TAG = "SplashActivity";
-    private TextView mTvJumpAd;
+//    private TextView mTvJumpAd;
     private static final int REQUEST_CODE_PERMISSION_STORAGE = 201;
     private static final int REQUEST_CODE_SETTING_PERMISSION = 202;
     private Handler mHandler = new Handler();
@@ -50,7 +43,8 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
     private WebView mWebView;
     private boolean mIsLoadWeb = false;
     private boolean mHasLoadAd = false;
-    private MediaView mAdMediaView;
+    private FrameLayout mAdwraper;
+    private SplashAd mSplashAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,41 +54,60 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
         setContentView(R.layout.activity_splash);
         StatusBarUtil.setStatusBarTransparnet(this);
 
-        App.init(this);
         initView();
         checkStoragePermission(); //检查是否有相应权限
     }
 
     private void initView() {
-        String cookie = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            cookie = CookieManager.getInstance().getCookie(".baidu.com");
-        } else {
-            CookieManager instance = CookieManager.getInstance();
-            instance.removeExpiredCookie();
-            cookie = instance.getCookie(".baidu.com");
-        }
-        LogHelper.d(TAG, "initView cookie = " + cookie);
         mWebView = (WebView) findViewById(R.id.webView);
         initWebView();
         mWebView.loadUrl("http://m.levect.com/appcpu.html?siteId=270872471&channelId=1057");
 
         //好看广告相关
-        mTvJumpAd = (TextView) findViewById(R.id.jumpad);
-        mTvJumpAd.setOnClickListener(this);
-        mAdMediaView = (MediaView)this.findViewById(R.id.ad_view);
-        mAdMediaView.setAdJumpWebview(true);
-        mAdMediaView.setAdClickListener(new AdClickListener() {
+//        mTvJumpAd = (TextView) findViewById(R.id.jumpad);
+//        mTvJumpAd.setOnClickListener(this);
+        mAdwraper = (FrameLayout) findViewById(R.id.adwrapper);
+        loadBaiduAd();
+    }
+
+    private void loadBaiduAd() {
+        SplashAdListener listener = new SplashAdListener() {
+            @Override
+            public void onAdDismissed() {
+                Log.i("RSplashActivity", "onAdDismissed");
+                launcherHome();
+            }
+            @Override
+            public void onAdFailed(String arg0) {
+                Log.i("RSplashActivity", "onAdFailed");
+                mHasLoadAd = true;
+            }
+            @Override
+            public void onAdPresent() {
+                Log.i("RSplashActivity", "onAdPresent");
+                mHasLoadAd = true;
+                mCountdown = 3;
+            }
             @Override
             public void onAdClick() {
-                mHandler.removeCallbacks(mLaunchHomeRunnable);
-//                launcherHome(); //点击广告的回调, 本身的广告被点击时, 就会跳转webview, 是广告sdk自己实现的
-                finish();
+                //设置开屏可接受点击时，该回调可用
+                Log.i("RSplashActivity", "onAdClick");
             }
-        });
-        Intent i = new Intent(this, ActivityMain.class);
-        mAdMediaView.setAdJumpWebViewCloseIntent(i.toUri(0));
+        };
+
+        /**
+         * 构造函数：
+         百度 Mobile SSP  移动应用推广 SDK
+         10
+         * new SplashAd(Context context, ViewGroup adsParent,
+         *    SplashAdListener listener,String adPlaceId, boolean canClick);
+         */
+        String adPlaceId = "4584884";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+//        String adPlaceId = "4589696";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+        mSplashAd = new SplashAd(this, mAdwraper, listener, adPlaceId, true);
     }
+
+
 
     /**
      * 检查权限
@@ -151,64 +164,17 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
         initData();
     }
 
+    @Override
+    protected void onDestroy() {
+//        mSplashAd.destroy();
+        super.onDestroy();
+    }
+
     /**
      * 初始化数据
      */
     public void initData() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String version = preferences.getString(Values.PreferenceKey.KEY_SP_SHOW_GUDIE_PAGE_version, "v0");
-        if (!App.APP_VERSION_NAME.equals(version)){
-            mHandler.postDelayed(mLaunchHomeRunnable, 0);
-        } else {
-            mHandler.postDelayed(mLaunchHomeRunnable, 1500);
-        }
-
-        HaokanADManager.getInstance().loadAdData(this, AdTypeCommonUtil.REQUEST_SPLASH_TYPE, "28-53-159", 1080, 1560,new HaokanADInterface() {
-            @Override
-            public void onADSuccess(AdData adData) {
-                if (mIsDestory) {
-                    return;
-                }
-                LogHelper.d(TAG, "HaokanADManager  loadAdData onADSuccess ");
-
-                mAdMediaView.setNativeAd(adData, new EffectiveAdListener() {
-                    @Override
-                    public void onAdInvalid() {
-                        if (mIsDestory) {
-                            return;
-                        }
-                        LogHelper.d(TAG, "HaokanADManager  setNativeAd onAdInvalid ");
-                    }
-
-                    @Override
-                    public void onLoadSuccess() {
-                        if (mIsDestory) {
-                            return;
-                        }
-                        LogHelper.d(TAG, "HaokanADManager  setNativeAd onLoadSuccess ");
-                        mHandler.removeCallbacks(mLaunchHomeRunnable);
-                        mCountdown = 3; //广告停留3秒
-                        mHandler.postDelayed(mLaunchHomeRunnable, 1000);
-                        mTvJumpAd.setText(getString(R.string.skip, mCountdown));
-                        mHasLoadAd = true;
-//                        mTvJumpAd.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onLoadFailure() {
-                        if (mIsDestory) {
-                            return;
-                        }
-                        LogHelper.d(TAG, "HaokanADManager  setNativeAd onLoadFailure ");
-                    }
-                });
-            }
-
-            @Override
-            public void onADError(String s) {
-                LogHelper.d(TAG, "HaokanADManager loadAdData onADError s = " + s);
-            }
-        });
+        mHandler.postDelayed(mLaunchHomeRunnable, 1000);
     }
 
     @Override
@@ -230,13 +196,13 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
         public void run() {
             mCountdown --;
             LogHelper.d(TAG, "mLaunchHomeRunnable  mCountdown =  " + mCountdown);
-            if (mCountdown <= 0 && mIsLoadWeb) {
+            if (mCountdown <= 0 && mIsLoadWeb && mHasLoadAd) {
                 launcherHome();
             } else {
                 if (mCountdown<0) {
                     mCountdown = 0;
                 }
-                mTvJumpAd.setText(getString(R.string.skip, mCountdown));
+//                mTvJumpAd.setText(getString(R.string.skip, mCountdown));
                 mHandler.postDelayed(mLaunchHomeRunnable, 1000);
             }
         }
@@ -252,20 +218,7 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
         }
         mIsDestory = true;
 
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        String version = preferences.getString(Values.PreferenceKey.KEY_SP_SHOW_GUDIE_PAGE_version, "v0");
-//        if (!App.APP_VERSION_NAME.equals(version)){
-//            Intent i = new Intent(ActivitySplash.this, ActivityGuide.class);
-//            startActivity(i);
-//        } else {
-//            Intent i = new Intent(ActivitySplash.this, ActivityMain2.class);
-//            startActivity(i);
-//        }
-
         Intent i = new Intent(ActivitySplash.this, ActivityMain.class);
-//        i.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, "http://m.levect.com/appcpu.html?siteId=270872471&channelId=1002");
-//        i.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, "https://cpu.baidu.com/1002/b4e53502");
-//        i.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, "https://rickxio.github.io/meinv.html");
         startActivity(i);
         finish();
         overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
@@ -308,6 +261,10 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 LogHelper.i(TAG, "shouldOverrideUrlLoading mweburl = " + url);
+                Intent i = new Intent(ActivitySplash.this, ActivityWebview.class);
+                i.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, url);
+                startActivity(i);
+                overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
                 return false;
             }
 
@@ -328,10 +285,11 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view,url);
                 LogHelper.i(TAG, "onPageFinished mweburl = " + url);
+//                mWebView.loadUrl("javascript:var t = document.createElement(\"base\");t.name = \"target\", t.content = \"_top\", document.getElementsByTagName(\"head\")[0].appendChild(t);");
                 mIsLoadWeb = true;
-                if (mHasLoadAd) {
-                    mTvJumpAd.setVisibility(View.VISIBLE);
-                }
+//                if (mHasLoadAd) {
+//                    mTvJumpAd.setVisibility(View.VISIBLE);
+//                }
             }
         });
 

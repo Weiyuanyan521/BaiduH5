@@ -7,8 +7,8 @@ android {
         applicationId "com.haokan.baiduh5"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        versionCode 101
+        versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -77,5 +77,133 @@ dependencies {
     compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
     //友盟统计
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile files('build/libs/haokan-ad-v1.0.jar')
+    //此处为百度广告
+    compile files('libs/Baidu_MobAds_SDK.jar')
+}
+
+android {
+//    200       华为应用市场
+//    201       金立应用市场
+//    202       oppo应用市场
+//    203       酷派应用市场
+//    204       91应用市场
+
+//    205       豌豆荚应用市场
+//    206      360应用市场
+//    207      小米应用市场
+//    208      联想应用市场
+//    209      安卓市场
+
+//    210      安智市场
+//    211      应用汇
+//    212      腾讯
+//    213      一图官方H5
+//    214      好看图片新闻
+
+//    215      三星应用市场
+//    216      好看锁屏官方
+//    217      当乐
+//    218      UC
+//    219      N多网
+//    220      魅族应用市场
+//    221      GooglePlay商店
+//    227      百度
+
+//    239      好看酷比
+
+    productFlavors {
+        pid200 {
+            manifestPlaceholders = [CHANNEL_NAME: "200"]
+        }
+        pid201 {
+            manifestPlaceholders = [CHANNEL_NAME: "201"]
+        }
+        pid202 {
+            manifestPlaceholders = [CHANNEL_NAME: "202"]
+        }
+        pid203 {
+            manifestPlaceholders = [CHANNEL_NAME: "203"]
+        }
+        pid204 {
+            manifestPlaceholders = [CHANNEL_NAME: "204"]
+        }
+        pid205 {
+            manifestPlaceholders = [CHANNEL_NAME: "205"]
+        }
+        pid206 {
+            manifestPlaceholders = [CHANNEL_NAME: "206"]
+        }
+        pid207 {
+            manifestPlaceholders = [CHANNEL_NAME: "207"]
+        }
+        pid208 {
+            manifestPlaceholders = [CHANNEL_NAME: "208"]
+        }
+        pid209 {
+            manifestPlaceholders = [CHANNEL_NAME: "209"]
+        }
+        pid210 {
+            manifestPlaceholders = [CHANNEL_NAME: "210"]
+        }
+        pid211 {
+            manifestPlaceholders = [CHANNEL_NAME: "211"]
+        }
+        pid212 {
+            manifestPlaceholders = [CHANNEL_NAME: "212"]
+        }
+        pid213 {
+            manifestPlaceholders = [CHANNEL_NAME: "213"]
+        }
+        pid214 {
+            manifestPlaceholders = [CHANNEL_NAME: "214"]
+        }
+        pid215 {
+            manifestPlaceholders = [CHANNEL_NAME: "215"]
+        }
+        pid216 {
+            manifestPlaceholders = [CHANNEL_NAME: "216"]
+        }
+        pid217 {
+            manifestPlaceholders = [CHANNEL_NAME: "217"]
+        }
+        pid218 {
+            manifestPlaceholders = [CHANNEL_NAME: "218"]
+        }
+        pid219 {
+            manifestPlaceholders = [CHANNEL_NAME: "219"]
+        }
+        pid220 {
+            manifestPlaceholders = [CHANNEL_NAME: "220"]
+        }
+        pid221 {
+            manifestPlaceholders = [CHANNEL_NAME: "221"]
+        }
+        pid222 {
+            manifestPlaceholders = [CHANNEL_NAME: "222"]
+        }
+        pid223 {
+            manifestPlaceholders = [CHANNEL_NAME: "223"]
+        }
+        pid224 {
+            manifestPlaceholders = [CHANNEL_NAME: "224"]
+        }
+        pid225 {
+            manifestPlaceholders = [CHANNEL_NAME: "225"]
+        }
+        pid226 {
+            manifestPlaceholders = [CHANNEL_NAME: "226"]
+        }
+        pid227 {
+            manifestPlaceholders = [CHANNEL_NAME: "227"]
+        }
+        pid301 {
+            manifestPlaceholders = [CHANNEL_NAME: "301"]
+        }
+        pid302 {
+            manifestPlaceholders = [CHANNEL_NAME: "302"]
+        }
+        pid303 {
+            manifestPlaceholders = [CHANNEL_NAME: "303"]
+        }
+    }
 }

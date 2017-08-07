@@ -18,6 +18,7 @@ import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -55,6 +56,7 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LogHelper.d("fragmentweb", "onCreateView " + mTypeBean.name);
         if (mView == null) {
             mView = inflater.inflate(R.layout.customview_webview, container, false);
             initView(mView);
@@ -68,6 +70,7 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
         showLoadingLayout();
         if (mTypeBean != null) {
             mWeb_Url = "https://cpu.baidu.com/wap/" + mTypeBean.id + "/270872471"
+//            mWeb_Url = "https://cpu.baidu.com/wap/" + mTypeBean.id + "/detail"
                     +
                     "?chk=1"
                     ;
@@ -109,6 +112,7 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
+
         mWebView.setHorizontalScrollBarEnabled(false);//水平不显示
         mWebView.setVerticalScrollBarEnabled(false); //垂直不显示
 
@@ -131,6 +135,7 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
             CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
         }
 
+//        LogHelper.d("fragmentweb", "uauauaua = " + settings.getUserAgentString());
         mWebView.setDownloadListener(new DownloadListener() {//实现文件下载功能
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
@@ -162,6 +167,15 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
             @Override
             public void onReceivedSslError(WebView view, @NonNull SslErrorHandler handler, SslError error) {
                 handler.proceed();
+            }
+
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+                if (url.contains("pos.baidu.com")) {
+//                    LogHelper.i("WebViewActivity", "shouldInterceptRequest pos被拦截 mweburl = " + url);
+                    return new WebResourceResponse(null, null, null);
+                }
+                return super.shouldInterceptRequest(view, url);
             }
 
             @Override

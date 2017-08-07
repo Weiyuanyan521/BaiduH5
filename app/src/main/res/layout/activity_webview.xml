@@ -66,4 +66,20 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"   >
     </WebView>
+
+    <FrameLayout
+        android:visibility="gone"
+        android:id="@+id/adwrapper1"
+        android:layout_below="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="54dp">
+    </FrameLayout>
+
+    <FrameLayout
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/adwrapper2"
+        android:layout_width="match_parent"
+        android:layout_height="54dp">
+    </FrameLayout>
 </RelativeLayout>

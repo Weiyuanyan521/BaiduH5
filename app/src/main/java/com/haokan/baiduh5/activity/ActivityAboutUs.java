@@ -5,12 +5,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.StatusBarUtil;
-
-import java.util.Calendar;
 
 /**
  * 关于我们页面
@@ -23,7 +22,7 @@ public class ActivityAboutUs extends ActivityBase implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_us);
-        StatusBarUtil.setStatusBarWhiteBg_BlackText(this);
+        StatusBarUtil.setStatusBarBgColor(this, R.color.colorMainStatus);
 
         TextView tv_copy_right = (TextView) findViewById(R.id.tv_copy_right);
 //        tv_copy_right.setText(getString(R.string.app_copyright, Calendar.getInstance().get(Calendar.YEAR)));

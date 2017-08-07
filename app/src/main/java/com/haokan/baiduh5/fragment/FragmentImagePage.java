@@ -17,11 +17,11 @@ import java.util.ArrayList;
 /**
  * Created by wangzixu on 2016/12/26.
  */
-public class FragmentVideoPage extends FragmentBase{
+public class FragmentImagePage extends FragmentBase{
     private View mView;
     private AdapterHomepageVp mAdaperMainHomepage;
-    private final String[] mVideoFenLei = new String[] {"推荐", "音乐", "搞笑", "娱乐", "小品", "萌萌哒", "观天下", "游戏", "社会"};
-    private final String[] mVideoFLIds  = new String[] {"1057", "1058", "1059","1061", "1062", "1065", "1064", "1067", "1063"};
+    private final String[] mFenLei = new String[] {"推荐", "娱乐", "体育", "旅游", "美食", "时尚", "汽车", "游戏"};
+    private final String[] mFLIds  = new String[] {"1068", "1071", "1072","1073", "1074", "1075", "1076", "1077"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,16 +40,16 @@ public class FragmentVideoPage extends FragmentBase{
         homepageTabLayout.setupWithViewPager(homepageViewpager);
 
         ArrayList<TypeBean> list = new ArrayList<>();
-        for (int i = 0; i < mVideoFenLei.length; i++) {
-            String name = mVideoFenLei[i];
+        for (int i = 0; i < mFenLei.length; i++) {
+            String name = mFenLei[i];
             if (App.sReview.equals("1")) {
-                if (name.equals("美女")||name.equals("搞笑")||name.equals("推荐")||name.equals("娱乐")) {
+                if (name.equals("时尚")||name.equals("推荐")||name.equals("娱乐")) {
                     continue;
                 }
             }
             TypeBean bean = new TypeBean();
             bean.name = name;
-            bean.id = mVideoFLIds[i];
+            bean.id = mFLIds[i];
             list.add(bean);
         }
         mAdaperMainHomepage.addData(list);

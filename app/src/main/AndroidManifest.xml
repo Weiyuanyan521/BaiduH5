@@ -25,6 +25,7 @@
     <!--百度广告需求的权限 begin-->
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -32,7 +33,27 @@
         android:theme="@style/AppTheme">
 
         <meta-data android:value="596d83f182b6354e8e0016a8" android:name="UMENG_APPKEY"/>
-        <meta-data android:value="Default" android:name="UMENG_CHANNEL"/>
+        <meta-data android:value="${CHANNEL_NAME}" android:name="UMENG_CHANNEL"/>
+
+        <!--百度广告 begin-->
+
+        <meta-data android:name="BaiduMobAd_APP_ID"
+                   android:value="f93f8007" />
+        <!--<meta-data android:name="BaiduMobAd_APP_ID"-->
+                   <!--android:value="c92936a5" />-->
+        <activity android:name="com.baidu.mobads.AppActivity"
+                  android:configChanges="keyboard|keyboardHidden|orientation"
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <provider
+            android:name="com.baidu.mobads.openad.FileProvider"
+            android:authorities="${packageName}.bd.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/bd_file_paths" />
+        </provider>
+        <!--百度广告 end-->
 
         <activity
             android:name=".activity.ActivitySplash"
@@ -62,5 +83,7 @@
             android:name=".activity.ActivityAboutUs"
             android:screenOrientation="portrait">
         </activity>
+
+        <service android:name=".service.UpdateApkService"/>
     </application>
 </manifest>

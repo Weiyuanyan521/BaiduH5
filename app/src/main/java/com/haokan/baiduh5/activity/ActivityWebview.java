@@ -2,8 +2,6 @@ package com.haokan.baiduh5.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -11,29 +9,33 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
-import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.baidu.mobads.AdSettings;
+import com.baidu.mobads.AdView;
+import com.baidu.mobads.AdViewListener;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
 
-import java.net.URLEncoder;
+import org.json.JSONObject;
 
 public class ActivityWebview extends ActivityBase implements View.OnClickListener {
     public static final String KEY_INTENT_WEB_URL = "url";
@@ -45,12 +47,15 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private String mWeb_Url;
     private Handler mHandler = new Handler();
     private View mTvClose;
+    private FrameLayout mAdWraper;
+    private FrameLayout mAdWraper1;
+    private FrameLayout mAdWraper2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
-        StatusBarUtil.setStatusBarWhiteBg_BlackText(this);
+        StatusBarUtil.setStatusBarBgColor(this, R.color.colorMainStatus);
 
         assignViews();
         loadData();
@@ -75,12 +80,13 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         if (getIntent().getData() != null) {
             Uri uri = getIntent().getData();
             String url = uri.getQueryParameter(KEY_INTENT_WEB_URL);
-            try {
-                mWeb_Url = "http://m.levect.com/appcpudetail.html?url=" + URLEncoder.encode(url, "UTF-8");
-            } catch (Exception e) {
-                e.printStackTrace();
-                mWeb_Url = url;
-            }
+            mWeb_Url = url;
+//            try {
+//                mWeb_Url = "http://m.levect.com/appcpudetail.html?url=" + URLEncoder.encode(url, "UTF-8");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                mWeb_Url = url;
+//            }
         } else {
             mWeb_Url = getIntent().getStringExtra(KEY_INTENT_WEB_URL);
         }
@@ -91,6 +97,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         }
 
         LogHelper.i("WebViewActivity", "loadData mweburl = " + mWeb_Url);
+
         if (mWeb_Url.startsWith("www")) {
             mWeb_Url = "http://" + mWeb_Url;
         }
@@ -105,6 +112,56 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         } else {
             loadLocalApp();
         }
+
+        //百度横幅广告相关begin
+        if (mWeb_Url.contains("image?")) {
+            mAdWraper1.setVisibility(View.VISIBLE);
+            mAdWraper = mAdWraper1;
+        } else {
+            mAdWraper2.setVisibility(View.VISIBLE);
+            mAdWraper = mAdWraper2;
+        }
+
+        AdSettings.setKey(new String[]{"baidu", "中国"});
+        String adPlaceID = "4584862";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+//        String adPlaceID = "3858444";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+        AdView adView = new AdView(this, adPlaceID);
+        //设置监听器
+        adView.setListener(new AdViewListener() {
+            @Override
+            public void onAdReady(AdView adView) {
+                LogHelper.i("WebViewActivity", "onAdReady");
+            }
+
+            @Override
+            public void onAdShow(JSONObject jsonObject) {
+                LogHelper.i("WebViewActivity", "onAdShow");
+            }
+
+            @Override
+            public void onAdClick(JSONObject jsonObject) {
+
+            }
+
+            @Override
+            public void onAdFailed(String s) {
+
+            }
+
+            @Override
+            public void onAdSwitch() {
+
+            }
+
+            @Override
+            public void onAdClose(JSONObject jsonObject) {
+                mAdWraper.setVisibility(View.GONE);
+                LogHelper.i("WebViewActivity", "onAdClose");
+            }
+        });
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        mAdWraper.addView(adView, params);
+        //百度横幅广告相关end
     }
 
     private void assignViews() {
@@ -113,6 +170,9 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
 
         mTvClose = findViewById(R.id.close);
         mTvClose.setOnClickListener(this);
+
+        mAdWraper1 = (FrameLayout) findViewById(R.id.adwrapper1);
+        mAdWraper2 = (FrameLayout) findViewById(R.id.adwrapper2);
 
         mTitle = (TextView) findViewById(R.id.title);
 
@@ -184,6 +244,15 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                 } else {
                     mTitle.setText("");
                 }
+            }
+
+            @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+                if (url.contains("pos.baidu.com")) {
+                    return new WebResourceResponse(null, null, null);
+                }
+                LogHelper.i("WebViewActivity", "shouldInterceptRequest mweburl = " + url);
+                return super.shouldInterceptRequest(view, url);
             }
 
             //可以加载https
@@ -264,45 +333,5 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         }
         super.onDestroy();
 //        System.exit(0);
-    }
-
-
-    @JavascriptInterface
-    public void onWebViewButtonBuyVipClick(String paramString, int paramInt) {
-        LogHelper.i("WebViewActivity", "onWebViewGetAppVersionCode ----");
-    }
-
-    @JavascriptInterface
-    public int onWebViewGetAppVersionCode(String paramString) {
-        LogHelper.i("WebViewActivity", "onWebViewGetAppVersionCode ----");
-        try {
-            PackageInfo packageInfo = ActivityWebview.this.getPackageManager().getPackageInfo(paramString, PackageManager.GET_ACTIVITIES);
-            if (packageInfo == null) {
-                return -1;
-            }
-            int i = packageInfo.versionCode;
-            return i;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.getMessage();
-        }
-        return -1;
-    }
-
-    @JavascriptInterface
-    public int onWebViewGetWidth() {
-        LogHelper.i("WebViewActivity", "onWebViewGetWidth ----");
-        return getWindowManager().getDefaultDisplay().getWidth();
-    }
-
-    @JavascriptInterface
-    public boolean onWebViewOpenApp(String paramString1, String paramString2) {
-        LogHelper.i("WebViewActivity", "onWebViewOpenApp ----");
-        return true;
-    }
-
-    @JavascriptInterface
-    @UiThread
-    public void onWebViewRichMediaShareCallBack(String paramString1, String paramString2, String paramString3, String paramString4, String paramString5, String paramString6) {
-        LogHelper.i("WebViewActivity", "onWebViewRichMediaShareCallBack ----");
     }
 }

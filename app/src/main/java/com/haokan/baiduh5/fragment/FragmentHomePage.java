@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.adapter.AdapterHomepageVp;
 import com.haokan.baiduh5.bean.TypeBean;
@@ -40,8 +41,15 @@ public class FragmentHomePage extends FragmentBase{
 
         ArrayList<TypeBean> list = new ArrayList<>();
         for (int i = 0; i < mImgFenLei.length; i++) {
+            String name = mImgFenLei[i];
+            if (App.sReview.equals("1")) {
+                if (name.equals("美女")||name.equals("搞笑")||name.equals("推荐")
+                        ||name.equals("娱乐")||name.equals("时尚")||name.equals("热点") ||name.equals("军事")) {
+                    continue;
+                }
+            }
             TypeBean bean = new TypeBean();
-            bean.name = mImgFenLei[i];
+            bean.name = name;
             bean.id = mImgFLIds[i];
             list.add(bean);
         }
