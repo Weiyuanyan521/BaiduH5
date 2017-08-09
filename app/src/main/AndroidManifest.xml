@@ -85,7 +85,7 @@
         <!--适应7.0以上的应用升级-->
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.haokanhaokan.news.fileProvider"
+            android:authorities="com.haokan.baiduh5.fileProvider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

@@ -60,7 +60,7 @@ public class UpdateUtils {
 
             Intent intent = new Intent(Intent.ACTION_VIEW);
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                Uri contentUri = FileProvider.getUriForFile(context, "com.haokanhaokan.news.fileProvider", file);
+                Uri contentUri = FileProvider.getUriForFile(context, "com.haokan.baiduh5.fileProvider", file);
                 intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
             } else {
