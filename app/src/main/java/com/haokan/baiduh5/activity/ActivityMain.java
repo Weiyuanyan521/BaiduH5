@@ -1,10 +1,12 @@
 package com.haokan.baiduh5.activity;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,6 +14,8 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
+import com.baidu.mobads.InterstitialAd;
+import com.baidu.mobads.InterstitialAdListener;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.bean.UpdateBean;
@@ -26,6 +30,11 @@ import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
 import com.haokan.baiduh5.util.UpdateUtils;
+import com.haokan.baiduh5.util.Values;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 
 /**
@@ -44,6 +53,8 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     private FragmentBase mCurrentFragment;
     private FragmentManager mFragmentManager;
     private String mReview;
+    private String mTodayData;
+    private InterstitialAd mInterAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +83,45 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
         }
 
         onClick(mTabHomepage);
+
+        //百度广告相关初始化
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        mTodayData = formatter.format(new Date());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String dat = preferences.getString(Values.PreferenceKey.KEY_SP_BAIDU_INSERTAD_TIME, "--");
+        if (!dat.equals(mTodayData)) {
+            preferences.edit().putString(Values.PreferenceKey.KEY_SP_BAIDU_INSERTAD_TIME, mTodayData).apply();
+
+            String adPlaceId = "4634505";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+            mInterAd = new InterstitialAd(this, adPlaceId);
+            mInterAd.setListener(new InterstitialAdListener() {
+                @Override
+                public void onAdReady() {
+                    if (mCurrentFragment != null) {
+                        if (mCurrentFragment == mImagePage || mCurrentFragment == mVideoPage) {
+                            showBaiduInsertAd();
+                        }
+                    }
+                }
+
+                @Override
+                public void onAdPresent() {
+                }
+
+                @Override
+                public void onAdClick(InterstitialAd interstitialAd) {
+                }
+
+                @Override
+                public void onAdDismissed() {
+                }
+
+                @Override
+                public void onAdFailed(String s) {
+                }
+            });
+            mInterAd.loadAd();
+        }
     }
 
     @Override
@@ -105,6 +155,9 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             if (mCurrentFragment != null && mVideoPage == mCurrentFragment) {
                 return;
             }
+
+            showBaiduInsertAd();
+
             FragmentTransaction fragmentTransaction =  mFragmentManager.beginTransaction();
             if (mCurrentFragment != null) {
                 fragmentTransaction.hide(mCurrentFragment);
@@ -127,6 +180,9 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             if (mCurrentFragment != null && mImagePage == mCurrentFragment) {
                 return;
             }
+
+            showBaiduInsertAd();
+
             FragmentTransaction fragmentTransaction =  mFragmentManager.beginTransaction();
             if (mCurrentFragment != null) {
                 fragmentTransaction.hide(mCurrentFragment);
@@ -173,6 +229,15 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             mTabVideopage.setSelected(false);
             mTabImagepage.setSelected(false);
             mTabPersonpage.setSelected(true);
+        }
+    }
+
+    private void showBaiduInsertAd() {
+        if (mInterAd != null) {
+            if (mInterAd.isAdReady()) {
+                mInterAd.showAd(this);
+                mInterAd = null;
+            }
         }
     }
 

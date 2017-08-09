@@ -112,6 +112,11 @@ public class Values {
         public static final String KEY_SP_SESSIONID = "sessionid";
         public static final String KEY_SP_USERID = "userid";
         /**
+         * 当天是否展示过百度广告
+         */
+        public static final String KEY_SP_BAIDU_INSERTAD_TIME = "baiduadtime";
+
+        /**
          * 锁屏的设置页打开后需要提示升级app, 每日提示一次, 这个是记录当前提示的日期的key
          */
         public static final String KEY_SP_SETTING_AUTOCHECK_UPDATEAPP_TIME = "lockuptime";

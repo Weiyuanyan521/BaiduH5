@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -56,11 +58,16 @@ public class UpdateUtils {
             Runtime runtime = Runtime.getRuntime();
             runtime.exec(command);
 
-            Intent intent = new Intent();
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setAction(Intent.ACTION_VIEW);
-            String type = "application/vnd.android.package-archive";
-            intent.setDataAndType(Uri.fromFile(file), type);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                Uri contentUri = FileProvider.getUriForFile(context, "com.haokanhaokan.news.fileProvider", file);
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+            } else {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+            }
+
             context.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();

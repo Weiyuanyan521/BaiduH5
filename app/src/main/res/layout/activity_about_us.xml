@@ -53,6 +53,18 @@
         android:textSize="16sp" />
 
     <TextView
+        android:layout_below="@id/iv_about_us_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:maxLines="1"
+        android:text="产品中所有内容均来自百度feeds联盟，内容版权归百度所有"
+        android:textColor="#c0c0c0"
+        android:textSize="10sp" />
+
+    <TextView
         android:id="@+id/tv_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

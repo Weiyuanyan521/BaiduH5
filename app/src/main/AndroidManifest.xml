@@ -64,10 +64,6 @@
             </intent-filter>
         </activity>
 
-        <!--好看的广告sdk-->
-        <activity android:name="com.haokan.sdk.Activity.WebViewActivity"
-                  android:screenOrientation="portrait"/>
-
         <activity
             android:name=".activity.ActivityMain"
             android:launchMode="singleTask"
@@ -85,5 +81,16 @@
         </activity>
 
         <service android:name=".service.UpdateApkService"/>
+
+        <!--适应7.0以上的应用升级-->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.haokanhaokan.news.fileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 </manifest>

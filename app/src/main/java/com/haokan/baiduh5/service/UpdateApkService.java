@@ -21,10 +21,8 @@ import com.haokan.baiduh5.util.UpdateUtils;
 import com.haokan.baiduh5.util.Values;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.NumberFormat;
@@ -122,7 +120,8 @@ public class UpdateApkService extends Service {
             //用retrofit实现的升级
             initNotification();
 
-            downLoadFileWithRetrofit(url, fileTemp, file);
+//            downLoadFileWithRetrofit(url, fileTemp, file);
+            downloadFileWithUrlConn(url, fileTemp, file);
         } catch (Exception e) {
             mNotificationManager.cancel(NOTIFY_ID);
             e.printStackTrace();
@@ -146,53 +145,120 @@ public class UpdateApkService extends Service {
      * 1.通过统一资源定位器（java.net.URL）获取连接器（java.net.URLConnection） 2.设置请求的参数 3.发送请求
      * 4.以输入流的形式获取返回内容 5.关闭输入流
      */
-    public static File downloadFile(String urlPath, File file) {
-        try {
-            // 统一资源
-            URL url = new URL(urlPath);
-            //获取http的连接类
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            // 设定请求的方法，默认是GET
-            httpURLConnection.setRequestMethod("GET");
-            //连接的超时时间
-            httpURLConnection.setConnectTimeout(10000);
-            //读数据的超时时间
-            httpURLConnection.setReadTimeout(5000);
-            // 设置字符编码
-//            httpURLConnection.setRequestProperty("Charset", "UTF-8");
+    public void downloadFileWithUrlConn(final String urlPath, final File fileTemp, final File file) {
+        LogHelper.d("okhttp", "downloadFileCall downloadFileWithUrlConn urlPath = " + urlPath);
+        final Scheduler.Worker worker = Schedulers.io().createWorker();
+        worker.schedule(new Action0() {
+            @Override
+            public void call() {
+                try {
+                    // 统一资源
+                    URL url = new URL(urlPath);
+                    //获取http的连接类
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    // 设定请求的方法，默认是GET
+                    httpURLConnection.setRequestMethod("GET");
+                    //连接的超时时间
+                    httpURLConnection.setConnectTimeout(10000);
+                    //读数据的超时时间
+                    httpURLConnection.setReadTimeout(5000);
+                    // 设置字符编码
+                    //httpURLConnection.setRequestProperty("Charset", "UTF-8");
 
-            int responseCode = httpURLConnection.getResponseCode();
-            if (responseCode == 200) {
-                // 文件大小
+                    int responseCode = httpURLConnection.getResponseCode();
 
-                // 文件名
+                    if (responseCode == 200) {
+
+                        //文件名
 //                String filePathUrl = httpURLConnection.getURL().getFile();
 //                String fileFullName = filePathUrl.substring(filePathUrl.lastIndexOf(File.separatorChar) + 1);
-//                System.out.println("file length---->" + fileLength);
 
-                int fileLength = httpURLConnection.getContentLength();
-                InputStream inputStream = httpURLConnection.getInputStream();
-                if (!file.getParentFile().exists()) {
-                    file.getParentFile().mkdirs();
+                        int fileLength = httpURLConnection.getContentLength();
+                        InputStream inputStream = httpURLConnection.getInputStream();
+                        FileUtil.writeInputStreamToFile(inputStream, fileTemp, fileLength, new FileUtil.ProgressListener() {
+                            @Override
+                            public void onStart(long total) {
+                                mIsDownLoading = true;
+                                LogHelper.d("okhttp", "downloadFileCall onStart total = " + total);
+                            }
+
+                            @Override
+                            public void onProgress(long current, long total) {
+                                String text = mFormat.format(current * 1.0f / total);
+                                LogHelper.d("okhttp", "downloadFileCall onProgress " + text);
+                                if (mI++ % 100 == 0) {
+                                    mBuilder.setSmallIcon(R.drawable.ic_launcher);
+                                    mBuilder.setProgress((int) total, (int) current, false); //设置通知栏中的进度条
+                                    mBuilder.setContentText(text); //设置进度条下面的文字信息
+                                    mBuilder.setOngoing(true);
+                                    Notification notification = mBuilder.build();
+                                    mNotificationManager.notify(NOTIFY_ID, notification);
+                                }
+                            }
+
+                            @Override
+                            public void onSuccess() {
+                                LogHelper.d("okhttp", "downloadFileCall onComplete");
+                                mNotificationManager.cancel(NOTIFY_ID);
+                                boolean b = fileTemp.renameTo(file);
+                                if (b) {
+                                    UpdateUtils.installApp(file, getApplicationContext());
+                                } else {
+                                    UpdateUtils.installApp(fileTemp, getApplicationContext());
+                                }
+                                App.sMainHanlder.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        UpdateApkService.this.stopSelf();
+                                    }
+                                }, 1000);
+                                mIsDownLoading = false;
+                                return;
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                mNotificationManager.cancel(NOTIFY_ID);
+                                App.sMainHanlder.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ToastManager.showShort(getApplicationContext(), "下载失败");
+                                    }
+                                });
+                                mIsDownLoading = false;
+                                UpdateApkService.this.stopSelf();
+                            }
+                        });
+
+
+                        //                OutputStream out = new FileOutputStream(file);
+                        //                int size;
+                        //                int len = 0;
+                        //                byte[] buf = new byte[1024];
+                        //                while ((size = inputStream.read(buf)) != -1) {
+                        //                    len += size;
+                        //                    out.write(buf, 0, size);
+                        //                    // 打印下载百分比
+                        //                    LogHelper.d("下载了-------> ", len*1.0f / fileLength + "");
+                        //                }
+                        //                inputStream.close();
+                        //                out.close();
+                    }
+                } catch (Exception e) {
+                    mNotificationManager.cancel(NOTIFY_ID);
+                    App.sMainHanlder.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastManager.showShort(getApplicationContext(), "下载失败 Exception");
+                        }
+                    });
+                    mIsDownLoading = false;
+                    e.printStackTrace();
+                    UpdateApkService.this.stopSelf();
                 }
-                OutputStream out = new FileOutputStream(file);
-                int size = 0;
-                int len = 0;
-                byte[] buf = new byte[1024];
-                while ((size = inputStream.read(buf)) != -1) {
-                    len += size;
-                    out.write(buf, 0, size);
-                    // 打印下载百分比
-                    LogHelper.d("下载了-------> ", len*1.0f / fileLength + "");
-                }
-                inputStream.close();
-                out.close();
+                worker.unsubscribe();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return file;
-        }
+        });
     }
 
     public void downLoadFileWithRetrofit(String url, final File fileTemp, final File file) {

@@ -21,21 +21,20 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baidu.mobads.AdSettings;
-import com.baidu.mobads.AdView;
-import com.baidu.mobads.AdViewListener;
+import com.baidu.mobad.feeds.RequestParameters;
+import com.baidu.mobads.BaiduNativeAdPlacement;
+import com.baidu.mobads.BaiduNativeH5AdView;
+import com.baidu.mobads.BaiduNativeH5AdViewManager;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
-
-import org.json.JSONObject;
 
 public class ActivityWebview extends ActivityBase implements View.OnClickListener {
     public static final String KEY_INTENT_WEB_URL = "url";
@@ -47,9 +46,9 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private String mWeb_Url;
     private Handler mHandler = new Handler();
     private View mTvClose;
-    private FrameLayout mAdWraper;
-    private FrameLayout mAdWraper1;
-    private FrameLayout mAdWraper2;
+    private RelativeLayout mAdWraper;
+    private RelativeLayout mAdWraper1;
+    private RelativeLayout mAdWraper2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,55 +112,133 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
             loadLocalApp();
         }
 
-        //百度横幅广告相关begin
         if (mWeb_Url.contains("image?")) {
-            mAdWraper1.setVisibility(View.VISIBLE);
             mAdWraper = mAdWraper1;
         } else {
-            mAdWraper2.setVisibility(View.VISIBLE);
             mAdWraper = mAdWraper2;
         }
 
-        AdSettings.setKey(new String[]{"baidu", "中国"});
-        String adPlaceID = "4584862";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
-//        String adPlaceID = "3858444";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
-        AdView adView = new AdView(this, adPlaceID);
-        //设置监听器
-        adView.setListener(new AdViewListener() {
+        //百度横幅广告相关begin
+//        if (mWeb_Url.contains("image?")) {
+//            mAdWraper1.setVisibility(View.VISIBLE);
+//            mAdWraper = mAdWraper1;
+//        } else {
+//            mAdWraper2.setVisibility(View.VISIBLE);
+//            mAdWraper = mAdWraper2;
+//        }
+//
+//        AdSettings.setKey(new String[]{"baidu", "中国"});
+//        String adPlaceID = "4584862";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+////        String adPlaceID = "3858444";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+//        AdView adView = new AdView(this, adPlaceID);
+//        //设置监听器
+//        adView.setListener(new AdViewListener() {
+//            @Override
+//            public void onAdReady(AdView adView) {
+//                LogHelper.i("WebViewActivity", "onAdReady");
+//            }
+//
+//            @Override
+//            public void onAdShow(JSONObject jsonObject) {
+//                LogHelper.i("WebViewActivity", "onAdShow");
+//            }
+//
+//            @Override
+//            public void onAdClick(JSONObject jsonObject) {
+//
+//            }
+//
+//            @Override
+//            public void onAdFailed(String s) {
+//
+//            }
+//
+//            @Override
+//            public void onAdSwitch() {
+//
+//            }
+//
+//            @Override
+//            public void onAdClose(JSONObject jsonObject) {
+//                mAdWraper.setVisibility(View.GONE);
+//                LogHelper.i("WebViewActivity", "onAdClose");
+//            }
+//        });
+//        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//        mAdWraper.addView(adView, params);
+        //百度横幅广告相关end
+
+
+        loadBaiduAd(null);
+    }
+
+    boolean mCloadAd = false;
+    private void loadBaiduAd(final View oldAdView) {
+        if (mIsDestory || mCloadAd) {
+            return;
+        }
+
+        mAdWraper.setVisibility(View.VISIBLE);
+        //百度信息流广告begin
+        /**
+         * Step 1. 在准备数据时，在listview广告位置创建BaiduNativeAdPlacement对象，并加入自己的数据列
+         表中
+         *  注意：请将YOUR_AD_PALCE_ID 替换为自己的广告位ID
+         */
+        BaiduNativeAdPlacement placement = new BaiduNativeAdPlacement();
+        placement.setApId("4634448");
+
+        final BaiduNativeH5AdView newAdView = BaiduNativeH5AdViewManager.getInstance()
+                .getBaiduNativeH5AdView(this, placement, R.color.bai);
+        if (newAdView.getParent() != null) {
+            ((ViewGroup) newAdView.getParent()).removeView(newAdView);
+        }
+        newAdView.setEventListener(new BaiduNativeH5AdView.BaiduNativeH5EventListner() {
             @Override
-            public void onAdReady(AdView adView) {
-                LogHelper.i("WebViewActivity", "onAdReady");
+            public void onAdClick() {
             }
 
             @Override
-            public void onAdShow(JSONObject jsonObject) {
+            public void onAdFail(String arg0) {
+                LogHelper.i("WebViewActivity", "onAdFail arg0 = " + arg0);
+                if (oldAdView == null) {
+                    mAdWraper.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onAdShow() {
                 LogHelper.i("WebViewActivity", "onAdShow");
+                if (oldAdView != null) {
+                    mAdWraper.removeView(oldAdView);
+                }
             }
 
             @Override
-            public void onAdClick(JSONObject jsonObject) {
-
-            }
-
-            @Override
-            public void onAdFailed(String s) {
-
-            }
-
-            @Override
-            public void onAdSwitch() {
-
-            }
-
-            @Override
-            public void onAdClose(JSONObject jsonObject) {
-                mAdWraper.setVisibility(View.GONE);
-                LogHelper.i("WebViewActivity", "onAdClose");
+            public void onAdDataLoaded() {
+                LogHelper.i("WebViewActivity", "onAdDataLoaded");
             }
         });
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        mAdWraper.addView(adView, params);
-        //百度横幅广告相关end
+
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = width>>2;
+        RelativeLayout.LayoutParams rllp = new RelativeLayout.LayoutParams(width, height);
+        newAdView.setLayoutParams(rllp);
+
+        final RequestParameters requestParameters =
+                new RequestParameters.Builder().setWidth(width).setHeight(height).build();
+        newAdView.makeRequest(requestParameters);
+        mAdWraper.addView(newAdView, 0);
+
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LogHelper.i("WebViewActivity", "onAd 重新请求了");
+                loadBaiduAd(newAdView);
+            }
+        }, 5000);
+        //百度信息流广告end
     }
 
     private void assignViews() {
@@ -171,8 +248,11 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         mTvClose = findViewById(R.id.close);
         mTvClose.setOnClickListener(this);
 
-        mAdWraper1 = (FrameLayout) findViewById(R.id.adwrapper1);
-        mAdWraper2 = (FrameLayout) findViewById(R.id.adwrapper2);
+        mAdWraper1 = (RelativeLayout) findViewById(R.id.adwrapper1);
+        mAdWraper2 = (RelativeLayout) findViewById(R.id.adwrapper2);
+
+        mAdWraper1.findViewById(R.id.ad_close).setOnClickListener(this);
+        mAdWraper2.findViewById(R.id.ad_close1).setOnClickListener(this);
 
         mTitle = (TextView) findViewById(R.id.title);
 
@@ -293,6 +373,13 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
             case R.id.close:
                 finish();
                 overridePendingTransition(R.anim.activity_in_left2right, R.anim.activity_out_left2right);
+                break;
+            case R.id.ad_close:
+            case R.id.ad_close1:
+                mCloadAd = true;
+                if (mAdWraper != null) {
+                    mAdWraper.setVisibility(View.GONE);
+                }
                 break;
             default:
                 break;
