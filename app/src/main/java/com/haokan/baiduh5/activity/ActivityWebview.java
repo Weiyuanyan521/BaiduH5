@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
@@ -35,7 +37,12 @@ import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
+import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
 import java.util.List;
 
@@ -291,6 +298,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         mShareContent.findViewById(R.id.share_qq).setOnClickListener(this);
         mShareContent.findViewById(R.id.share_qqzone).setOnClickListener(this);
         mShareContent.findViewById(R.id.share_sina).setOnClickListener(this);
+        mShareContent.findViewById(R.id.cancel).setOnClickListener(this);
         mShareBg = mBottomShare.findViewById(R.id.bg);
         mShareBg.setOnClickListener(this);
 
@@ -419,8 +427,33 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                     mAdWraper.setVisibility(View.GONE);
                 }
                 break;
+            case R.id.cancel:
+            case R.id.bg:
+                dismissShareLayout();
+                break;
             case R.id.iv_share:
-                //分享
+                //弹出分享框
+                showShareLayout();
+                break;
+            case R.id.share_weixin:
+                LogHelper.d("share","share_weixin called");
+                shareTo(SHARE_MEDIA.WEIXIN);
+                break;
+            case R.id.share_weixin_circle:
+                LogHelper.d("share","share_weixin called");
+                shareTo(SHARE_MEDIA.WEIXIN_CIRCLE);
+                break;
+            case R.id.share_qq:
+                LogHelper.d("share","share_weixin called");
+                shareTo(SHARE_MEDIA.QQ);
+                break;
+            case R.id.share_qqzone:
+                LogHelper.d("share","share_weixin called");
+                shareTo(SHARE_MEDIA.QZONE);
+                break;
+            case R.id.share_sina:
+                LogHelper.d("share","share_weixin called");
+                shareTo(SHARE_MEDIA.SINA);
                 break;
             case R.id.iv_collect:
                 //收藏
@@ -433,6 +466,94 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                 break;
             default:
                 break;
+        }
+    }
+
+    private void shareTo(SHARE_MEDIA media) {
+        UMWeb web = new UMWeb(mWeb_Url);
+        String s = mTitle.getText().toString();
+        web.setTitle(s);//标题
+        web.setDescription("  ");
+        web.setThumb(new UMImage(this, R.drawable.ic_launcher));  //缩略图
+
+        new ShareAction(this)
+                .setPlatform(media)
+                .withMedia(web)
+                .setCallback(mUMShareListener)
+                .share();
+    }
+
+    private UMShareListener mUMShareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            showToast("已分享");
+            dismissShareLayout();
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            showToast("分享失败");
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            showToast("分享取消");
+        }
+    };
+
+    private void showShareLayout() {
+        if (mBottomShare.getVisibility() != View.VISIBLE) {
+            mBottomShare.setVisibility(View.VISIBLE);
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.activity_fade_in);
+            mShareBg.startAnimation(animation);
+
+            Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.sharein_bottom2top);
+            mShareContent.startAnimation(animation1);
+        }
+    }
+
+    private void dismissShareLayout() {
+        if (mBottomShare.getVisibility() == View.VISIBLE) {
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.activity_fade_out);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mBottomShare.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+            mShareBg.startAnimation(animation);
+
+            Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.shareout_top2bottom);
+            mShareContent.startAnimation(animation1);
         }
     }
 

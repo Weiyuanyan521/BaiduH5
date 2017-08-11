@@ -130,7 +130,8 @@
 
         <activity
             android:name=".activity.ActivityWebview"
-            android:screenOrientation="portrait">
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:hardwareAccelerated="true">
         </activity>
 
         <activity

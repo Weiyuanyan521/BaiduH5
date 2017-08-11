@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.haokanhaokan.news"
         minSdkVersion 16
@@ -53,8 +53,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
+    //数据库
+    compile 'com.j256.ormlite:ormlite-android:5.0'
+    compile 'com.j256.ormlite:ormlite-core:5.0'
     //retrofit，底层网络库用okhttp, 默认里面已经集成了okhttp3，JSON库解析用GSON，所以需要GSON
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     //retrofit与GSON集成的中间件
@@ -72,8 +75,6 @@ dependencies {
     compile 'io.reactivex:rxjava:1.2.3'
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    //下拉刷新
-    compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
     //友盟统计
     compile 'com.umeng.analytics:analytics:latest.integration'
     //此处为百度广告
