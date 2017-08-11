@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
@@ -26,15 +25,18 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mobad.feeds.BaiduNative;
+import com.baidu.mobad.feeds.NativeErrorCode;
+import com.baidu.mobad.feeds.NativeResponse;
 import com.baidu.mobad.feeds.RequestParameters;
-import com.baidu.mobads.BaiduNativeAdPlacement;
-import com.baidu.mobads.BaiduNativeH5AdView;
-import com.baidu.mobads.BaiduNativeH5AdViewManager;
+import com.bumptech.glide.Glide;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
+
+import java.util.List;
 
 public class ActivityWebview extends ActivityBase implements View.OnClickListener {
     public static final String KEY_INTENT_WEB_URL = "url";
@@ -49,6 +51,8 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private RelativeLayout mAdWraper;
     private RelativeLayout mAdWraper1;
     private RelativeLayout mAdWraper2;
+    private ImageView mAdimage;
+    private TextView mAdTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,129 +121,148 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         } else {
             mAdWraper = mAdWraper2;
         }
+        mAdimage = (ImageView) mAdWraper.findViewById(R.id.image);
+        mAdTitle = (TextView) mAdWraper.findViewById(R.id.titlead);
 
-        //百度横幅广告相关begin
-//        if (mWeb_Url.contains("image?")) {
-//            mAdWraper1.setVisibility(View.VISIBLE);
-//            mAdWraper = mAdWraper1;
-//        } else {
-//            mAdWraper2.setVisibility(View.VISIBLE);
-//            mAdWraper = mAdWraper2;
-//        }
-//
-//        AdSettings.setKey(new String[]{"baidu", "中国"});
-//        String adPlaceID = "4584862";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
-////        String adPlaceID = "3858444";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
-//        AdView adView = new AdView(this, adPlaceID);
-//        //设置监听器
-//        adView.setListener(new AdViewListener() {
-//            @Override
-//            public void onAdReady(AdView adView) {
-//                LogHelper.i("WebViewActivity", "onAdReady");
-//            }
-//
-//            @Override
-//            public void onAdShow(JSONObject jsonObject) {
-//                LogHelper.i("WebViewActivity", "onAdShow");
-//            }
-//
-//            @Override
-//            public void onAdClick(JSONObject jsonObject) {
-//
-//            }
-//
-//            @Override
-//            public void onAdFailed(String s) {
-//
-//            }
-//
-//            @Override
-//            public void onAdSwitch() {
-//
-//            }
-//
-//            @Override
-//            public void onAdClose(JSONObject jsonObject) {
-//                mAdWraper.setVisibility(View.GONE);
-//                LogHelper.i("WebViewActivity", "onAdClose");
-//            }
-//        });
-//        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//        mAdWraper.addView(adView, params);
-        //百度横幅广告相关end
-
-
-        loadBaiduAd(null);
+        loadBaiduAd2(true);
     }
 
-    boolean mCloadAd = false;
-    private void loadBaiduAd(final View oldAdView) {
+    private void loadBaiduAd2(final boolean first) {
         if (mIsDestory || mCloadAd) {
             return;
         }
 
-        mAdWraper.setVisibility(View.VISIBLE);
-        //百度信息流广告begin
         /**
-         * Step 1. 在准备数据时，在listview广告位置创建BaiduNativeAdPlacement对象，并加入自己的数据列
-         表中
-         *  注意：请将YOUR_AD_PALCE_ID 替换为自己的广告位ID
+         * Step 1. 创建 BaiduNative 对象，参数分别为：
+         * 上下文 context，广告位 ID，BaiduNativeNetworkListener 监听（监听广告请求的成功与失
+         败）
+         *  注意：请将 YOUR_AD_PALCE_ID  替换为自己的代码位 ID ，不填写无法请求到广告
          */
-        BaiduNativeAdPlacement placement = new BaiduNativeAdPlacement();
-        placement.setApId("4634448");
-
-        final BaiduNativeH5AdView newAdView = BaiduNativeH5AdViewManager.getInstance()
-                .getBaiduNativeH5AdView(this, placement, R.color.bai);
-        if (newAdView.getParent() != null) {
-            ((ViewGroup) newAdView.getParent()).removeView(newAdView);
-        }
-        newAdView.setEventListener(new BaiduNativeH5AdView.BaiduNativeH5EventListner() {
-            @Override
-            public void onAdClick() {
-            }
-
-            @Override
-            public void onAdFail(String arg0) {
-                LogHelper.i("WebViewActivity", "onAdFail arg0 = " + arg0);
-                if (oldAdView == null) {
-                    mAdWraper.setVisibility(View.GONE);
+        BaiduNative baidu = new BaiduNative(this, "4655660",
+                new BaiduNative.BaiduNativeNetworkListener() {
+                @Override
+                public void onNativeFail(NativeErrorCode arg0) {
+                    LogHelper.d("ListViewActivity", "onNativeFail reason:" + arg0.name());
+                    if (first) {
+                        mAdWraper.setVisibility(View.GONE);
+                    }
                 }
-            }
+                @Override
+                public void onNativeLoad(List<NativeResponse> arg0) {
+                    if (arg0 != null && arg0.size() > 0) {
+                        mAdWraper.setVisibility(View.VISIBLE);
+                        final NativeResponse nativeResponse = arg0.get(0);
+                        String title = nativeResponse.getTitle();
+                        mAdTitle.setText(title);
+                        String iconUrl = nativeResponse.getIconUrl();
+                        String adLogoUrl = nativeResponse.getAdLogoUrl();
+                        String imageUrl = nativeResponse.getImageUrl();
+                        LogHelper.d("ListViewActivity", "iconUrl = " + iconUrl + ", adLogoUrl = " + adLogoUrl
+                                + ", imageUrl = " + imageUrl);
 
-            @Override
-            public void onAdShow() {
-                LogHelper.i("WebViewActivity", "onAdShow");
-                if (oldAdView != null) {
-                    mAdWraper.removeView(oldAdView);
+                        Glide.with(ActivityWebview.this).load(imageUrl).into(mAdimage);
+
+                        nativeResponse.recordImpression(mAdWraper);//  警告：调用该函数来发送展现，勿漏！
+                        mAdWraper.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                nativeResponse.handleClick(view);//  点击响应
+                            }
+                        });
+                    } else {
+                        if (first) {
+                            mAdWraper.setVisibility(View.GONE);
+                        }
+                    }
                 }
-            }
+            });
 
-            @Override
-            public void onAdDataLoaded() {
-                LogHelper.i("WebViewActivity", "onAdDataLoaded");
-            }
-        });
-
-        int width = getResources().getDisplayMetrics().widthPixels;
-        int height = width>>2;
-        RelativeLayout.LayoutParams rllp = new RelativeLayout.LayoutParams(width, height);
-        newAdView.setLayoutParams(rllp);
-
-        final RequestParameters requestParameters =
-                new RequestParameters.Builder().setWidth(width).setHeight(height).build();
-        newAdView.makeRequest(requestParameters);
-        mAdWraper.addView(newAdView, 0);
-
+        /**
+         * Step 2. 创建requestParameters对象，并将其传给baidu.makeRequest来请求广告
+         */
+        RequestParameters requestParameters = new RequestParameters.Builder()
+                .downloadAppConfirmPolicy(RequestParameters.DOWNLOAD_APP_CONFIRM_ALWAYS)
+                .build();
+        baidu.makeRequest(requestParameters);
 
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 LogHelper.i("WebViewActivity", "onAd 重新请求了");
-                loadBaiduAd(newAdView);
+                loadBaiduAd2(false);
             }
-        }, 5000);
-        //百度信息流广告end
+        }, 10000);
     }
+
+    boolean mCloadAd = false;
+
+//    private void loadBaiduAd(final View oldAdView) {
+//        if (mIsDestory || mCloadAd) {
+//            return;
+//        }
+//
+//        mAdWraper.setVisibility(View.VISIBLE);
+//        //百度信息流广告begin
+//        /**
+//         * Step 1. 在准备数据时，在listview广告位置创建BaiduNativeAdPlacement对象，并加入自己的数据列
+//         表中
+//         *  注意：请将YOUR_AD_PALCE_ID 替换为自己的广告位ID
+//         */
+//        BaiduNativeAdPlacement placement = new BaiduNativeAdPlacement();
+//        placement.setApId("4634448");
+//
+//        final BaiduNativeH5AdView newAdView = BaiduNativeH5AdViewManager.getInstance()
+//                .getBaiduNativeH5AdView(this, placement, R.color.bai);
+//        if (newAdView.getParent() != null) {
+//            ((ViewGroup) newAdView.getParent()).removeView(newAdView);
+//        }
+//        newAdView.setEventListener(new BaiduNativeH5AdView.BaiduNativeH5EventListner() {
+//            @Override
+//            public void onAdClick() {
+//            }
+//
+//            @Override
+//            public void onAdFail(String arg0) {
+//                LogHelper.i("WebViewActivity", "onAdFail arg0 = " + arg0);
+//                if (oldAdView == null) {
+//                    mAdWraper.setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void onAdShow() {
+//                LogHelper.i("WebViewActivity", "onAdShow");
+//                if (oldAdView != null) {
+//                    mAdWraper.removeView(oldAdView);
+//                }
+//            }
+//
+//            @Override
+//            public void onAdDataLoaded() {
+//                LogHelper.i("WebViewActivity", "onAdDataLoaded");
+//            }
+//        });
+//
+//        int width = getResources().getDisplayMetrics().widthPixels;
+//        int height = width>>2;
+//        RelativeLayout.LayoutParams rllp = new RelativeLayout.LayoutParams(width, height);
+//        newAdView.setLayoutParams(rllp);
+//
+//        final RequestParameters requestParameters =
+//                new RequestParameters.Builder().setWidth(width).setHeight(height).build();
+//        newAdView.makeRequest(requestParameters);
+//        mAdWraper.addView(newAdView, 0);
+//
+//
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                LogHelper.i("WebViewActivity", "onAd 重新请求了");
+//                loadBaiduAd(newAdView);
+//            }
+//        }, 5000);
+//        //百度信息流广告end
+//    }
 
     private void assignViews() {
         ImageView back = (ImageView) findViewById(R.id.back);
@@ -252,7 +275,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         mAdWraper2 = (RelativeLayout) findViewById(R.id.adwrapper2);
 
         mAdWraper1.findViewById(R.id.ad_close).setOnClickListener(this);
-        mAdWraper2.findViewById(R.id.ad_close1).setOnClickListener(this);
+        mAdWraper2.findViewById(R.id.ad_close).setOnClickListener(this);
 
         mTitle = (TextView) findViewById(R.id.title);
 
@@ -375,7 +398,6 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                 overridePendingTransition(R.anim.activity_in_left2right, R.anim.activity_out_left2right);
                 break;
             case R.id.ad_close:
-            case R.id.ad_close1:
                 mCloadAd = true;
                 if (mAdWraper != null) {
                     mAdWraper.setVisibility(View.GONE);

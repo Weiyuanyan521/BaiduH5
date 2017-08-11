@@ -73,6 +73,50 @@
         android:layout_height="match_parent">
     </FrameLayout>
 
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/adwrapper"
+        android:background="@color/hei_60"
+        android:layout_above="@id/divider"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/image"
+            android:scaleType="fitCenter"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"/>
+
+        <FrameLayout
+            android:id="@+id/adwrapper_child"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"/>
+
+        <ImageView
+            android:id="@+id/ad_close"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/adwrapper_child"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="6dp"
+            android:src="@drawable/ad_close"
+            android:layout_width="25dp"
+            android:layout_height="25dp"/>
+
+        <!--<TextView-->
+            <!--android:textSize="9sp"-->
+            <!--android:textColor="@color/bai"-->
+            <!--android:layout_below="@id/image"-->
+            <!--android:text="广告"-->
+            <!--android:background="@drawable/drawable_shape_ad_bg"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_width="25dp"-->
+            <!--android:layout_height="14dp"/>-->
+    </RelativeLayout>
+
     <!--<com.haokan.baiduh5.custompage.Custom_Homepage-->
         <!--android:visibility="gone"-->
         <!--android:id="@+id/main_homepage"-->

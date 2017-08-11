@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.http.UrlsUtil;
-import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.SecurityUtil;
 
 import org.json.JSONException;
@@ -80,7 +79,7 @@ public class RequestHeader<RequestBody> {
 
         StringBuilder sb = new StringBuilder();
         String sign_temp = sb.append(messageID).append(timeStamp).append(UrlsUtil.SECRET_KEY).append(bodyStr).toString();
-        LogHelper.d("wangzixu", "sign = " + sign_temp);
+//        LogHelper.d("wangzixu", "sign = " + sign_temp);
         sign = SecurityUtil.md5(sign_temp);
 
         terminal = "5";

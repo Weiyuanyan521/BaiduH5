@@ -12,10 +12,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.webkit.WebView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.baidu.mobads.InterstitialAd;
-import com.baidu.mobads.InterstitialAdListener;
+import com.baidu.mobad.feeds.BaiduNative;
+import com.baidu.mobad.feeds.NativeErrorCode;
+import com.baidu.mobad.feeds.NativeResponse;
+import com.baidu.mobad.feeds.RequestParameters;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.bean.UpdateBean;
@@ -34,6 +39,7 @@ import com.haokan.baiduh5.util.Values;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -54,7 +60,10 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     private FragmentManager mFragmentManager;
     private String mReview;
     private String mTodayData;
-    private InterstitialAd mInterAd;
+    private View mAdWrapper;
+    private FrameLayout mAdWrapperChild;
+    private NativeResponse mNativxeAdResponse;
+    private ImageView mAdImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,43 +94,45 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
         onClick(mTabHomepage);
 
         //百度广告相关初始化
+        mAdWrapper = findViewById(R.id.adwrapper);
+        mAdWrapper.setOnClickListener(this);
+        mAdWrapperChild = (FrameLayout) mAdWrapper.findViewById(R.id.adwrapper_child);
+        mAdImage = (ImageView) mAdWrapper.findViewById(R.id.image);
+        mAdWrapper.findViewById(R.id.ad_close).setOnClickListener(this);
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         mTodayData = formatter.format(new Date());
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String dat = preferences.getString(Values.PreferenceKey.KEY_SP_BAIDU_INSERTAD_TIME, "--");
-        if (!dat.equals(mTodayData)) {
-            preferences.edit().putString(Values.PreferenceKey.KEY_SP_BAIDU_INSERTAD_TIME, mTodayData).apply();
 
-            String adPlaceId = "4634505";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
-            mInterAd = new InterstitialAd(this, adPlaceId);
-            mInterAd.setListener(new InterstitialAdListener() {
-                @Override
-                public void onAdReady() {
-                    if (mCurrentFragment != null) {
-                        if (mCurrentFragment == mImagePage || mCurrentFragment == mVideoPage) {
-                            showBaiduInsertAd();
-                        }
-                    }
-                }
-
-                @Override
-                public void onAdPresent() {
-                }
-
-                @Override
-                public void onAdClick(InterstitialAd interstitialAd) {
-                }
-
-                @Override
-                public void onAdDismissed() {
-                }
-
-                @Override
-                public void onAdFailed(String s) {
-                }
-            });
-            mInterAd.loadAd();
-        }
+//            String adPlaceId = "4634505";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+//            mInterAd = new InterstitialAd(this, adPlaceId);
+//            mInterAd.setListener(new InterstitialAdListener() {
+//                @Override
+//                public void onAdReady() {
+//                    if (mCurrentFragment != null) {
+//                        if (mCurrentFragment == mImagePage || mCurrentFragment == mVideoPage) {
+//                            showBaiduInsertAd();
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onAdPresent() {
+//                }
+//
+//                @Override
+//                public void onAdClick(InterstitialAd interstitialAd) {
+//                }
+//
+//                @Override
+//                public void onAdDismissed() {
+//                }
+//
+//                @Override
+//                public void onAdFailed(String s) {
+//                }
+//            });
+//            mInterAd.loadAd();
+//        }
     }
 
     @Override
@@ -229,15 +240,119 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             mTabVideopage.setSelected(false);
             mTabImagepage.setSelected(false);
             mTabPersonpage.setSelected(true);
+        } else if (v.getId() == R.id.ad_close || v.getId() == R.id.adwrapper) {
+            mAdWrapper.setVisibility(View.GONE);
         }
     }
 
+    boolean mIsQequestAd = false;
     private void showBaiduInsertAd() {
-        if (mInterAd != null) {
-            if (mInterAd.isAdReady()) {
-                mInterAd.showAd(this);
-                mInterAd = null;
-            }
+        if (mIsQequestAd) {
+            return;
+        }
+
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String dat = preferences.getString(Values.PreferenceKey.KEY_SP_BAIDU_INSERTAD_TIME, "--");
+        if (!dat.equals(mTodayData)) {
+            //信息流轮播模板
+            /**
+             * Step 1. 创建BaiduNative对象，参数分别为：
+             * 上下文context，广告位ID, BaiduNativeNetworkListener监听（监听广告请求的成功与失败）
+             *  注意：请将YOUR_AD_PALCE_ID 替换为自己的广告位ID
+             */
+            BaiduNative baidu = new BaiduNative(this, "4655722",
+                    new BaiduNative.BaiduNativeNetworkListener() {
+                        @Override
+                        public void onNativeFail(NativeErrorCode arg0) {
+                            LogHelper.d("ListViewActivity", "onNativeFail reason:" + arg0.name());
+                        }
+                        @Override
+                        public void onNativeLoad(List<NativeResponse> arg0) {
+                            if (arg0 != null && arg0.size() > 0) {
+                                NativeResponse response = arg0.get(0);
+                                if (response.getMaterialType() == NativeResponse.MaterialType.HTML) {
+                                    mAdWrapper.setVisibility(View.VISIBLE);
+                                    preferences.edit().putString(Values.PreferenceKey.KEY_SP_BAIDU_INSERTAD_TIME, mTodayData).apply();
+                                    WebView webView = response.getWebView();
+                                    mAdWrapperChild.addView(webView);
+                                }
+                            }
+                        }
+                    });
+
+            baidu.setNativeEventListener(new BaiduNative.BaiduNativeEventListener() {
+                @Override
+                public void onImpressionSended() {
+                    LogHelper.d("ListViewActivity", "onImpressionSended");
+                }
+
+                @Override
+                public void onClicked() {
+                    LogHelper.d("ListViewActivity", "onClicked");
+                }
+            });
+
+            /**
+             * Step 2. 创建requestParameters对象，并将其传给baidu.makeRequest来请求广告
+             */
+            float density = getResources().getDisplayMetrics().density;
+            RequestParameters requestParameters = new RequestParameters.Builder()
+                    .setWidth((int) (360 * density)) //  需要设置请求模板的宽与高（物理像素值 ）
+                    .setHeight((int) (300 * density))
+                    .downloadAppConfirmPolicy(RequestParameters.DOWNLOAD_APP_CONFIRM_ALWAYS)
+                    .build();
+            baidu.makeRequest(requestParameters);
+
+            /**
+             * Step 1. 创建 BaiduNative 对象，参数分别为：
+             * 上下文 context，广告位 ID，BaiduNativeNetworkListener 监听（监听广告请求的成功与失
+             败）
+             *  注意：请将 YOUR_AD_PALCE_ID  替换为自己的代码位 ID ，不填写无法请求到广告
+             */
+//            BaiduNative baidu = new BaiduNative(this, "4655655",
+//                    new BaiduNative.BaiduNativeNetworkListener() {
+//                        @Override
+//                        public void onNativeFail(NativeErrorCode arg0) {
+//                            mIsQequestAd = false;
+//                            LogHelper.d("ListViewActivity", "onNativeFail reason:" + arg0.name());
+//                        }
+//                        @Override
+//                        public void onNativeLoad(List<NativeResponse> arg0) {
+//                            mIsQequestAd = false;
+//                            if (mIsDestory) {
+//                                return;
+//                            }
+//                            if (arg0 != null && arg0.size() > 0) {
+//                                mAdWrapper.setVisibility(View.VISIBLE);
+//                                preferences.edit().putString(Values.PreferenceKey.KEY_SP_BAIDU_INSERTAD_TIME, mTodayData).apply();
+//
+//                                final NativeResponse nativeResponse = arg0.get(0);
+//                                mNativxeAdResponse = null;
+//
+//                                String imageUrl = nativeResponse.getImageUrl();
+//                                Glide.with(ActivityMain.this).load(imageUrl).into(mAdImage);
+//
+//                                nativeResponse.recordImpression(mAdWrapper);//  警告：调用该函数来发送展现，勿漏！
+//                                mAdWrapper.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View view) {
+//                                        nativeResponse.handleClick(view);//  点击响应
+//                                        mAdWrapper.setVisibility(View.GONE);
+//                                    }
+//                                });
+//                            }
+//                        }
+//                    });
+//
+//            /**
+//             * Step 2. 创建requestParameters对象，并将其传给baidu.makeRequest来请求广告
+//             */
+//            RequestParameters requestParameters = new RequestParameters.Builder()
+//                    .downloadAppConfirmPolicy(RequestParameters.DOWNLOAD_APP_CONFIRM_ALWAYS)
+//                    .build();
+//            baidu.makeRequest(requestParameters);
+//            mIsQequestAd = true;
+//            LogHelper.d("ListViewActivity", "request ad");
         }
     }
 

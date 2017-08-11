@@ -37,10 +37,10 @@
 
         <!--百度广告 begin-->
 
-        <meta-data android:name="BaiduMobAd_APP_ID"
-                   android:value="f93f8007" />
         <!--<meta-data android:name="BaiduMobAd_APP_ID"-->
-                   <!--android:value="c92936a5" />-->
+                   <!--android:value="f93f8007" />-->
+        <meta-data android:name="BaiduMobAd_APP_ID"
+                   android:value="c92936a5" />
         <activity android:name="com.baidu.mobads.AppActivity"
                   android:configChanges="keyboard|keyboardHidden|orientation"
                   android:theme="@android:style/Theme.Translucent.NoTitleBar" />

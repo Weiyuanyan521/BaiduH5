@@ -64,36 +64,24 @@
         android:id="@+id/webView"
         android:layout_below="@+id/divider"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"   >
+        android:layout_height="fill_parent">
     </WebView>
 
-    <RelativeLayout
+    <include
         android:visibility="gone"
-        android:id="@+id/adwrapper1"
         android:layout_below="@+id/divider"
+        android:id="@+id/adwrapper1"
         android:layout_width="match_parent"
-        android:layout_height="90dp">
-        <ImageView
-            android:id="@+id/ad_close"
-            android:layout_alignParentRight="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/close"
-            android:layout_width="20dp"
-            android:layout_height="20dp"/>
-    </RelativeLayout>
+        android:layout_height="64dp"
+        layout="@layout/activity_webview_ad1"
+        />
 
-    <RelativeLayout
+    <include
         android:visibility="gone"
-        android:layout_alignParentBottom="true"
         android:id="@+id/adwrapper2"
         android:layout_width="match_parent"
-        android:layout_height="90dp">
-        <ImageView
-            android:id="@+id/ad_close1"
-            android:layout_alignParentRight="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/close"
-            android:layout_width="20dp"
-            android:layout_height="20dp"/>
-    </RelativeLayout>
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        layout="@layout/activity_webview_ad2"
+        />
 </RelativeLayout>

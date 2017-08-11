@@ -40,7 +40,7 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
     private String mWeb_Url;
 
     public static FragmentWebview newInstance(TypeBean type) {
-        LogHelper.d("wangzixu", "FragmentWebview newInstance");
+//        LogHelper.d("wangzixu", "FragmentWebview newInstance");
         Bundle args = new Bundle();
         args.putParcelable(TYPE_BEAN, type);
         FragmentWebview f = new FragmentWebview();
