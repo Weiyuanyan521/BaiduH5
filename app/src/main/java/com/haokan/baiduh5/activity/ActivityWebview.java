@@ -35,6 +35,7 @@ import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
+import com.umeng.socialize.UMShareAPI;
 
 import java.util.List;
 
@@ -53,6 +54,9 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private RelativeLayout mAdWraper2;
     private ImageView mAdimage;
     private TextView mAdTitle;
+    private View mBottomShare;
+    private View mShareContent;
+    private View mShareBg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,15 +274,27 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
 
         mTvClose = findViewById(R.id.close);
         mTvClose.setOnClickListener(this);
-
         mAdWraper1 = (RelativeLayout) findViewById(R.id.adwrapper1);
         mAdWraper2 = (RelativeLayout) findViewById(R.id.adwrapper2);
-
         mAdWraper1.findViewById(R.id.ad_close).setOnClickListener(this);
         mAdWraper2.findViewById(R.id.ad_close).setOnClickListener(this);
 
-        mTitle = (TextView) findViewById(R.id.title);
+        findViewById(R.id.writecomment).setOnClickListener(this);
+        findViewById(R.id.lookcomment).setOnClickListener(this);
+        findViewById(R.id.iv_collect).setOnClickListener(this);
+        findViewById(R.id.iv_share).setOnClickListener(this);
 
+        mBottomShare = findViewById(R.id.bottom_share);
+        mShareContent = mBottomShare.findViewById(R.id.content);
+        mShareContent.findViewById(R.id.share_weixin).setOnClickListener(this);
+        mShareContent.findViewById(R.id.share_weixin_circle).setOnClickListener(this);
+        mShareContent.findViewById(R.id.share_qq).setOnClickListener(this);
+        mShareContent.findViewById(R.id.share_qqzone).setOnClickListener(this);
+        mShareContent.findViewById(R.id.share_sina).setOnClickListener(this);
+        mShareBg = mBottomShare.findViewById(R.id.bg);
+        mShareBg.setOnClickListener(this);
+
+        mTitle = (TextView) findViewById(R.id.title);
         mProgressHorizontal = (ProgressBar) findViewById(R.id.progress_horizontal);
         mWebView = (WebView) findViewById(R.id.webView);
         initWebView();
@@ -403,6 +419,18 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                     mAdWraper.setVisibility(View.GONE);
                 }
                 break;
+            case R.id.iv_share:
+                //分享
+                break;
+            case R.id.iv_collect:
+                //收藏
+                break;
+            case R.id.writecomment:
+                //写评论
+                break;
+            case R.id.lookcomment:
+                //查看评论
+                break;
             default:
                 break;
         }
@@ -442,5 +470,11 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         }
         super.onDestroy();
 //        System.exit(0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }

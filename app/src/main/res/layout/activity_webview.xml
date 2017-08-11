@@ -60,12 +60,74 @@
         android:max="100"
         android:progressDrawable="@drawable/drawable_layer_webview_loading_line" />
 
+    <RelativeLayout
+        android:id="@+id/bottom_bar"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bai"
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+        <View
+            android:background="#d8d8d8"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <TextView
+            android:id="@+id/writecomment"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="15dp"
+            android:text="写评论"
+            android:textSize="13sp"
+            android:textColor="#444444"
+            android:drawableLeft="@drawable/icon_personal"
+            android:drawablePadding="3dp"
+            android:paddingLeft="10dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/drawable_shape_tvcomment_bg"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/iv_share"
+            android:scaleType="centerInside"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/umeng_socialize_share_music"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/iv_collect"
+            android:scaleType="centerInside"
+            android:layout_toLeftOf="@id/iv_share"
+            android:src="@drawable/umeng_socialize_copy"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/lookcomment"
+            android:scaleType="centerInside"
+            android:layout_toLeftOf="@id/iv_collect"
+            android:src="@drawable/umeng_socialize_copyurl"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+
     <WebView
         android:id="@+id/webView"
         android:layout_below="@+id/divider"
+        android:layout_above="@id/bottom_bar"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
     </WebView>
+
+    <include
+        android:visibility="gone"
+        android:id="@+id/bottom_share"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/layout_bottom_share"
+        />
 
     <include
         android:visibility="gone"
@@ -81,7 +143,7 @@
         android:id="@+id/adwrapper2"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/bottom_bar"
         layout="@layout/activity_webview_ad2"
         />
 </RelativeLayout>

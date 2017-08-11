@@ -263,20 +263,3 @@ public static final ** CREATOR;
   **[] $VALUES;
   public *;
 }
-
-
-#好看广告sdk需要的混淆*****begin
--keep public class pl.droidsonroids.gif.GifIOException{<init>(int);}
--keep class pl.droidsonroids.gif.GifInfoHandle{<init>(long,int,int,int);}
--keep class com.haokan.newad.model.** { *; }
--keep class com.haokan.newad.view.MediaView { *; }
--keep class com.haokan.newad.HaokanADManager { *; }
--keep class com.haokan.newad.callback.HaokanADInterface { *; }
--keep class com.haokan.newad.callback.EffectiveAdListener { *; }
--keep class com.haokan.newad.callback.HaokanADListener { *; }
--keep class com.haokan.newad.callback.AdClickListener { *; }
--keep class com.haokan.newad.utils.AdTypeCommonUtil { *; }
--keep class com.haokan.newad.AdConfiguration { *; }
--keep class com.haokan.newad.AdConfiguration$Builder { *; }
--dontwarn com.haokan.newad.**
-#好看广告sdk需要的混淆*****end

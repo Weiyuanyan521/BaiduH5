@@ -78,6 +78,7 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     //此处为百度广告
     compile files('libs/Baidu_MobAds_SDK.jar')
+    compile project(':umsharelibrary')
 }
 
 android {

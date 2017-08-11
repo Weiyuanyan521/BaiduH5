@@ -102,8 +102,8 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
          * new SplashAd(Context context, ViewGroup adsParent,
          *    SplashAdListener listener,String adPlaceId, boolean canClick);
          */
-        String adPlaceId = "4584884";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
-//        String adPlaceId = "4589696";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+//        String adPlaceId = "4584884";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+        String adPlaceId = "4589696";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
         mSplashAd = new SplashAd(this, mAdwraper, listener, adPlaceId, true);
     }
 
