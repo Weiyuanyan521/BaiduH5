@@ -132,11 +132,17 @@
         <activity
             android:name=".activity.ActivityWebview"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:hardwareAccelerated="true">
+            android:hardwareAccelerated="true"
+            >
         </activity>
 
         <activity
             android:name=".activity.ActivityAboutUs"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".activity.ActivityMyCollection"
             android:screenOrientation="portrait">
         </activity>
 

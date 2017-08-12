@@ -7,7 +7,7 @@
     android:id="@+id/content">
 
     <LinearLayout
-        android:id="@+id/title_layout"
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:orientation="horizontal"
@@ -47,13 +47,13 @@
 
     <View
         android:id="@+id/divider"
-        android:layout_below="@id/title_layout"
+        android:layout_below="@id/header"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
 
     <ProgressBar
         android:id="@+id/progress_horizontal"
-        android:layout_below="@id/title_layout"
+        android:layout_below="@id/header"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -156,4 +156,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>
+
+    <include
+        android:visibility="gone"
+        android:layout_below="@id/header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout_loading"
+        layout="@layout/layout_loading"/>
 </RelativeLayout>

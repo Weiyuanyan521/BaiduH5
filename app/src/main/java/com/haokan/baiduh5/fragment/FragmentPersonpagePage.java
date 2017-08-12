@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.activity.ActivityAboutUs;
+import com.haokan.baiduh5.activity.ActivityMyCollection;
 import com.haokan.baiduh5.cachesys.CacheManager;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.ToastManager;
@@ -26,7 +27,6 @@ import rx.schedulers.Schedulers;
 public class FragmentPersonpagePage extends FragmentBase implements View.OnClickListener {
     private View mView;
     private LinearLayout mCollection;
-    private LinearLayout mFollow;
     private LinearLayout mClearcache;
     private LinearLayout mAboutus;
     private TextView mTvCacheSize;
@@ -43,14 +43,12 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
 
     private void initView() {
         mCollection = (LinearLayout) mView.findViewById(R.id.collection);
-        mFollow = (LinearLayout) mView.findViewById(R.id.follow);
         mClearcache = (LinearLayout) mView.findViewById(R.id.clearcache);
         mTvCacheSize = (TextView) mClearcache.findViewById(R.id.cachesize);
         mCacheProgressBar = (ProgressBar) mClearcache.findViewById(R.id.progress);
         mAboutus = (LinearLayout) mView.findViewById(R.id.aboutus);
 
         mCollection.setOnClickListener(this);
-        mFollow.setOnClickListener(this);
         mClearcache.setOnClickListener(this);
         mAboutus.setOnClickListener(this);
 
@@ -65,7 +63,7 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
         int id = v.getId();
         switch (id) {
             case R.id.collection:
-                Intent iCollect = new Intent(mActivity, ActivityAboutUs.class);
+                Intent iCollect = new Intent(mActivity, ActivityMyCollection.class);
                 mActivity.startActivity(iCollect);
                 mActivity.overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
                 break;

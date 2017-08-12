@@ -17,6 +17,20 @@ public class CollectionBean {
     @DatabaseField
     public String title;
 
+    /**
+     * 存入日期
+     */
+    @DatabaseField
+    public String date;
+
+    /**
+     * 缩略图地址
+     */
+    @DatabaseField
+    public String thumbUrl;
+
     @DatabaseField
     public long create_time;
+
+    public boolean isSelected;
 }

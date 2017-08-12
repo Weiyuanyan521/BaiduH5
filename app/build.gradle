@@ -80,6 +80,8 @@ dependencies {
     //此处为百度广告
     compile files('libs/Baidu_MobAds_SDK.jar')
     compile project(':umsharelibrary')
+    //
+    compile 'org.greenrobot:eventbus:3.0.0'
 }
 
 android {

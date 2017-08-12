@@ -22,7 +22,7 @@ public class ActivityAboutUs extends ActivityBase implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_us);
-        StatusBarUtil.setStatusBarBgColor(this, R.color.colorMainStatus);
+        StatusBarUtil.setStatusBarBgColor(this, R.color.hong);
 
         TextView tv_copy_right = (TextView) findViewById(R.id.tv_copy_right);
 //        tv_copy_right.setText(getString(R.string.app_copyright, Calendar.getInstance().get(Calendar.YEAR)));

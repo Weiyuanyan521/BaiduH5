@@ -38,13 +38,14 @@ import com.baidu.mobad.feeds.RequestParameters;
 import com.bumptech.glide.Glide;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.bean.CollectionBean;
-import com.haokan.baiduh5.database.MyDatabaseHelper;
+import com.haokan.baiduh5.event.EventCollectionChange;
+import com.haokan.baiduh5.model.ModelMyCollection;
+import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.CommonUtil;
+import com.haokan.baiduh5.util.DataFormatUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.DeleteBuilder;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -52,11 +53,14 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 public class ActivityWebview extends ActivityBase implements View.OnClickListener {
     public static final String KEY_INTENT_WEB_URL = "url";
-    private TextView mTitle;
+    private TextView mTvTitle;
+    private String mTitleText = "";
     private ProgressBar mProgressHorizontal;
     private WebView mWebView;
 
@@ -73,12 +77,13 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private View mShareContent;
     private View mShareBg;
     private ViewGroup mBigViedioParent;
+    private View mTvCollection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
-        StatusBarUtil.setStatusBarBgColor(this, R.color.colorMainStatus);
+        StatusBarUtil.setStatusBarBgColor(this, R.color.hong);
 
         assignViews();
         loadData();
@@ -151,7 +156,6 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         if (mIsDestory || mCloadAd) {
             return;
         }
-
         /**
          * Step 1. 创建 BaiduNative 对象，参数分别为：
          * 上下文 context，广告位 ID，BaiduNativeNetworkListener 监听（监听广告请求的成功与失
@@ -285,6 +289,12 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
 //    }
 
     private void assignViews() {
+        //        错误界面相关
+        View loadingLayout = findViewById(R.id.layout_loading);
+        loadingLayout.setOnClickListener(this);
+        setPromptLayout(loadingLayout, null, null, null);
+
+
         ImageView back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(this);
 
@@ -297,7 +307,8 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
 
         findViewById(R.id.writecomment).setOnClickListener(this);
         findViewById(R.id.lookcomment).setOnClickListener(this);
-        findViewById(R.id.iv_collect).setOnClickListener(this);
+        mTvCollection = findViewById(R.id.iv_collect);
+        mTvCollection.setOnClickListener(this);
         findViewById(R.id.iv_share).setOnClickListener(this);
 
         mBottomShare = findViewById(R.id.bottom_share);
@@ -311,7 +322,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         mShareBg = mBottomShare.findViewById(R.id.bg);
         mShareBg.setOnClickListener(this);
 
-        mTitle = (TextView) findViewById(R.id.title);
+        mTvTitle = (TextView) findViewById(R.id.title);
         mProgressHorizontal = (ProgressBar) findViewById(R.id.progress_horizontal);
         mWebView = (WebView) findViewById(R.id.webView);
         mBigViedioParent = (ViewGroup) findViewById(R.id.bigvideoview);
@@ -374,12 +385,16 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                LogHelper.i("WebViewActivity", "onPageFinished mweburl = " + url);
                 String title = mWebView.getTitle();
+                LogHelper.i("WebViewActivity", "onPageFinished mweburl = " + url + ", title = " + title);
                 if (!TextUtils.isEmpty(title)) {
-                    mTitle.setText(title);
+                    if (!title.equals(mTitleText)) {
+                        mTitleText = title;
+                        mTvTitle.setText(mTitleText);
+                        checkIsCollect();
+                    }
                 } else {
-                    mTitle.setText("");
+                    mTvTitle.setText("");
                 }
             }
 
@@ -504,7 +519,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                 break;
             case R.id.cancel:
             case R.id.bg:
-                dismissShareLayout();
+                hideShareLayout();
                 break;
             case R.id.iv_share:
                 //弹出分享框
@@ -533,34 +548,107 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
             case R.id.iv_collect:
                 //收藏
                 if (v.isSelected()) {
-                    try {
-                        Dao dao = MyDatabaseHelper.getInstance(ActivityWebview.this).getDaoQuickly(CollectionBean.class);
-                        DeleteBuilder builder = dao.deleteBuilder();
-                        builder.where().eq("url", mWeb_Url);
-                        builder.delete();
-                    } catch (Exception e) {
-                        showToast("失败:" + e.getMessage());
-                        e.printStackTrace();
-                        return;
-                    }
-                    v.setSelected(false);
-                    showToast("取消收藏");
-                } else {
-                    CollectionBean bean = new CollectionBean();
-                    bean.url = mWeb_Url;
-                    bean.title = mTitle.getText().toString();
-                    bean.create_time = System.currentTimeMillis();
+                    new ModelMyCollection().deleteCollection(this, mTitleText, new onDataResponseListener<CollectionBean>() {
+                        @Override
+                        public void onStart() {
+                            showLoadingLayout();
+                        }
 
-                    try {
-                        Dao dao = MyDatabaseHelper.getInstance(ActivityWebview.this).getDaoQuickly(CollectionBean.class);
-                        dao.create(bean);
-                    } catch (Exception e) {
-                        showToast("失败:" + e.getMessage());
-                        e.printStackTrace();
-                        return;
+                        @Override
+                        public void onDataSucess(CollectionBean collectionBean) {
+                            if (mIsDestory) {
+                                return;
+                            }
+                            dismissAllPromptLayout();
+                            mTvCollection.setSelected(false);
+                            showToast("取消收藏");
+
+                            //发送删除收藏的通知
+                            CollectionBean bean = new CollectionBean();
+                            bean.title = mTitleText;
+                            EventCollectionChange change = new EventCollectionChange(false, bean);
+                            EventBus.getDefault().post(change);
+                        }
+
+                        @Override
+                        public void onDataEmpty() {
+                            if (mIsDestory) {
+                                return;
+                            }
+                            dismissAllPromptLayout();
+                        }
+
+                        @Override
+                        public void onDataFailed(String errmsg) {
+                            if (mIsDestory) {
+                                return;
+                            }
+                            dismissAllPromptLayout();
+                            showToast("失败:" + errmsg);
+                        }
+
+                        @Override
+                        public void onNetError() {
+                            if (mIsDestory) {
+                                return;
+                            }
+                            dismissAllPromptLayout();
+                        }
+                    });
+                } else {
+                    final CollectionBean bean = new CollectionBean();
+                    bean.url = mWeb_Url;
+                    bean.title = mTitleText;
+                    if (TextUtils.isEmpty(bean.title)) {
+                        bean.title = mWeb_Url;
                     }
-                    v.setSelected(true);
-                    showToast("收藏成功");
+                    bean.create_time = System.currentTimeMillis();
+                    bean.date = DataFormatUtil.format(bean.create_time);
+
+                    new ModelMyCollection().addCollection(this, bean, new onDataResponseListener<CollectionBean>() {
+                        @Override
+                        public void onStart() {
+                            showLoadingLayout();
+                        }
+
+                        @Override
+                        public void onDataSucess(CollectionBean collectionBean) {
+                            if (mIsDestory) {
+                                return;
+                            }
+                            dismissAllPromptLayout();
+                            mTvCollection.setSelected(true);
+                            showToast("收藏成功");
+
+                            EventCollectionChange change = new EventCollectionChange(true, bean);
+                            EventBus.getDefault().post(change);
+                        }
+
+                        @Override
+                        public void onDataEmpty() {
+                            if (mIsDestory) {
+                                return;
+                            }
+                            dismissAllPromptLayout();
+                        }
+
+                        @Override
+                        public void onDataFailed(String errmsg) {
+                            if (mIsDestory) {
+                                return;
+                            }
+                            dismissAllPromptLayout();
+                            showToast("失败:" + errmsg);
+                        }
+
+                        @Override
+                        public void onNetError() {
+                            if (mIsDestory) {
+                                return;
+                            }
+                            dismissAllPromptLayout();
+                        }
+                    });
                 }
                 break;
             case R.id.writecomment:
@@ -576,7 +664,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
 
     private void shareTo(SHARE_MEDIA media) {
         UMWeb web = new UMWeb(mWeb_Url);
-        String s = mTitle.getText().toString();
+        String s = mTvTitle.getText().toString();
         web.setTitle(s);//标题
         web.setDescription("  ");
         web.setThumb(new UMImage(this, R.drawable.ic_launcher));  //缩略图
@@ -604,7 +692,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         @Override
         public void onResult(SHARE_MEDIA platform) {
             showToast("已分享");
-            dismissShareLayout();
+            hideShareLayout();
         }
 
         /**
@@ -638,7 +726,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         }
     }
 
-    private void dismissShareLayout() {
+    private void hideShareLayout() {
         if (mBottomShare.getVisibility() == View.VISIBLE) {
             Animation animation = AnimationUtils.loadAnimation(this, R.anim.activity_fade_out);
             animation.setAnimationListener(new Animation.AnimationListener() {
@@ -662,8 +750,40 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         }
     }
 
+    private void checkIsCollect() {
+        new ModelMyCollection().checkIsCollectWithTitle(this, mTitleText, new onDataResponseListener<CollectionBean>() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onDataSucess(CollectionBean collectionBean) {
+                mTvCollection.setSelected(true);
+            }
+
+            @Override
+            public void onDataEmpty() {
+                mTvCollection.setSelected(false);
+            }
+
+            @Override
+            public void onDataFailed(String errmsg) {
+                mTvCollection.setSelected(false);
+            }
+
+            @Override
+            public void onNetError() {
+                mTvCollection.setSelected(false);
+            }
+        });
+    }
+
     @Override
     public void onBackPressed() {
+        if (mBottomShare.getVisibility() == View.VISIBLE) {
+            hideShareLayout();
+            return;
+        }
         if (mWebView.canGoBack()) {
             mWebView.goBack();
         } else {

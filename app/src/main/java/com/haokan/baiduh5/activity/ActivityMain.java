@@ -68,8 +68,8 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
-        StatusBarUtil.setStatusBarBgColor(this, R.color.colorMainStatus);
         setContentView(R.layout.activity_main);
+        StatusBarUtil.setStatusBarBgColor(this, R.color.hong);
         initView();
         checkStoragePermission();
     }
