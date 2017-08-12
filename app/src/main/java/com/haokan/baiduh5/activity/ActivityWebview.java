@@ -2,6 +2,8 @@ package com.haokan.baiduh5.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -11,6 +13,8 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.CookieManager;
@@ -33,10 +37,14 @@ import com.baidu.mobad.feeds.NativeResponse;
 import com.baidu.mobad.feeds.RequestParameters;
 import com.bumptech.glide.Glide;
 import com.haokan.baiduh5.R;
+import com.haokan.baiduh5.bean.CollectionBean;
+import com.haokan.baiduh5.database.MyDatabaseHelper;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -64,6 +72,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private View mBottomShare;
     private View mShareContent;
     private View mShareBg;
+    private ViewGroup mBigViedioParent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -305,6 +314,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         mTitle = (TextView) findViewById(R.id.title);
         mProgressHorizontal = (ProgressBar) findViewById(R.id.progress_horizontal);
         mWebView = (WebView) findViewById(R.id.webView);
+        mBigViedioParent = (ViewGroup) findViewById(R.id.bigvideoview);
         initWebView();
     }
 
@@ -404,8 +414,73 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
                 callback.invoke(origin, true, false);
             }
+
+            //*******全屏播放视频设置相关begin*********
+            @Override
+            public void onShowCustomView(View view, CustomViewCallback callback) {
+//                super.onShowCustomView(view, callback);
+                LogHelper.d("vedio", "onShowCustomView view = " + view + ", callback = " + callback);
+                if (mBigVidioView != null) {
+                    callback.onCustomViewHidden();
+                    return;
+                }
+                mCustomViewCallback = callback;
+                mBigVidioView = view;
+                mBigViedioParent.setVisibility(View.VISIBLE);
+                mBigViedioParent.addView(view);
+                mWebView.setVisibility(View.GONE);
+
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }
+
+            @Override
+            public void onHideCustomView() {
+                LogHelper.d("vedio", "onHideCustomView");
+                mWebView.setVisibility(View.VISIBLE);
+                if (mCustomViewCallback != null) {
+                    mCustomViewCallback.onCustomViewHidden();
+                    mCustomViewCallback = null;
+                }
+                if (mBigVidioView != null) {
+                    mBigViedioParent.removeView(mBigVidioView);
+                    mBigVidioView = null;
+                }
+                mBigViedioParent.setVisibility(View.GONE);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
         });
     }
+    private View mBigVidioView = null;
+    private WebChromeClient.CustomViewCallback mCustomViewCallback = null;
+    @Override
+    public void onConfigurationChanged(Configuration config) {
+        super.onConfigurationChanged(config);
+        switch (config.orientation) {
+            case Configuration.ORIENTATION_LANDSCAPE:
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                break;
+            case Configuration.ORIENTATION_PORTRAIT:
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                break;
+        }
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mWebView != null) {
+            mWebView.onPause();
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mWebView != null) {
+            mWebView.onResume();
+        }
+    }
+    //*******全屏播放视频设置相关end*********
 
     @Override
     public void onClick(View v) {
@@ -457,6 +532,36 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                 break;
             case R.id.iv_collect:
                 //收藏
+                if (v.isSelected()) {
+                    try {
+                        Dao dao = MyDatabaseHelper.getInstance(ActivityWebview.this).getDaoQuickly(CollectionBean.class);
+                        DeleteBuilder builder = dao.deleteBuilder();
+                        builder.where().eq("url", mWeb_Url);
+                        builder.delete();
+                    } catch (Exception e) {
+                        showToast("失败:" + e.getMessage());
+                        e.printStackTrace();
+                        return;
+                    }
+                    v.setSelected(false);
+                    showToast("取消收藏");
+                } else {
+                    CollectionBean bean = new CollectionBean();
+                    bean.url = mWeb_Url;
+                    bean.title = mTitle.getText().toString();
+                    bean.create_time = System.currentTimeMillis();
+
+                    try {
+                        Dao dao = MyDatabaseHelper.getInstance(ActivityWebview.this).getDaoQuickly(CollectionBean.class);
+                        dao.create(bean);
+                    } catch (Exception e) {
+                        showToast("失败:" + e.getMessage());
+                        e.printStackTrace();
+                        return;
+                    }
+                    v.setSelected(true);
+                    showToast("收藏成功");
+                }
                 break;
             case R.id.writecomment:
                 //写评论

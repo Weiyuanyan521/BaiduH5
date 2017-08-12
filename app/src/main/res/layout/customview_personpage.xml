@@ -20,14 +20,13 @@
         />
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/collection"
         android:orientation="horizontal"
         android:background="@drawable/drawable_selector_bai"
         android:layout_width="match_parent"
         android:layout_height="56dp">
-            <!--android:src="@drawable/icon_collection"-->
         <ImageView
+            android:src="@drawable/icon_collection"
             android:layout_marginLeft="18dp"
             android:scaleType="center"
             android:layout_gravity="center_vertical"
@@ -44,8 +43,8 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"/>
 
-            <!--android:src="@drawable/icon_personal_into"-->
         <ImageView
+            android:src="@drawable/icon_setting_into"
             android:scaleType="center"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="16dp"
@@ -54,49 +53,6 @@
     </LinearLayout>
 
     <View
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#d8d8d8"
-        android:layout_marginLeft="15dp"
-        />
-
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/follow"
-        android:orientation="horizontal"
-        android:background="@drawable/drawable_selector_bai"
-        android:layout_width="match_parent"
-        android:layout_height="56dp">
-            <!--android:src="@drawable/icon_follow"-->
-        <ImageView
-            android:layout_marginLeft="18dp"
-            android:scaleType="center"
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:text="@string/my_follow"
-            android:textColor="#666666"
-            android:textSize="14sp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"/>
-
-            <!--android:src="@drawable/icon_personal_into"-->
-        <ImageView
-            android:scaleType="center"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <View
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#d8d8d8"
@@ -109,8 +65,8 @@
         android:background="@drawable/drawable_selector_bai"
         android:layout_width="match_parent"
         android:layout_height="56dp">
-            <!--android:src="@drawable/icon_clearcache"-->
         <ImageView
+            android:src="@drawable/icon_clearcache"
             android:layout_marginLeft="18dp"
             android:scaleType="center"
             android:layout_gravity="center_vertical"
@@ -160,8 +116,8 @@
         android:background="@drawable/drawable_selector_bai"
         android:layout_width="match_parent"
         android:layout_height="56dp">
-            <!--android:src="@drawable/icon_about"-->
         <ImageView
+            android:src="@drawable/icon_about"
             android:layout_marginLeft="18dp"
             android:scaleType="center"
             android:layout_gravity="center_vertical"
@@ -178,8 +134,8 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"/>
 
-            <!--android:src="@drawable/icon_personal_into"-->
         <ImageView
+            android:src="@drawable/icon_setting_into"
             android:scaleType="center"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="16dp"

@@ -23,7 +23,8 @@
     <!-- 以下为可选权限 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!--百度广告需求的权限 begin-->
-
+    <uses-sdk android:minSdkVersion="16"
+              android:targetSdkVersion="24"/>
     <application
         android:name=".App"
         android:allowBackup="true"

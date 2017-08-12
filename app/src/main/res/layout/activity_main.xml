@@ -49,7 +49,7 @@
         <TextView
             android:id="@+id/tab_personpage"
             android:gravity="center"
-            android:text="关于"
+            android:text="个人"
             android:textColor="@color/color_selector_tabmain"
             android:textSize="10sp"
             android:drawableTop="@drawable/drawable_selector_tab_personpage"

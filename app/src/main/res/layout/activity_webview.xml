@@ -115,26 +115,13 @@
             android:layout_height="match_parent"/>
     </RelativeLayout>
 
-    <FrameLayout
+    <WebView
+        android:id="@+id/webView"
         android:layout_below="@+id/divider"
         android:layout_above="@id/bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <WebView
-            android:id="@+id/webView"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-        </WebView>
-    </FrameLayout>
-
-    <include
-        android:visibility="gone"
-        android:id="@+id/bottom_share"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/layout_bottom_share"
-        />
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    </WebView>
 
     <include
         android:visibility="gone"
@@ -153,4 +140,20 @@
         android:layout_above="@id/bottom_bar"
         layout="@layout/activity_webview_ad2"
         />
+
+    <include
+        android:visibility="gone"
+        android:id="@+id/bottom_share"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/layout_bottom_share"
+        />
+
+    <FrameLayout
+        android:id="@+id/bigvideoview"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 </RelativeLayout>

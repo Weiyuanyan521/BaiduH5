@@ -64,6 +64,11 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
         }
         int id = v.getId();
         switch (id) {
+            case R.id.collection:
+                Intent iCollect = new Intent(mActivity, ActivityAboutUs.class);
+                mActivity.startActivity(iCollect);
+                mActivity.overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
+                break;
             case R.id.clearcache:
                 clearCache();
                 break;
