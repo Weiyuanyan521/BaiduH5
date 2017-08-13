@@ -103,9 +103,9 @@ public class App extends Application {
     public void initCY(){
         Config config = new Config();
         config.ui.toolbar_bg = Color.WHITE;
-        // config.ui.style="indent";
-        // config.ui.depth = 1;
-        // config.ui.sub_size = 20;
+         config.ui.style="indent";
+         config.ui.depth = 1;
+         config.ui.sub_size = 20;
         config.comment.showScore = false;
         config.comment.uploadFiles = false;
 
