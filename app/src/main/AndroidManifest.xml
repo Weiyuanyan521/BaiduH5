@@ -146,6 +146,15 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <!--畅言begin-->
+        <!-- 评论列表界面 -->
+        <activity android:name="com.sohu.cyan.android.sdk.activity.CyanCommentActivity"/>
+        <!-- 发表评论页面 -->
+        <activity android:name="com.sohu.cyan.android.sdk.activity.CyanPostCommentActivity"/>
+        <!-- 社会化账号登陆界面-->
+        <activity android:name="com.sohu.cyan.android.sdk.activity.OAuthActivity"></activity>
+        <!--畅言end-->
+
         <service android:name=".service.UpdateApkService"/>
 
         <!--适应7.0以上的应用升级-->

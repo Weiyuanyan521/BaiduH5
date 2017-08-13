@@ -11,6 +11,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +39,11 @@ import com.baidu.mobad.feeds.NativeErrorCode;
 import com.baidu.mobad.feeds.NativeResponse;
 import com.baidu.mobad.feeds.RequestParameters;
 import com.bumptech.glide.Glide;
+import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.bean.CollectionBean;
 import com.haokan.baiduh5.event.EventCollectionChange;
+import com.haokan.baiduh5.fragment.FragmentComment;
 import com.haokan.baiduh5.model.ModelMyCollection;
 import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.CommonUtil;
@@ -78,6 +83,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private View mShareBg;
     private ViewGroup mBigViedioParent;
     private View mTvCollection;
+    private FragmentComment mFragmentComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +93,13 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
 
         assignViews();
         loadData();
+    }
+
+    private void addFragment(Fragment fragment, String tag) {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.cy_frag_wrapper, fragment, tag);
+        transaction.commit();
     }
 
     /**
@@ -305,8 +318,9 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         mAdWraper1.findViewById(R.id.ad_close).setOnClickListener(this);
         mAdWraper2.findViewById(R.id.ad_close).setOnClickListener(this);
 
-        findViewById(R.id.writecomment).setOnClickListener(this);
-        findViewById(R.id.lookcomment).setOnClickListener(this);
+//        findViewById(R.id.writecomment).setOnClickListener(this);
+//        findViewById(R.id.lookcomment).setOnClickListener(this);
+
         mTvCollection = findViewById(R.id.iv_collect);
         mTvCollection.setOnClickListener(this);
         findViewById(R.id.iv_share).setOnClickListener(this);
@@ -327,6 +341,9 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         mWebView = (WebView) findViewById(R.id.webView);
         mBigViedioParent = (ViewGroup) findViewById(R.id.bigvideoview);
         initWebView();
+
+        mFragmentComment = new FragmentComment();
+        addFragment(mFragmentComment, "cypl");
     }
 
     private void initWebView() {
@@ -391,6 +408,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                     if (!title.equals(mTitleText)) {
                         mTitleText = title;
                         mTvTitle.setText(mTitleText);
+                        App.sCyanSdk.addCommentToolbar((ViewGroup)mFragmentComment.getRootView(), mTitleText, mTitleText, url);
                         checkIsCollect();
                     }
                 } else {
@@ -651,12 +669,12 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                     });
                 }
                 break;
-            case R.id.writecomment:
-                //写评论
-                break;
-            case R.id.lookcomment:
-                //查看评论
-                break;
+//            case R.id.writecomment:
+//                //写评论
+//                break;
+//            case R.id.lookcomment:
+//                //查看评论
+//                break;
             default:
                 break;
         }

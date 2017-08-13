@@ -3,6 +3,7 @@ package com.haokan.baiduh5;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -13,6 +14,9 @@ import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.Values;
+import com.sohu.cyan.android.sdk.api.Config;
+import com.sohu.cyan.android.sdk.api.CyanSdk;
+import com.sohu.cyan.android.sdk.exception.CyanException;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
@@ -46,6 +50,8 @@ public class App extends Application {
         PlatformConfig.setSinaWeibo("357695541", "a4d2df94f7c5c2e48ae93659801e2249","https://api.weibo.com/oauth2/default.html");
         // QQ和Qzone appid appkey
         PlatformConfig.setQQZone("1101819412", "pvH55D7PJ3XTii7j");
+
+        initCY();
     }
 
     public static void init(final Context context) {
@@ -91,5 +97,36 @@ public class App extends Application {
                 LogHelper.d(TAG, "checkUpdata onNetError");
             }
         });
+    }
+
+    public static CyanSdk sCyanSdk;
+    public void initCY(){
+        Config config = new Config();
+        config.ui.toolbar_bg = Color.WHITE;
+        // config.ui.style="indent";
+        // config.ui.depth = 1;
+        // config.ui.sub_size = 20;
+        config.comment.showScore = false;
+        config.comment.uploadFiles = false;
+
+        config.comment.useFace = false;
+        config.login.SSO_Assets_ICon = "ico31.png";
+        config.login.SSOLogin = false;
+        config.login.Custom_oauth_login = false;
+        config.login.QQ = true;
+        config.login.SINA = true;
+        config.login.SOHU = true;
+        config.ui.toolbar_border = 0x00000000;
+
+//        config.ui.toolbar_bg = Color.BLACK;
+//        config.ui.toolbar_border = Color.GREEN;
+//        config.login.loginActivityClass = AppLoginActivity.class;
+        try {
+            CyanSdk.register(this, "cysWG45hK", "d8f872bfc9f31965971618841403ebf4", "https://m.levect.com", config);
+        } catch (CyanException e) {
+//            LogHelper.d("cyanexcp", e.getMessage());
+            e.printStackTrace();
+        }
+        sCyanSdk = CyanSdk.getInstance(this);
     }
 }
