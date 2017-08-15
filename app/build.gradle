@@ -26,7 +26,7 @@ android {
 
     signingConfigs {
         debug {
-            storeFile file('/Users/rickxio/Desktop/xsy/研发/haokankey_kd')
+            storeFile file('haokankey')
             storePassword "fr33d0m"
             keyAlias "好看新闻"
             keyPassword "fr33d0m"
