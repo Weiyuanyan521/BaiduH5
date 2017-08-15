@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -134,6 +135,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         if (TextUtils.isEmpty(mWeb_Url)) {
             ToastManager.showShort(this, R.string.url_error);
             finish();
+
             return;
         }
 
@@ -679,9 +681,12 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                 break;
         }
     }
-
+    private String mShare_url= "http://m.levect.com/kd/share.html?s=";
     private void shareTo(SHARE_MEDIA media) {
-        UMWeb web = new UMWeb(mWeb_Url);
+        String mWeb_Url_Base64 = mShare_url+Base64.encodeToString(mWeb_Url.getBytes(), Base64.DEFAULT);
+        LogHelper.d("share","share mWeb_Url_Base64 ="+mWeb_Url_Base64);
+        LogHelper.d("share","share mWeb_Url ="+mWeb_Url);
+        UMWeb web = new UMWeb(mWeb_Url_Base64);
         String s = mTvTitle.getText().toString();
         web.setTitle(s);//标题
         web.setDescription("  ");
@@ -721,6 +726,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             showToast("分享失败");
+            LogHelper.d("share","分享失败:"+t);
         }
 
         /**
