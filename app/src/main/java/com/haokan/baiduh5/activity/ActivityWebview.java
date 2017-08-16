@@ -42,6 +42,7 @@ import com.baidu.mobad.feeds.RequestParameters;
 import com.baidu.mobads.AdSettings;
 import com.baidu.mobads.AdView;
 import com.baidu.mobads.AdViewListener;
+import com.baiduad.BaiduAdManager;
 import com.bumptech.glide.Glide;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
@@ -67,7 +68,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.Random;
 
 public class ActivityWebview extends ActivityBase implements View.OnClickListener {
     public static final String KEY_INTENT_WEB_URL = "url";
@@ -93,6 +93,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private ViewGroup mBigViedioParent;
     private View mTvCollection;
     private FragmentComment mFragmentComment;
+    private RelativeLayout mAdParent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,26 +128,25 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     }
 
     private void assignViews() {
-        //        错误界面相关
+        //错误界面相关
         View loadingLayout = findViewById(R.id.layout_loading);
         loadingLayout.setOnClickListener(this);
         setPromptLayout(loadingLayout, null, null, null);
-
 
         ImageView back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(this);
 
         mTvClose = findViewById(R.id.close);
         mTvClose.setOnClickListener(this);
-        mAdWraper1 = (RelativeLayout) findViewById(R.id.adwrapper1);
-        mAdWraper2 = (RelativeLayout) findViewById(R.id.adwrapper2);
-        mAdWraper3 = (RelativeLayout) findViewById(R.id.adwrapper3);
-        mAdWraper4 = (RelativeLayout) findViewById(R.id.adwrapper4);
-        mAdWraper1.findViewById(R.id.ad_close).setOnClickListener(this);
-        mAdWraper2.findViewById(R.id.ad_close).setOnClickListener(this);
 
-//        findViewById(R.id.writecomment).setOnClickListener(this);
-//        findViewById(R.id.lookcomment).setOnClickListener(this);
+//        mAdWraper1 = (RelativeLayout) findViewById(R.id.adwrapper1);
+//        mAdWraper2 = (RelativeLayout) findViewById(R.id.adwrapper2);
+//        mAdWraper3 = (RelativeLayout) findViewById(R.id.adwrapper3);
+//        mAdWraper4 = (RelativeLayout) findViewById(R.id.adwrapper4);
+//        mAdWraper1.findViewById(R.id.ad_close).setOnClickListener(this);
+//        mAdWraper2.findViewById(R.id.ad_close).setOnClickListener(this);
+
+        mAdParent = (RelativeLayout) findViewById(R.id.adParent);
 
         mTvCollection = findViewById(R.id.iv_collect);
         mTvCollection.setOnClickListener(this);
@@ -213,34 +213,36 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     }
 
     private void loadBaiduAd() {
-        if (mAdWraper != null) {
-            mAdWraper.setVisibility(View.GONE);
-        }
-        mCloadAd = false;
-        Random random = new Random();
-        boolean b = (random.nextInt(8) % 2) == 0;
-        LogHelper.d("loadbaiduad", "b = " + b);
-        if (b) { //取信息流广告
-            if (mWeb_Url.contains("image?")) {
-                mAdWraper = mAdWraper1;
-            } else {
-                mAdWraper = mAdWraper2;
-            }
+        new BaiduAdManager().fillAdView(this, mAdParent, "首页", "美女", true, mWeb_Url.contains("image?")?1:2);
 
-            mAdimage = (ImageView) mAdWraper.findViewById(R.id.image);
-            mAdTitle = (TextView) mAdWraper.findViewById(R.id.titlead);
-            loadBaiduAd2(true);
-        } else { //取横幅广告
-            if (mWeb_Url.contains("image?")) {
-                mAdWraper = mAdWraper3;
-            } else {
-                mAdWraper = mAdWraper4;
-            }
-
-            mAdimage = (ImageView) mAdWraper.findViewById(R.id.image);
-            mAdTitle = (TextView) mAdWraper.findViewById(R.id.titlead);
-            loadBaiduAd3(true);
-        }
+//        if (mAdWraper != null) {
+//            mAdWraper.setVisibility(View.GONE);
+//        }
+//        mCloadAd = false;
+//        Random random = new Random();
+//        boolean b = (random.nextInt(8) % 2) == 0;
+//        LogHelper.d("loadbaiduad", "b = " + b);
+//        if (b) { //取信息流广告
+//            if (mWeb_Url.contains("image?")) {
+//                mAdWraper = mAdWraper1;
+//            } else {
+//                mAdWraper = mAdWraper2;
+//            }
+//
+//            mAdimage = (ImageView) mAdWraper.findViewById(R.id.image);
+//            mAdTitle = (TextView) mAdWraper.findViewById(R.id.titlead);
+//            loadBaiduAd2(true);
+//        } else { //取横幅广告
+//            if (mWeb_Url.contains("image?")) {
+//                mAdWraper = mAdWraper3;
+//            } else {
+//                mAdWraper = mAdWraper4;
+//            }
+//
+//            mAdimage = (ImageView) mAdWraper.findViewById(R.id.image);
+//            mAdTitle = (TextView) mAdWraper.findViewById(R.id.titlead);
+//            loadBaiduAd3(true);
+//        }
     }
 
     //百度信息流横幅广告
@@ -374,74 +376,6 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     }
 
     boolean mCloadAd = false;
-
-//    百度信息流模板广告begin
-//    private void loadBaiduAd(final View oldAdView) {
-//        if (mIsDestory || mCloadAd) {
-//            return;
-//        }
-//
-//        mAdWraper.setVisibility(View.VISIBLE);
-//        /**
-//         * Step 1. 在准备数据时，在listview广告位置创建BaiduNativeAdPlacement对象，并加入自己的数据列
-//         表中
-//         *  注意：请将YOUR_AD_PALCE_ID 替换为自己的广告位ID
-//         */
-//        BaiduNativeAdPlacement placement = new BaiduNativeAdPlacement();
-//        placement.setApId("4634448");
-//
-//        final BaiduNativeH5AdView newAdView = BaiduNativeH5AdViewManager.getInstance()
-//                .getBaiduNativeH5AdView(this, placement, R.color.bai);
-//        if (newAdView.getParent() != null) {
-//            ((ViewGroup) newAdView.getParent()).removeView(newAdView);
-//        }
-//        newAdView.setEventListener(new BaiduNativeH5AdView.BaiduNativeH5EventListner() {
-//            @Override
-//            public void onAdClick() {
-//            }
-//
-//            @Override
-//            public void onAdFail(String arg0) {
-//                LogHelper.i("WebViewActivity", "onAdFail arg0 = " + arg0);
-//                if (oldAdView == null) {
-//                    mAdWraper.setVisibility(View.GONE);
-//                }
-//            }
-//
-//            @Override
-//            public void onAdShow() {
-//                LogHelper.i("WebViewActivity", "onAdShow");
-//                if (oldAdView != null) {
-//                    mAdWraper.removeView(oldAdView);
-//                }
-//            }
-//
-//            @Override
-//            public void onAdDataLoaded() {
-//                LogHelper.i("WebViewActivity", "onAdDataLoaded");
-//            }
-//        });
-//
-//        int width = getResources().getDisplayMetrics().widthPixels;
-//        int height = width>>2;
-//        RelativeLayout.LayoutParams rllp = new RelativeLayout.LayoutParams(width, height);
-//        newAdView.setLayoutParams(rllp);
-//
-//        final RequestParameters requestParameters =
-//                new RequestParameters.Builder().setWidth(width).setHeight(height).build();
-//        newAdView.makeRequest(requestParameters);
-//        mAdWraper.addView(newAdView, 0);
-//
-//
-//        mHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                LogHelper.i("WebViewActivity", "onAd 重新请求了");
-//                loadBaiduAd(newAdView);
-//            }
-//        }, 5000);
-//        //百度信息流广告end
-//    }
 
     private void initWebView() {
         mWebView.setHorizontalScrollBarEnabled(false);//水平不显示
@@ -627,12 +561,12 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                 finish();
                 overridePendingTransition(R.anim.activity_in_left2right, R.anim.activity_out_left2right);
                 break;
-            case R.id.ad_close:
-                mCloadAd = true;
-                if (mAdWraper != null) {
-                    mAdWraper.setVisibility(View.GONE);
-                }
-                break;
+//            case R.id.ad_close:
+//                mCloadAd = true;
+//                if (mAdWraper != null) {
+//                    mAdWraper.setVisibility(View.GONE);
+//                }
+//                break;
             case R.id.cancel:
             case R.id.bg:
                 hideShareLayout();
