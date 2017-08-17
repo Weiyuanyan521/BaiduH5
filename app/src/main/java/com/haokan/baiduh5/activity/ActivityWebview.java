@@ -42,7 +42,6 @@ import com.baidu.mobad.feeds.RequestParameters;
 import com.baidu.mobads.AdSettings;
 import com.baidu.mobads.AdView;
 import com.baidu.mobads.AdViewListener;
-import com.baiduad.BaiduAdManager;
 import com.bumptech.glide.Glide;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
@@ -68,6 +67,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Random;
 
 public class ActivityWebview extends ActivityBase implements View.OnClickListener {
     public static final String KEY_INTENT_WEB_URL = "url";
@@ -80,11 +80,11 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private String mWeb_Url;
     private Handler mHandler = new Handler();
     private View mTvClose;
-    private RelativeLayout mAdWraper;
-    private RelativeLayout mAdWraper1;
-    private RelativeLayout mAdWraper2;
-    private RelativeLayout mAdWraper3;
-    private RelativeLayout mAdWraper4;
+//    private RelativeLayout mAdWraper;
+//    private RelativeLayout mAdWraper1;
+//    private RelativeLayout mAdWraper2;
+//    private RelativeLayout mAdWraper3;
+//    private RelativeLayout mAdWraper4;
     private ImageView mAdimage;
     private TextView mAdTitle;
     private View mBottomShare;
@@ -213,36 +213,36 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     }
 
     private void loadBaiduAd() {
-        new BaiduAdManager().fillAdView(this, mAdParent, "首页", "美女", true, mWeb_Url.contains("image?")?1:2);
+//        new BaiduAdManager().fillAdView(this, mAdParent, "首页", "美女", true, mWeb_Url.contains("image?")?1:2);
 
-//        if (mAdWraper != null) {
-//            mAdWraper.setVisibility(View.GONE);
-//        }
-//        mCloadAd = false;
-//        Random random = new Random();
-//        boolean b = (random.nextInt(8) % 2) == 0;
-//        LogHelper.d("loadbaiduad", "b = " + b);
-//        if (b) { //取信息流广告
-//            if (mWeb_Url.contains("image?")) {
-//                mAdWraper = mAdWraper1;
-//            } else {
-//                mAdWraper = mAdWraper2;
-//            }
-//
-//            mAdimage = (ImageView) mAdWraper.findViewById(R.id.image);
-//            mAdTitle = (TextView) mAdWraper.findViewById(R.id.titlead);
-//            loadBaiduAd2(true);
-//        } else { //取横幅广告
-//            if (mWeb_Url.contains("image?")) {
-//                mAdWraper = mAdWraper3;
-//            } else {
-//                mAdWraper = mAdWraper4;
-//            }
-//
-//            mAdimage = (ImageView) mAdWraper.findViewById(R.id.image);
-//            mAdTitle = (TextView) mAdWraper.findViewById(R.id.titlead);
-//            loadBaiduAd3(true);
-//        }
+        if (mAdParent != null) {
+            mAdParent.setVisibility(View.GONE);
+        }
+        mCloadAd = false;
+        Random random = new Random();
+        boolean b = (random.nextInt(8) % 2) == 0;
+        LogHelper.d("loadbaiduad", "b = " + b);
+        if (b) { //取信息流广告
+            if (mWeb_Url.contains("image?")) {
+                mAdWraper = mAdWraper1;
+            } else {
+                mAdWraper = mAdWraper2;
+            }
+
+            mAdimage = (ImageView) mAdWraper.findViewById(R.id.image);
+            mAdTitle = (TextView) mAdWraper.findViewById(R.id.titlead);
+            loadBaiduAd2(true);
+        } else { //取横幅广告
+            if (mWeb_Url.contains("image?")) {
+                mAdWraper = mAdWraper3;
+            } else {
+                mAdWraper = mAdWraper4;
+            }
+
+            mAdimage = (ImageView) mAdWraper.findViewById(R.id.image);
+            mAdTitle = (TextView) mAdWraper.findViewById(R.id.titlead);
+            loadBaiduAd3(true);
+        }
     }
 
     //百度信息流横幅广告

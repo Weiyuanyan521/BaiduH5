@@ -29,7 +29,7 @@ import java.util.List;
  * Created by wangzixu on 2017/8/15.
  */
 public class BaiduAdManager {
-    private static final String TAG = "BaiduAdManager";
+    public static final String TAG = "BaiduAdManager";
     /**
      * @param type 分类, 1首页, 2视频, 3图片
      * @param channel 频道名称
@@ -69,7 +69,7 @@ public class BaiduAdManager {
         });
     }
 
-    private void getHengfuAd(final Context context, final RelativeLayout adParent, BaiduAdBean baiduAdBean) {
+    public void getHengfuAd(final Context context, final RelativeLayout adParent, BaiduAdBean baiduAdBean) {
         AdSettings.setKey(new String[]{"baidu", "中国"});
         String adPlaceID = baiduAdBean.adId;// 重要：请填上你的 代码位ID, 否则 无法请求到广告
         AdView adView = new AdView(context, adPlaceID);
@@ -121,7 +121,7 @@ public class BaiduAdManager {
     /**
      * 获取信息流轮播模板广告
      */
-    private void getBaiduFlowTurnAd(final Context context, final RelativeLayout adParent, final BaiduAdBean baiduAdBean) {
+    public void getBaiduFlowTurnAd(final Context context, final RelativeLayout adParent, final BaiduAdBean baiduAdBean) {
         /**
          * Step 1. 创建BaiduNative对象，参数分别为：
          * 上下文context，广告位ID, BaiduNativeNetworkListener监听（监听广告请求的成功与失败）
@@ -174,7 +174,7 @@ public class BaiduAdManager {
     /**
      *百度信息流listview模板广告begin
      */
-    private void getBaiduFlowListAd(final Context context, final RelativeLayout adParent, final BaiduAdBean baiduAdBean) {
+    public void getBaiduFlowListAd(final Context context, final RelativeLayout adParent, final BaiduAdBean baiduAdBean) {
         /**
          * Step 1. 在准备数据时，在listview广告位置创建BaiduNativeAdPlacement对象，并加入自己的数据列
          表中

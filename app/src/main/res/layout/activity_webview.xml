@@ -133,7 +133,6 @@
         <!--android:visibility="gone"-->
     <RelativeLayout
         android:id="@+id/adParent"
-        android:background="@color/hei_10"
         android:layout_below="@+id/divider"
         android:layout_above="@id/bottom_bar"
         android:layout_width="match_parent"
