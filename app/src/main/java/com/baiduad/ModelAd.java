@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.haokan.baiduh5.model.onDataResponseListener;
 
+import java.util.Random;
+
 /**
  * Created by wangzixu on 2017/8/15.
  */
@@ -21,13 +23,27 @@ public class ModelAd {
             } else {
                 bean.adLocation = 2;
             }
-            bean.adHeight = 54;
-            bean.adType = 0;
-            bean.adId = "4668974";
-//            bean.adType = 2;
-//            bean.adId = "4634448";
-            listener.onDataSucess(bean);
+
+            Random random = new Random();
+            int adt = (random.nextInt(12) % 3);
+//            adt = 1;
+            if (adt == 0) {
+                bean.adHFactor = 0.15f;
+                bean.adType = 0;
+                bean.adId = "4676571";
+            } else if (adt == 1) {
+                bean.adHFactor = 0.25f;
+                bean.adType = 1;
+                bean.adId = "4676713";
+            } else if (adt == 2) {
+                bean.adHFactor = 0.25f;
+                bean.adType = 2;
+                bean.adId = "4676884";
+            }
+        } else {
+            bean.adLocation = 1;
         }
+        listener.onDataSucess(bean);
 
 
 

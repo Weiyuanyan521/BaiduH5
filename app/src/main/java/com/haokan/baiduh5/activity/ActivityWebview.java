@@ -35,14 +35,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baidu.mobad.feeds.BaiduNative;
-import com.baidu.mobad.feeds.NativeErrorCode;
-import com.baidu.mobad.feeds.NativeResponse;
-import com.baidu.mobad.feeds.RequestParameters;
-import com.baidu.mobads.AdSettings;
-import com.baidu.mobads.AdView;
-import com.baidu.mobads.AdViewListener;
-import com.bumptech.glide.Glide;
+import com.baiduad.BaiduAdManager;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.bean.CollectionBean;
@@ -52,7 +45,6 @@ import com.haokan.baiduh5.model.ModelMyCollection;
 import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.DataFormatUtil;
-import com.haokan.baiduh5.util.DisplayUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
@@ -64,10 +56,6 @@ import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
-
-import java.util.List;
-import java.util.Random;
 
 public class ActivityWebview extends ActivityBase implements View.OnClickListener {
     public static final String KEY_INTENT_WEB_URL = "url";
@@ -94,6 +82,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private View mTvCollection;
     private FragmentComment mFragmentComment;
     private RelativeLayout mAdParent;
+    private BaiduAdManager mAdManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,169 +202,14 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     }
 
     private void loadBaiduAd() {
-//        new BaiduAdManager().fillAdView(this, mAdParent, "首页", "美女", true, mWeb_Url.contains("image?")?1:2);
-
-        if (mAdParent != null) {
-            mAdParent.setVisibility(View.GONE);
-        }
-        mCloadAd = false;
-        Random random = new Random();
-        boolean b = (random.nextInt(8) % 2) == 0;
-        LogHelper.d("loadbaiduad", "b = " + b);
-        if (b) { //取信息流广告
-            if (mWeb_Url.contains("image?")) {
-                mAdWraper = mAdWraper1;
-            } else {
-                mAdWraper = mAdWraper2;
-            }
-
-            mAdimage = (ImageView) mAdWraper.findViewById(R.id.image);
-            mAdTitle = (TextView) mAdWraper.findViewById(R.id.titlead);
-            loadBaiduAd2(true);
-        } else { //取横幅广告
-            if (mWeb_Url.contains("image?")) {
-                mAdWraper = mAdWraper3;
-            } else {
-                mAdWraper = mAdWraper4;
-            }
-
-            mAdimage = (ImageView) mAdWraper.findViewById(R.id.image);
-            mAdTitle = (TextView) mAdWraper.findViewById(R.id.titlead);
-            loadBaiduAd3(true);
-        }
-    }
-
-    //百度信息流横幅广告
-    private void loadBaiduAd3(final boolean first) {
-        if (mAdWraper == null || mIsDestory || mCloadAd || (mAdWraper != mAdWraper3 && mAdWraper != mAdWraper4)) {
+        if (mAdParent == null || mIsDestory) {
             return;
         }
-
-        AdSettings.setKey(new String[]{"baidu", "中国"});
-        String adPlaceID = "4668974";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
-        AdView adView = new AdView(this, adPlaceID);
-        //设置监听器
-        adView.setListener(new AdViewListener() {
-            @Override
-            public void onAdReady(AdView adView) {
-                LogHelper.i("baiduad3", "onAdReady");
-                mAdWraper.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAdShow(JSONObject jsonObject) {
-                LogHelper.i("baiduad3", "onAdShow");
-            }
-
-            @Override
-            public void onAdClick(JSONObject jsonObject) {
-
-            }
-
-            @Override
-            public void onAdFailed(String s) {
-                LogHelper.i("baiduad3", "onAdFailed");
-                if (first) {
-                    mAdWraper.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onAdSwitch() {
-                LogHelper.i("baiduad3", "onAdSwitch");
-            }
-
-            @Override
-            public void onAdClose(JSONObject jsonObject) {
-                mAdWraper.setVisibility(View.GONE);
-                mCloadAd = true;
-                LogHelper.i("baiduad3", "onAdClose");
-            }
-        });
-
-        mAdWraper.removeAllViews();
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DisplayUtil.dip2px(this, 54));
-        mAdWraper.addView(adView, params);
-        //百度横幅广告相关end
-        //百度横幅广告会自动更换广告内容
-//        mHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                LogHelper.i("WebViewActivity", "onAd 重新请求了");
-//                loadBaiduAd3(false);
-//            }
-//        }, 8000);
-    }
-
-    //百度信息流元素广告
-    private void loadBaiduAd2(final boolean first) {
-        if (mAdWraper == null || mIsDestory || mCloadAd || (mAdWraper != mAdWraper1 && mAdWraper != mAdWraper2)) {
-            return;
+        if (mAdManager == null) {
+            mAdManager = new BaiduAdManager();
         }
-
-        /**
-         * Step 1. 创建 BaiduNative 对象，参数分别为：
-         * 上下文 context，广告位 ID，BaiduNativeNetworkListener 监听（监听广告请求的成功与失
-         败）
-         *  注意：请将 YOUR_AD_PALCE_ID  替换为自己的代码位 ID ，不填写无法请求到广告
-         */
-        BaiduNative baidu = new BaiduNative(this, "4655660",
-                new BaiduNative.BaiduNativeNetworkListener() {
-                @Override
-                public void onNativeFail(NativeErrorCode arg0) {
-                    LogHelper.d("ListViewActivity", "onNativeFail reason:" + arg0.name());
-                    if (first) {
-                        mAdWraper.setVisibility(View.GONE);
-                    }
-                }
-                @Override
-                public void onNativeLoad(List<NativeResponse> arg0) {
-                    if (arg0 != null && arg0.size() > 0) {
-                        mAdWraper.setVisibility(View.VISIBLE);
-                        final NativeResponse nativeResponse = arg0.get(0);
-                        String title = nativeResponse.getTitle();
-                        mAdTitle.setText(title);
-                        String iconUrl = nativeResponse.getIconUrl();
-                        String adLogoUrl = nativeResponse.getAdLogoUrl();
-                        String imageUrl = nativeResponse.getImageUrl();
-                        LogHelper.d("ListViewActivity", "iconUrl = " + iconUrl + ", adLogoUrl = " + adLogoUrl
-                                + ", imageUrl = " + imageUrl);
-
-                        Glide.with(ActivityWebview.this).load(imageUrl).into(mAdimage);
-
-                        nativeResponse.recordImpression(mAdWraper);//  警告：调用该函数来发送展现，勿漏！
-                        mAdWraper.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                nativeResponse.handleClick(view);//  点击响应
-                            }
-                        });
-                    } else {
-                        if (first) {
-                            mAdWraper.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            });
-
-        /**
-         * Step 2. 创建requestParameters对象，并将其传给baidu.makeRequest来请求广告
-         */
-        RequestParameters requestParameters = new RequestParameters.Builder()
-                .downloadAppConfirmPolicy(RequestParameters.DOWNLOAD_APP_CONFIRM_ALWAYS)
-                .build();
-        baidu.makeRequest(requestParameters);
-
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                LogHelper.i("WebViewActivity", "onAd 重新请求了");
-                loadBaiduAd2(false);
-            }
-        }, 10000);
+        mAdManager.fillAdView(this, mAdParent, "首页", "美女", true, mWeb_Url.contains("image?")?1:2);
     }
-
-    boolean mCloadAd = false;
 
     private void initWebView() {
         mWebView.setHorizontalScrollBarEnabled(false);//水平不显示
@@ -446,6 +280,12 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                 } else {
                     mTvTitle.setText("");
                 }
+            }
+
+            @Override
+            public void onLoadResource(WebView view, String url) {
+                super.onLoadResource(view, url);
+                LogHelper.i("WebViewActivity", "onLoadResource mweburl = " + url);
             }
 
             @Override
@@ -863,6 +703,9 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
 
     @Override
     protected void onDestroy() {
+        if (mAdManager != null) {
+            mAdManager.onDestory();
+        }
         if(mWebView!=null){
             mWebView.destroy();
             mWebView.removeAllViews();

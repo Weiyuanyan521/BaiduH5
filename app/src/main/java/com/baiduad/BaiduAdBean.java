@@ -10,14 +10,14 @@ public class BaiduAdBean {
     public int adLocation;
 
     /**
-     * 广告的类型, 0横幅banner, 1信息流轮播模板, 2信息流listview
+     * 广告的类型, 0横幅banner, 1信息流模板, 2信息流元素
      */
     public int adType;
 
     /**
-     * 广告的高度, dp
+     * 广告的高度相对于宽度的比例
      */
-    public int adHeight;
+    public float adHFactor;
 
     /**
      * 广告id
