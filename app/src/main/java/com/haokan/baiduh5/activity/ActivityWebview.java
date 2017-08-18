@@ -207,6 +207,9 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         }
         if (mAdManager == null) {
             mAdManager = new BaiduAdManager();
+        } else {
+            mAdManager.onDestory();
+            mAdManager = new BaiduAdManager();
         }
         mAdManager.fillAdView(this, mAdParent, "首页", "美女", true, mWeb_Url.contains("image?")?1:2);
     }
@@ -290,10 +293,10 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
 
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-                if (url.contains("pos.baidu.com")) {
-                    return new WebResourceResponse(null, null, null);
-                }
-                LogHelper.i("WebViewActivity", "shouldInterceptRequest mweburl = " + url);
+//                if (url.contains("pos.baidu.com")) {
+//                    return new WebResourceResponse(null, null, null);
+//                }
+//                LogHelper.i("WebViewActivity", "shouldInterceptRequest mweburl = " + url);
                 return super.shouldInterceptRequest(view, url);
             }
 

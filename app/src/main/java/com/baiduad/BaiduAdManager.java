@@ -34,6 +34,7 @@ import java.util.List;
 public class BaiduAdManager {
     public static final String TAG = "BaiduAdManager";
     private AdView mHenffuAdView;
+    private boolean mIsDestory = false;
 
     /**
      * @param type 分类, 1首页, 2视频, 3图片
@@ -132,7 +133,7 @@ public class BaiduAdManager {
      * 获取信息流轮播模板广告
      */
     public void getFeedH5Ad(final Context context, final RelativeLayout adParent, final BaiduAdBean baiduAdBean) {
-        if (adParent.getVisibility() != View.VISIBLE) {
+        if (mIsDestory || adParent.getVisibility() != View.VISIBLE) {
             return;
         }
         /**
@@ -277,7 +278,7 @@ public class BaiduAdManager {
     }
 
     private void updateNativeAd(final Context context) {
-        if (mNativeResponseList == null || mNativeResponseList.size() == 0 || mNativeAdHolder == null
+        if (mIsDestory || mNativeResponseList == null || mNativeResponseList.size() == 0 || mNativeAdHolder == null
                 || mNativeAdHolder.rootView.getVisibility() != View.VISIBLE) {
             return;
         }
@@ -363,6 +364,7 @@ public class BaiduAdManager {
     }
 
     public void onDestory() {
+        mIsDestory = true;
         if (mHenffuAdView != null) {
             mHenffuAdView.destroy();
         }

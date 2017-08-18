@@ -171,10 +171,10 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
 
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-                if (url.contains("pos.baidu.com")) {
-//                    LogHelper.i("WebViewActivity", "shouldInterceptRequest pos被拦截 mweburl = " + url);
-                    return new WebResourceResponse(null, null, null);
-                }
+//                if (url.contains("pos.baidu.com")) {
+////                    LogHelper.i("WebViewActivity", "shouldInterceptRequest pos被拦截 mweburl = " + url);
+//                    return new WebResourceResponse(null, null, null);
+//                }
                 return super.shouldInterceptRequest(view, url);
             }
 
