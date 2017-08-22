@@ -234,6 +234,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
 
+        //设置接受第三方的cooke, 很重要, 必须设置才能正确接受cookie
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
         }
