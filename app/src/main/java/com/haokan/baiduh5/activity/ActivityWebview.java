@@ -211,7 +211,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
             mAdManager.onDestory();
             mAdManager = new BaiduAdManager();
         }
-        mAdManager.fillAdView(this, mAdParent, "首页", "美女", true, mWeb_Url.contains("image?")?1:2);
+        mAdManager.fillAdView(this, mAdParent, "首页", "美女", 1, mWeb_Url.contains("image?")?1:2);
     }
 
     private void initWebView() {

@@ -10,14 +10,14 @@ import java.util.Random;
  * Created by wangzixu on 2017/8/15.
  */
 public class ModelAd {
-    public void getAdType(Context context, String type, String channel, boolean isDetail, int detailType
+    public void getAdType(Context context, String type, String channel, int isDetail, int detailType
             , onDataResponseListener<BaiduAdBean> listener) {
         if (listener == null || context == null) {
             return;
         }
 
         BaiduAdBean bean = new BaiduAdBean();
-        if (isDetail) {
+        if (isDetail == 1) {
             if (detailType == 1) { //图片详情
                 bean.adLocation = 0;
             } else {
@@ -41,7 +41,16 @@ public class ModelAd {
                 bean.adId = "4676884";
             }
         } else {
+//            bean.adLocation = 1;
+//            bean.adType = 3;
+//            bean.adId = "4690142";
+//            bean.adHFactor = 0.25f;
+
+            //信息流模板
             bean.adLocation = 1;
+            bean.adType = 4;
+            bean.adId = "4655722";
+            bean.adHFactor = 5/6.0f;
         }
         listener.onDataSucess(bean);
 
