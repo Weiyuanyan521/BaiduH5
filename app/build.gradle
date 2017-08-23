@@ -115,6 +115,7 @@ android {
 
 //    239      好看酷比
 //    240      好看图片新闻升级
+//    241      老版好看升级
 
     productFlavors {
         pid200 {
@@ -212,6 +213,9 @@ android {
         }
         pid240 {
             manifestPlaceholders = [CHANNEL_NAME: "240"]
+        }
+        pid241 {
+            manifestPlaceholders = [CHANNEL_NAME: "241"]
         }
     }
 }
