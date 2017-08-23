@@ -76,9 +76,8 @@
     <RelativeLayout
         android:visibility="gone"
         android:id="@+id/adwrapper"
-        android:background="@color/hei_60"
         android:layout_above="@id/divider"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="45dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

@@ -41,16 +41,23 @@ public class ModelAd {
                 bean.adId = "4676884";
             }
         } else {
+            //插屏
 //            bean.adLocation = 1;
 //            bean.adType = 3;
 //            bean.adId = "4690142";
 //            bean.adHFactor = 0.25f;
 
             //信息流模板
+//            bean.adLocation = 1;
+//            bean.adType = 1;
+//            bean.adId = "4655722";
+//            bean.adHFactor = 5/6.0f;
+
+            //banner
+            bean.adHFactor = 0.15f;
+            bean.adType = 0;
             bean.adLocation = 1;
-            bean.adType = 4;
-            bean.adId = "4655722";
-            bean.adHFactor = 5/6.0f;
+            bean.adId = "4676571";
         }
         listener.onDataSucess(bean);
 

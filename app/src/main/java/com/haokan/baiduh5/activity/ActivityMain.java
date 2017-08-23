@@ -89,8 +89,6 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
 
         //百度广告相关初始化
         mAdWrapper = (RelativeLayout) findViewById(R.id.adwrapper);
-        mAdWrapper.setOnClickListener(this);
-
 //        mAdWrapperChild = (FrameLayout) mAdWrapper.findViewById(R.id.adwrapper_child);
 //        mAdImage = (ImageView) mAdWrapper.findViewById(R.id.image);
 //        mAdWrapper.findViewById(R.id.ad_close).setOnClickListener(this);
@@ -204,9 +202,10 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             mTabVideopage.setSelected(false);
             mTabImagepage.setSelected(false);
             mTabPersonpage.setSelected(true);
-        } else if (v.getId() == R.id.ad_close || v.getId() == R.id.adwrapper) {
-            mAdWrapper.setVisibility(View.GONE);
         }
+//        else if (v.getId() == R.id.ad_close || v.getId() == R.id.adwrapper) {
+//            mAdWrapper.setVisibility(View.GONE);
+//        }
     }
 
     boolean mIsQequestAd = false;
