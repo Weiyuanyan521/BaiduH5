@@ -26,12 +26,17 @@ public class BaiduAdBean {
 
 
     /**
-     * 广告的每日展现频率类型, 0每日, 1总共
+     * 广告的每日展现频率类型, 0无限制, 1总共, 2,每日
      */
     public int countType;
 
     /**
      * 广告的每日展现频率
      */
-    public int count;
+    public int limitCount;
+
+    public String type;
+    public String channel;
+    public int isDetail;
+    public int detailType;
 }

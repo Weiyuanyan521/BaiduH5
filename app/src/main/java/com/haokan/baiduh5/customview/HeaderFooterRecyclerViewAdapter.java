@@ -115,7 +115,7 @@ public abstract class HeaderFooterRecyclerViewAdapter<VH extends RecyclerView.Vi
 	 * @param positionStart
 	 *            the position.
 	 * @param itemCount
-	 *            the item count.
+	 *            the item limitCount.
 	 */
 	public final void notifyHeaderItemRangeInserted(int positionStart, int itemCount) {
 		getItemCount();
@@ -153,7 +153,7 @@ public abstract class HeaderFooterRecyclerViewAdapter<VH extends RecyclerView.Vi
 	 * @param positionStart
 	 *            the position.
 	 * @param itemCount
-	 *            the item count.
+	 *            the item limitCount.
 	 */
 	public final void notifyHeaderItemRangeChanged(int positionStart, int itemCount) {
 		if (positionStart < 0 || itemCount < 0 || positionStart + itemCount >= headerItemCount) {
@@ -209,7 +209,7 @@ public abstract class HeaderFooterRecyclerViewAdapter<VH extends RecyclerView.Vi
 	 * @param positionStart
 	 *            the position.
 	 * @param itemCount
-	 *            the item count.
+	 *            the item limitCount.
 	 */
 	public void notifyHeaderItemRangeRemoved(int positionStart, int itemCount) {
 		getItemCount();
@@ -249,7 +249,7 @@ public abstract class HeaderFooterRecyclerViewAdapter<VH extends RecyclerView.Vi
 	 * @param positionStart
 	 *            the position.
 	 * @param itemCount
-	 *            the item count.
+	 *            the item limitCount.
 	 */
 	public final void notifyContentItemRangeInserted(int positionStart, int itemCount) {
 		getItemCount();
@@ -289,7 +289,7 @@ public abstract class HeaderFooterRecyclerViewAdapter<VH extends RecyclerView.Vi
 	 * @param positionStart
 	 *            the position.
 	 * @param itemCount
-	 *            the item count.
+	 *            the item limitCount.
 	 */
 	public final void notifyContentItemRangeChanged(int positionStart, int itemCount) {
 		getItemCount();
@@ -348,7 +348,7 @@ public abstract class HeaderFooterRecyclerViewAdapter<VH extends RecyclerView.Vi
 	 * @param positionStart
 	 *            the position.
 	 * @param itemCount
-	 *            the item count.
+	 *            the item limitCount.
 	 */
 	public final void notifyContentItemRangeRemoved(int positionStart, int itemCount) {
 		getItemCount();
@@ -389,7 +389,7 @@ public abstract class HeaderFooterRecyclerViewAdapter<VH extends RecyclerView.Vi
 	 * @param positionStart
 	 *            the position.
 	 * @param itemCount
-	 *            the item count.
+	 *            the item limitCount.
 	 */
 	public final void notifyFooterItemRangeInserted(int positionStart, int itemCount) {
 		getItemCount();
@@ -429,7 +429,7 @@ public abstract class HeaderFooterRecyclerViewAdapter<VH extends RecyclerView.Vi
 	 * @param positionStart
 	 *            the position.
 	 * @param itemCount
-	 *            the item count.
+	 *            the item limitCount.
 	 */
 	public final void notifyFooterItemRangeChanged(int positionStart, int itemCount) {
 		if (positionStart < 0 || itemCount < 0 || positionStart + itemCount > footerItemCount) {
@@ -484,7 +484,7 @@ public abstract class HeaderFooterRecyclerViewAdapter<VH extends RecyclerView.Vi
 	 * @param positionStart
 	 *            the position.
 	 * @param itemCount
-	 *            the item count.
+	 *            the item limitCount.
 	 */
 	public final void notifyFooterItemRangeRemoved(int positionStart, int itemCount) {
 		if (positionStart < 0 || itemCount < 0 || positionStart + itemCount > footerItemCount) {
@@ -534,26 +534,26 @@ public abstract class HeaderFooterRecyclerViewAdapter<VH extends RecyclerView.Vi
 	}
 
 	/**
-	 * Gets the header item count. This method can be called several times, so
-	 * it should not calculate the count every time.
+	 * Gets the header item limitCount. This method can be called several times, so
+	 * it should not calculate the limitCount every time.
 	 *
-	 * @return the header item count.
+	 * @return the header item limitCount.
 	 */
 	protected abstract int getHeaderItemCount();
 
 	/**
-	 * Gets the footer item count. This method can be called several times, so
-	 * it should not calculate the count every time.
+	 * Gets the footer item limitCount. This method can be called several times, so
+	 * it should not calculate the limitCount every time.
 	 *
-	 * @return the footer item count.
+	 * @return the footer item limitCount.
 	 */
 	protected abstract int getFooterItemCount();
 
 	/**
-	 * Gets the content item count. This method can be called several times, so
-	 * it should not calculate the count every time.
+	 * Gets the content item limitCount. This method can be called several times, so
+	 * it should not calculate the limitCount every time.
 	 *
-	 * @return the content item count.
+	 * @return the content item limitCount.
 	 */
 	protected abstract int getContentItemCount();
 

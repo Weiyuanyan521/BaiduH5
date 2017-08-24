@@ -1,6 +1,8 @@
 package com.baiduad;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -29,7 +31,10 @@ import com.haokan.baiduh5.util.LogHelper;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by wangzixu on 2017/8/15.
@@ -42,7 +47,7 @@ public class BaiduAdManager {
     /**
      * @param type 分类, 1首页, 2视频, 3图片
      * @param channel 频道名称
-     * @param isDetail 是否是详情页, 0首页, 1详情页
+     * @param isDetail 是否是详情页, 0列表页, 1详情页
      * @param detailType 详情页的类型, 1代表图片, 2代表视频, 3代表列表
      */
     public void fillAdView(final Context context, final RelativeLayout adParent
@@ -87,7 +92,7 @@ public class BaiduAdManager {
         });
     }
 
-    public void getDetailPageBannerAd(final Context context, final RelativeLayout adParent, BaiduAdBean baiduAdBean) {
+    public void getDetailPageBannerAd(final Context context, final RelativeLayout adParent, final BaiduAdBean baiduAdBean) {
         AdSettings.setKey(new String[]{"baidu", "中国"});
         String adPlaceID = baiduAdBean.adId;// 重要：请填上你的 代码位ID, 否则 无法请求到广告
         mHenffuAdView = new AdView(context, adPlaceID);
@@ -99,6 +104,9 @@ public class BaiduAdManager {
                     return;
                 }
                 LogHelper.i(TAG, "onAdReady");
+                if (!isShow(context, baiduAdBean)) {
+                    return;
+                }
                 adParent.setVisibility(View.VISIBLE);
             }
 
@@ -191,6 +199,10 @@ public class BaiduAdManager {
                         if (arg0 != null && arg0.size() > 0) {
                             NativeResponse mNrAd = arg0.get(0);
                             if (mNrAd.getMaterialType() == NativeResponse.MaterialType.HTML) {
+                                if (!isShow(context, baiduAdBean)) {
+                                    return;
+                                }
+
                                 adParent.removeAllViews();
                                 adParent.setVisibility(View.VISIBLE);
 
@@ -375,6 +387,10 @@ public class BaiduAdManager {
                             return;
                         }
                         if (arg0 != null && arg0.size() > 0) {
+                            if (!isShow(context, baiduAdBean)) {
+                                return;
+                            }
+
                             LogHelper.d(TAG, "getDetailPageFeedNativeAd onNativeLoad arg0 size = " + arg0.size());
                             mNativeResponseList = arg0;
 
@@ -523,7 +539,9 @@ public class BaiduAdManager {
                     return;
                 }
                 LogHelper.d(TAG, "getMainPageInsertAd onAdReady");
-                mInterAd.showAd(context);
+                if (isShow(context, baiduAdBean)) {
+                    mInterAd.showAd(context);
+                }
             }
 
             @Override
@@ -559,5 +577,61 @@ public class BaiduAdManager {
         if (mNativeAdHolder != null) {
             mNativeAdHolder = null;
         }
+    }
+
+    private boolean isShow(Context context, BaiduAdBean baiduAdBean) {
+        String type = baiduAdBean.type;
+        String channel = baiduAdBean.channel;
+        int isDetail = baiduAdBean.isDetail;
+        int detailType = baiduAdBean.detailType;
+
+        //处理显示频率的逻辑begin
+        if (baiduAdBean.countType == 1) {//总共
+            String key = new StringBuilder(type)
+                    .append("_").append(channel)
+                    .append("_").append(isDetail)
+                    .append("_").append(detailType)
+                    .toString();
+            int limitCount = baiduAdBean.limitCount;
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            int nowCount = preferences.getInt(key, 0);
+            if (nowCount>limitCount) {
+                return false;
+            } else {
+                preferences.edit().putInt(key, nowCount+1).apply();
+                return true;
+            }
+        } else if (baiduAdBean.countType == 2) { //每日
+            String key = new StringBuilder(type)
+                    .append("_").append(channel)
+                    .append("_").append(isDetail)
+                    .append("_").append(detailType)
+                    .toString();
+
+            String keyDate = "d_" + key;
+
+            int limitCount = baiduAdBean.limitCount;
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor edit = preferences.edit();
+            String data = preferences.getString(keyDate, "xxxx");
+            int nowCount = preferences.getInt(key, 0);
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String nowDate = formatter.format(new Date());
+            if (nowDate.equals(data)) { //说明是当天
+                if (nowCount > limitCount) {
+                    return false;
+                } else {
+                    preferences.edit().putInt(key, nowCount+1).apply();
+                    return true;
+                }
+            } else { //说明不是一天
+                edit.putString(keyDate, nowDate).apply();
+                edit.putInt(key, 1).apply();
+                return true;
+            }
+        }
+        return true;
+        //处理显示频率的逻辑end
     }
 }

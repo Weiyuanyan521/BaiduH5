@@ -15,9 +15,14 @@ public class ModelAd {
         if (listener == null || context == null) {
             return;
         }
-
         BaiduAdBean bean = new BaiduAdBean();
+        bean.type = type;
+        bean.channel = channel;
+        bean.isDetail = isDetail;
+        bean.detailType = detailType;
+
         if (isDetail == 1) {
+            bean.countType = 0;
             if (detailType == 1) { //图片详情
                 bean.adLocation = 0;
             } else {
@@ -58,11 +63,12 @@ public class ModelAd {
             bean.adType = 0;
             bean.adLocation = 1;
             bean.adId = "4676571";
+
+            bean.countType = 2;
+            bean.limitCount = 2;
         }
+
         listener.onDataSucess(bean);
-
-
-
 //        listener.onStart();
 //
 //        final RequestEntity<RequestBody_Config> requestEntity = new RequestEntity<>();
