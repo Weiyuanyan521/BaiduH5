@@ -80,6 +80,9 @@ public class App extends Application {
                 sReview = sw;
                 SharedPreferences.Editor edit = sp.edit();
                 edit.putString(Values.PreferenceKey.KEY_SP_REVIEW, sw).apply();
+                edit.putString(Values.PreferenceKey.KEY_SP_SHOWEXTRA, updateBean.getKd_showextra()).apply();
+                edit.putString(Values.PreferenceKey.KEY_SP_EXTRANAME, updateBean.getKd_extraname()).apply();
+                edit.putString(Values.PreferenceKey.KEY_SP_EXTRAURL, updateBean.getKd_extraurl()).apply();
             }
 
             @Override

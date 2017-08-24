@@ -124,6 +124,21 @@ public class Values {
          * 是否正在审核阶段
          */
         public static final String KEY_SP_REVIEW = "sw_review";
+
+        /**
+         * 是否正在审核阶段
+         */
+        public static final String KEY_SP_SHOWEXTRA = "showextra";
+
+        /**
+         * 是否正在审核阶段
+         */
+        public static final String KEY_SP_EXTRANAME = "extraname";
+
+        /**
+         * 是否正在审核阶段
+         */
+        public static final String KEY_SP_EXTRAURL = "extraurl";
         /**
          * 大图页尾页是否显示大图广告
          */

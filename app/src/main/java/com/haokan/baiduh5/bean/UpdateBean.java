@@ -12,6 +12,34 @@ public class UpdateBean implements Parcelable {
     private String kd_dl;
     private String kd_desc;
     private String kd_review;
+    //configure
+    private String kd_showextra; //是否显示额外条目.默认0是没有, 1代表有
+    private String kd_extraname; //额外条目名称
+    private String kd_extraurl; //额外条目链接
+
+    public String getKd_showextra() {
+        return kd_showextra;
+    }
+
+    public void setKd_showextra(String kd_showextra) {
+        this.kd_showextra = kd_showextra;
+    }
+
+    public String getKd_extraname() {
+        return kd_extraname;
+    }
+
+    public void setKd_extraname(String kd_extraname) {
+        this.kd_extraname = kd_extraname;
+    }
+
+    public String getKd_extraurl() {
+        return kd_extraurl;
+    }
+
+    public void setKd_extraurl(String kd_extraurl) {
+        this.kd_extraurl = kd_extraurl;
+    }
 
     public String getKd_review() {
         return kd_review;
