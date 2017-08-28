@@ -105,4 +105,9 @@ public class ModelAd {
 //                    }
 //                });
     }
+
+    public void getAdFromNet(Context context, String type, String channel, boolean isDetail, int detailType
+            , onDataResponseListener<BaiduAdBean> listener) {
+
+    }
 }
