@@ -23,6 +23,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.baidu.mobads.CpuInfoManager;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.activity.ActivityWebview;
@@ -69,11 +70,16 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
     private void loadData() {
         showLoadingLayout();
         if (mTypeBean != null) {
-            mWeb_Url = "https://cpu.baidu.com/wap/" + mTypeBean.id + "/270872471"
-//            mWeb_Url = "https://cpu.baidu.com/wap/" + mTypeBean.id + "/detail"
-                    +
-                    "?chk=1"
-                    ;
+            CpuInfoManager.getCpuInfoUrl(mActivity, "c92936a5", Integer.valueOf(mTypeBean.id), new CpuInfoManager.UrlListener() {
+                @Override
+                public void onUrl(String url) {
+                    LogHelper.d("getCpuInfoUrl", "url = " + url);
+                    mWeb_Url = url;
+                    mWebView.loadUrl(mWeb_Url);
+                }
+            });
+            return;
+//            mWeb_Url = "https://cpu.baidu.com/" + mTypeBean.id + "/c92936a5";
         } else {
             mWeb_Url = "https://image.baidu.com";
         }

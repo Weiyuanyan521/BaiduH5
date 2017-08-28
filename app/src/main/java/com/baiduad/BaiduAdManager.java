@@ -79,15 +79,17 @@ public class BaiduAdManager {
 
             @Override
             public void onDataEmpty() {
-
+                adParent.setVisibility(View.GONE);
             }
 
             @Override
             public void onDataFailed(String errmsg) {
+                adParent.setVisibility(View.GONE);
             }
 
             @Override
             public void onNetError() {
+                adParent.setVisibility(View.GONE);
             }
         });
     }

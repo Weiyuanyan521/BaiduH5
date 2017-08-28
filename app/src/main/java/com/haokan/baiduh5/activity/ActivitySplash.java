@@ -1,28 +1,15 @@
 package com.haokan.baiduh5.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
-import android.webkit.CookieManager;
-import android.webkit.DownloadListener;
-import android.webkit.GeolocationPermissions;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 
 import com.baidu.mobads.SplashAd;
@@ -40,8 +27,8 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
     private static final int REQUEST_CODE_SETTING_PERMISSION = 202;
     private Handler mHandler = new Handler();
     private int mCountdown = 2; //倒计时
-    private WebView mWebView;
-    private boolean mIsLoadWeb = false;
+//    private WebView mWebView;
+//    private boolean mIsLoadWeb = false;
     private boolean mHasLoadAd = false;
     private FrameLayout mAdwraper;
     private SplashAd mSplashAd;
@@ -59,9 +46,9 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
     }
 
     private void initView() {
-        mWebView = (WebView) findViewById(R.id.webView);
-        initWebView();
-        mWebView.loadUrl("http://m.levect.com/appcpu.html?siteId=270872471&channelId=1057");
+//        mWebView = (WebView) findViewById(R.id.webView);
+//        initWebView();
+//        mWebView.loadUrl("http://m.levect.com/appcpu.html?siteId=270872471&channelId=1057");
 
         //好看广告相关
 //        mTvJumpAd = (TextView) findViewById(R.id.jumpad);
@@ -196,7 +183,7 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
         public void run() {
             mCountdown --;
             LogHelper.d(TAG, "mLaunchHomeRunnable  mCountdown =  " + mCountdown);
-            if (mCountdown <= 0 && mIsLoadWeb && mHasLoadAd) {
+            if (mCountdown <= 0 && mHasLoadAd) {
                 launcherHome();
             } else {
                 if (mCountdown<0) {
@@ -224,84 +211,84 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
         overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    private void initWebView() {
-        mWebView.setHorizontalScrollBarEnabled(false);//水平不显示
-        mWebView.setVerticalScrollBarEnabled(false); //垂直不显示
-
-        WebSettings settings = mWebView.getSettings();
-        settings.setJavaScriptEnabled(true);
-        settings.setDomStorageEnabled(true);
-        settings.setJavaScriptCanOpenWindowsAutomatically(true);
-        settings.setAppCacheEnabled(true);
-        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        settings.setAppCacheMaxSize(1024 * 1024 * 100);
-        settings.setAllowFileAccess(true);
-        settings.setBuiltInZoomControls(false);
-        settings.setDatabaseEnabled(true);
-        settings.setUseWideViewPort(true);
-        settings.setGeolocationEnabled(true);
-        settings.setLoadWithOverviewMode(true);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
-        }
-
-        mWebView.setDownloadListener(new DownloadListener() {//实现文件下载功能
-            @Override
-            public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-                Uri uri = Uri.parse(url);
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-            }
-        });
-
-        mWebView.setWebViewClient(new WebViewClient() {
-            //点击链接在此webView打开
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                LogHelper.i(TAG, "shouldOverrideUrlLoading mweburl = " + url);
-                Intent i = new Intent(ActivitySplash.this, ActivityWebview.class);
-                i.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, url);
-                startActivity(i);
-                overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
-                return false;
-            }
-
-            //可以加载https
-            @Override
-            public void onReceivedSslError(WebView view, @NonNull SslErrorHandler handler, SslError error) {
-                handler.proceed();
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                LogHelper.i(TAG, "onPageStarted mweburl = " + url);
-//                showLoadingLayout();
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view,url);
-                LogHelper.i(TAG, "onPageFinished mweburl = " + url);
-//                mWebView.loadUrl("javascript:var t = document.createElement(\"base\");t.name = \"target\", t.content = \"_top\", document.getElementsByTagName(\"head\")[0].appendChild(t);");
-                mIsLoadWeb = true;
-//                if (mHasLoadAd) {
-//                    mTvJumpAd.setVisibility(View.VISIBLE);
-//                }
-            }
-        });
-
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-            }
-
-            @Override
-            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-                callback.invoke(origin, true, false);
-            }
-        });
-    }
+//    @SuppressLint("SetJavaScriptEnabled")
+//    private void initWebView() {
+//        mWebView.setHorizontalScrollBarEnabled(false);//水平不显示
+//        mWebView.setVerticalScrollBarEnabled(false); //垂直不显示
+//
+//        WebSettings settings = mWebView.getSettings();
+//        settings.setJavaScriptEnabled(true);
+//        settings.setDomStorageEnabled(true);
+//        settings.setJavaScriptCanOpenWindowsAutomatically(true);
+//        settings.setAppCacheEnabled(true);
+//        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+//        settings.setAppCacheMaxSize(1024 * 1024 * 100);
+//        settings.setAllowFileAccess(true);
+//        settings.setBuiltInZoomControls(false);
+//        settings.setDatabaseEnabled(true);
+//        settings.setUseWideViewPort(true);
+//        settings.setGeolocationEnabled(true);
+//        settings.setLoadWithOverviewMode(true);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
+//        }
+//
+//        mWebView.setDownloadListener(new DownloadListener() {//实现文件下载功能
+//            @Override
+//            public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+//                Uri uri = Uri.parse(url);
+//                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        mWebView.setWebViewClient(new WebViewClient() {
+//            //点击链接在此webView打开
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                LogHelper.i(TAG, "shouldOverrideUrlLoading mweburl = " + url);
+//                Intent i = new Intent(ActivitySplash.this, ActivityWebview.class);
+//                i.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, url);
+//                startActivity(i);
+//                overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
+//                return false;
+//            }
+//
+//            //可以加载https
+//            @Override
+//            public void onReceivedSslError(WebView view, @NonNull SslErrorHandler handler, SslError error) {
+//                handler.proceed();
+//            }
+//
+//            @Override
+//            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//                super.onPageStarted(view, url, favicon);
+//                LogHelper.i(TAG, "onPageStarted mweburl = " + url);
+////                showLoadingLayout();
+//            }
+//
+//            @Override
+//            public void onPageFinished(WebView view, String url) {
+//                super.onPageFinished(view,url);
+//                LogHelper.i(TAG, "onPageFinished mweburl = " + url);
+////                mWebView.loadUrl("javascript:var t = document.createElement(\"base\");t.name = \"target\", t.content = \"_top\", document.getElementsByTagName(\"head\")[0].appendChild(t);");
+//                mIsLoadWeb = true;
+////                if (mHasLoadAd) {
+////                    mTvJumpAd.setVisibility(View.VISIBLE);
+////                }
+//            }
+//        });
+//
+//        mWebView.setWebChromeClient(new WebChromeClient() {
+//            @Override
+//            public void onProgressChanged(WebView view, int newProgress) {
+//            }
+//
+//            @Override
+//            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+//                callback.invoke(origin, true, false);
+//            }
+//        });
+//    }
 }

@@ -37,5 +37,4 @@ public interface RetrofitHttpService {
      */
     @POST
     Observable<ResponseEntity<ResponseBody_Config>> getConfig(@Url String url, @Body RequestEntity<RequestBody_Config> requestEntity);
-
 }
