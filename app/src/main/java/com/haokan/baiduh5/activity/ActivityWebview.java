@@ -83,6 +83,8 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private FragmentComment mFragmentComment;
     private RelativeLayout mAdParent;
     private BaiduAdManager mAdManager;
+    private boolean mIsAdPage = false;
+    private View mBottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +154,8 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         mShareBg = mBottomShare.findViewById(R.id.bg);
         mShareBg.setOnClickListener(this);
 
+
+        mBottomBar = findViewById(R.id.bottom_bar);
         mTvTitle = (TextView) findViewById(R.id.title);
         mProgressHorizontal = (ProgressBar) findViewById(R.id.progress_horizontal);
         mWebView = (WebView) findViewById(R.id.webView);
@@ -179,11 +183,17 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         if (TextUtils.isEmpty(mWeb_Url)) {
             ToastManager.showShort(this, R.string.url_error);
             finish();
-
             return;
         }
 
         LogHelper.i("WebViewActivity", "loadData mweburl = " + mWeb_Url);
+        if (mWeb_Url.startsWith("http://cpro.baidu.com")) {
+            mIsAdPage = true;
+            mBottomBar.setVisibility(View.GONE);
+        } else {
+            mIsAdPage = false;
+            mBottomBar.setVisibility(View.VISIBLE);
+        }
 
         if (mWeb_Url.startsWith("www")) {
             mWeb_Url = "http://" + mWeb_Url;
@@ -276,7 +286,9 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                     if (!title.equals(mTitleText)) {
                         mTitleText = title;
                         mTvTitle.setText(mTitleText);
-                        App.sCyanSdk.addCommentToolbar((ViewGroup)mFragmentComment.getRootView(), mTitleText, mTitleText, url);
+                        if (!mIsAdPage) {
+                            App.sCyanSdk.addCommentToolbar((ViewGroup)mFragmentComment.getRootView(), mTitleText, mTitleText, url);
+                        }
                         checkIsCollect();
                         loadBaiduAd();
                     }

@@ -16,6 +16,15 @@ public class UpdateBean implements Parcelable {
     private String kd_showextra; //是否显示额外条目.默认0是没有, 1代表有
     private String kd_extraname; //额外条目名称
     private String kd_extraurl; //额外条目链接
+    private String kd_localad; //是否显示本地广告, 默认0显示,1不显示
+
+    public String getKd_localad() {
+        return kd_localad;
+    }
+
+    public void setKd_localad(String kd_localad) {
+        this.kd_localad = kd_localad;
+    }
 
     public String getKd_showextra() {
         return kd_showextra;
@@ -96,6 +105,10 @@ public class UpdateBean implements Parcelable {
         dest.writeString(this.kd_dl);
         dest.writeString(this.kd_desc);
         dest.writeString(this.kd_review);
+        dest.writeString(this.kd_showextra);
+        dest.writeString(this.kd_extraname);
+        dest.writeString(this.kd_extraurl);
+        dest.writeString(this.kd_localad);
     }
 
     protected UpdateBean(Parcel in) {
@@ -104,6 +117,10 @@ public class UpdateBean implements Parcelable {
         this.kd_dl = in.readString();
         this.kd_desc = in.readString();
         this.kd_review = in.readString();
+        this.kd_showextra = in.readString();
+        this.kd_extraname = in.readString();
+        this.kd_extraurl = in.readString();
+        this.kd_localad = in.readString();
     }
 
     public static final Creator<UpdateBean> CREATOR = new Creator<UpdateBean>() {

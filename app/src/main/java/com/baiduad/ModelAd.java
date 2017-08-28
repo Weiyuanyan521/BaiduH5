@@ -1,8 +1,11 @@
 package com.baiduad;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.haokan.baiduh5.model.onDataResponseListener;
+import com.haokan.baiduh5.util.Values;
 
 import java.util.Random;
 
@@ -19,6 +22,12 @@ public class ModelAd {
         BaiduAdBean bean = new BaiduAdBean();
         if (isDetail) {
             if (detailType == 1) { //图片详情
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                String string = preferences.getString(Values.PreferenceKey.KEY_SP_SHOWIMGAD, "0");
+                if (!string.equals("0")) {
+                    listener.onDataEmpty();
+                    return;
+                }
                 bean.adLocation = 0;
             } else {
                 bean.adLocation = 2;

@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.DecimalFormat;
 
 public class FileUtil {
@@ -41,16 +40,16 @@ public class FileUtil {
         if (listener != null) {
             listener.onStart(totalSize);
         }
-        FileOutputStream buffer = null;
+        FileOutputStream outputStream = null;
         try {
-            buffer = new FileOutputStream(file, false);
+            outputStream = new FileOutputStream(file, false);
             byte[] tmp = new byte[BUFFER_SIZE];
-            int l, count = 0;
-            while ((l = inputStream.read(tmp)) != -1) {
-                count += l;
-                buffer.write(tmp, 0, l);
+            int size = 0, count;
+            while ((count = inputStream.read(tmp)) != -1) {
+                size += count;
+                outputStream.write(tmp, 0, count);
                 if (listener != null) {
-                    listener.onProgress(count, totalSize);
+                    listener.onProgress(size, totalSize);
                 }
             }
         } catch (IOException e) {
@@ -60,9 +59,18 @@ public class FileUtil {
             e.printStackTrace();
             return false;
         } finally {
-            silentCloseInputStream(inputStream);
-            silentFlushOutputStream(buffer);
-            silentCloseOutputStream(buffer);
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                outputStream.flush();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                LogHelper.w(TAG, "Cannot flush output stream");
+            }
         }
         if (listener != null) {
             listener.onSuccess();
@@ -200,6 +208,7 @@ public class FileUtil {
         boolean success = false;
         try {
             fos.flush();
+            fos.close();
             success = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -210,7 +219,6 @@ public class FileUtil {
                 intent.setData(Uri.fromFile(f));
                 context.sendBroadcast(intent);
             }
-            silentCloseOutputStream(fos);
         }
         return success;
     }
@@ -225,45 +233,6 @@ public class FileUtil {
             end = url.length();
         }
         return url.substring(start, end);
-    }
-
-    /**
-     * A utility function to close an input stream without raising an exception.
-     */
-    public static void silentCloseInputStream(InputStream is) {
-        try {
-            if (is != null) {
-                is.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            LogHelper.w(TAG, "Cannot close input stream");
-        }
-    }
-
-    /**
-     * A utility function to close an output stream without raising an exception.
-     */
-    public static void silentCloseOutputStream(OutputStream os) {
-        try {
-            if (os != null) {
-                os.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            LogHelper.w(TAG, "Cannot close output stream");
-        }
-    }
-
-    public static void silentFlushOutputStream(OutputStream os) {
-        try {
-            if (os != null) {
-                os.flush();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            LogHelper.w(TAG, "Cannot flush output stream");
-        }
     }
 
     public static String saveAvatar(Context context, Bitmap destBitmap, String picName) {

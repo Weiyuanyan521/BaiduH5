@@ -1,7 +1,9 @@
 package com.haokan.baiduh5.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +14,11 @@ import android.widget.TextView;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.activity.ActivityAboutUs;
 import com.haokan.baiduh5.activity.ActivityMyCollection;
+import com.haokan.baiduh5.activity.ActivityWebview;
 import com.haokan.baiduh5.cachesys.CacheManager;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.ToastManager;
+import com.haokan.baiduh5.util.Values;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -28,9 +32,12 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
     private View mView;
     private LinearLayout mCollection;
     private LinearLayout mClearcache;
+    private LinearLayout mExtra;
+    private View mExtraDivider;
     private LinearLayout mAboutus;
     private TextView mTvCacheSize;
     private ProgressBar mCacheProgressBar;
+    private String mExtraUrl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +54,22 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
         mTvCacheSize = (TextView) mClearcache.findViewById(R.id.cachesize);
         mCacheProgressBar = (ProgressBar) mClearcache.findViewById(R.id.progress);
         mAboutus = (LinearLayout) mView.findViewById(R.id.aboutus);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        String show = sp.getString(Values.PreferenceKey.KEY_SP_SHOWEXTRA, "0");
+        if ("1".equals(show)) {
+            mExtraUrl = sp.getString(Values.PreferenceKey.KEY_SP_EXTRAURL, "http://m.baidu.com");
+            String name = sp.getString(Values.PreferenceKey.KEY_SP_EXTRANAME, "好看外链");
+
+            mExtra = (LinearLayout) mView.findViewById(R.id.hkextra);
+            mExtra.setVisibility(View.VISIBLE);
+            mExtra.setOnClickListener(this);
+            TextView tvExtra = (TextView) mExtra.findViewById(R.id.tv_extra);
+            tvExtra.setText(name);
+            mExtraDivider = mView.findViewById(R.id.divider);
+            mExtraDivider.setVisibility(View.VISIBLE);
+        }
+
 
         mCollection.setOnClickListener(this);
         mClearcache.setOnClickListener(this);
@@ -73,6 +96,13 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
             case R.id.aboutus:
                 Intent iAbout = new Intent(mActivity, ActivityAboutUs.class);
                 mActivity.startActivity(iAbout);
+                mActivity.overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
+                break;
+            case R.id.hkextra:
+                Intent extra = new Intent(mActivity, ActivityWebview.class);
+                extra.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, mExtraUrl);
+//                extra.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, "http://m.baidu.com");
+                mActivity.startActivity(extra);
                 mActivity.overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
                 break;
         }

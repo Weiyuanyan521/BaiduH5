@@ -139,6 +139,12 @@ public class Values {
          * 是否正在审核阶段
          */
         public static final String KEY_SP_EXTRAURL = "extraurl";
+
+        /**
+         * 是否显示图片详情页广告, 因为百度自身带广告
+         */
+        public static final String KEY_SP_SHOWIMGAD = "showimgad";
+
         /**
          * 大图页尾页是否显示大图广告
          */
