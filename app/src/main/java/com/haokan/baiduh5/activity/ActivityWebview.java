@@ -39,8 +39,10 @@ import com.baiduad.BaiduAdManager;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.bean.CollectionBean;
+import com.haokan.baiduh5.bean.TypeBean;
 import com.haokan.baiduh5.event.EventCollectionChange;
 import com.haokan.baiduh5.fragment.FragmentComment;
+import com.haokan.baiduh5.fragment.FragmentWebview;
 import com.haokan.baiduh5.model.ModelMyCollection;
 import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.CommonUtil;
@@ -63,7 +65,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private String mTitleText = "";
     private ProgressBar mProgressHorizontal;
     private WebView mWebView;
-
+    private TypeBean mTypeBean;
     //分享用到的内容
     private String mWeb_Url;
     private Handler mHandler = new Handler();
@@ -180,6 +182,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         } else {
             mWeb_Url = getIntent().getStringExtra(KEY_INTENT_WEB_URL);
         }
+        mTypeBean = getIntent().getParcelableExtra(FragmentWebview.TYPE_BEAN);
         if (TextUtils.isEmpty(mWeb_Url)) {
             ToastManager.showShort(this, R.string.url_error);
             finish();
@@ -221,7 +224,17 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
             mAdManager.onDestory();
             mAdManager = new BaiduAdManager();
         }
-        mAdManager.fillAdView(this, mAdParent, "首页", "美女", 1, mWeb_Url.contains("image?")?1:2);
+        String detailType;
+        if (mWeb_Url.contains("image?")) {
+            detailType = "image";
+        } else if (mWeb_Url.contains("video?")) {
+            detailType = "video";
+        } else {
+            detailType = "info";
+        }
+        mAdManager.fillAdView(this, mAdParent, mTypeBean.tabName, mTypeBean.name, "detail", detailType, "top");
+        mAdManager.fillAdView(this, mAdParent, mTypeBean.tabName, mTypeBean.name, "detail", detailType, "middle");
+        mAdManager.fillAdView(this, mAdParent, mTypeBean.tabName, mTypeBean.name, "detail", detailType, "down");
     }
 
     private void initWebView() {

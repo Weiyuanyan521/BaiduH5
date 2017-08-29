@@ -64,7 +64,12 @@ public class RequestHeaderAd<RequestBody> {
         companyId = UrlsUtil.COMPANYID;
 
         StringBuilder sb = new StringBuilder();
-        String sign_temp = sb.append(timeStamp).append(imei).append(companyId).append(bodyStr).toString();
+//        LogHelper.d("wangzixu", "bodyStr = " + bodyStr);
+//        LogHelper.d("wangzixu", "abc = " + SecurityUtil.md5("abc"));
+
+        String sign_temp = sb.append(timeStamp).append(imei).append(companyId)
+//                .append(bodyStr)
+                .toString();
         sign = SecurityUtil.md5(sign_temp);
     }
 

@@ -48,6 +48,7 @@ public class FragmentImagePage extends FragmentBase{
                 }
             }
             TypeBean bean = new TypeBean();
+            bean.tabName = "image";
             bean.name = name;
             bean.id = mFLIds[i];
             list.add(bean);

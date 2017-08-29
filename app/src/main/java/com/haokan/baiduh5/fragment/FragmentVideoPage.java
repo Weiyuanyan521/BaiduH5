@@ -48,6 +48,7 @@ public class FragmentVideoPage extends FragmentBase{
                 }
             }
             TypeBean bean = new TypeBean();
+            bean.tabName = "video";
             bean.name = name;
             bean.id = mVideoFLIds[i];
             list.add(bean);

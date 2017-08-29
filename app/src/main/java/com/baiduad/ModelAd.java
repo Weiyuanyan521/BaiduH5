@@ -4,10 +4,22 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.baiduad.bean.request.RequestBodyBaiduAd;
+import com.baiduad.bean.request.RequestEntityAd;
+import com.baiduad.bean.request.RequestHeaderAd;
+import com.baiduad.bean.response.ResponseBodyBaiduAd;
+import com.baiduad.bean.response.ResponseEntityAd;
+import com.haokan.baiduh5.http.HttpRetrofitManager;
+import com.haokan.baiduh5.http.HttpStatusManager;
 import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.Values;
 
 import java.util.Random;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by wangzixu on 2017/8/15.
@@ -78,58 +90,59 @@ public class ModelAd {
         }
 
         listener.onDataSucess(bean);
-//        listener.onStart();
-//
-//        final RequestEntity<RequestBody_Config> requestEntity = new RequestEntity<>();
-//        final RequestBody_Config body = new RequestBody_Config();
-//        body.pid = App.PID;
-//        body.appId = UrlsUtil.COMPANYID;
-//
-//        RequestHeader<RequestBody_Config> header = new RequestHeader(body);
-//        requestEntity.setHeader(header);
-//        requestEntity.setBody(body);
-//
-//        Observable<ResponseEntity<ResponseBody_Config>> observable = HttpRetrofitManager.getInstance().getRetrofitService().getConfig(new UrlsUtil().getConfigUrl(), requestEntity);
-//        observable
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Subscriber<ResponseEntity<ResponseBody_Config>>() {
-//                    @Override
-//                    public void onCompleted() {
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        if (HttpStatusManager.checkNetWorkConnect(context)) {
-//                            e.printStackTrace();
-//                            listener.onDataFailed(e.getMessage());
-//                        } else {
-//                            listener.onNetError();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onNext(ResponseEntity<ResponseBody_Config> config) {
-//                        if (config != null && config.getHeader().getResCode() == 0) {
-//                            ResponseBody_Config body1 = config.getBody();
-//                            if (body1 != null && !TextUtils.isEmpty(body1.getKd())) {
-//                                UpdateBean updateBean = JsonUtil.fromJson(body1.getKd(), UpdateBean.class);
-//
-////                                updateBean.setKd_vc(2);
-////                                updateBean.setKd_dl("http://uc1-apk.wdjcdn.com/2/f3/e31607c9f5f57acf689910df9f692f32.apk");
-//                                listener.onDataSucess(updateBean);
-//                            } else {
-//                                listener.onDataEmpty();
-//                            }
-//                        } else {
-//                            listener.onDataFailed(config != null ? config.getHeader().getResMsg() : "null");
-//                        }
-//                    }
-//                });
     }
 
-    public void getAdFromNet(Context context, String type, String channel, boolean isDetail, int detailType
-            , onDataResponseListener<BaiduAdBean> listener) {
+    public void getAdFromNet(final Context context, String positionType, String positionChannel
+            , String positionArea, String detailType, String positionPage
+            , final onDataResponseListener<ResponseBodyBaiduAd> listener) {
+        listener.onStart();
 
+        final RequestEntityAd<RequestBodyBaiduAd> requestEntity = new RequestEntityAd<>();
+
+        final RequestBodyBaiduAd body = new RequestBodyBaiduAd();
+        body.positionType = positionType;
+        body.positionChannel = positionChannel;
+        body.positionArea = positionArea;
+        body.detailType = detailType;
+        body.positionPage = positionPage;
+
+        RequestHeaderAd<RequestBodyBaiduAd> header = new RequestHeaderAd(body);
+        requestEntity.setHeader(header);
+        requestEntity.setBody(body);
+
+        Observable<ResponseEntityAd> observable = HttpRetrofitManager.getInstance().getRetrofitService()
+//                .getBaiduAd("http://172.18.0.128:3009/api/appAdvertisement", requestEntity);
+                .getBaiduAd("http://admin.m.levect.com/api/appAdvertisement/", requestEntity);
+        observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ResponseEntityAd>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (HttpStatusManager.checkNetWorkConnect(context)) {
+                            e.printStackTrace();
+                            listener.onDataFailed(e.getMessage());
+                        } else {
+                            listener.onNetError();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(ResponseEntityAd config) {
+                        if (config != null && config.info.code == 200) {
+                            if (config.data != null && config.data.size() > 0) {
+                                listener.onDataSucess(config.data.get(0));
+                            } else {
+                                listener.onDataEmpty();
+                            }
+                        } else {
+                            listener.onDataFailed(config != null ? config.info.msg: "null");
+                        }
+                    }
+                });
     }
 }

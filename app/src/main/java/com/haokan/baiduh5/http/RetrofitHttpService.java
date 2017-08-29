@@ -1,5 +1,8 @@
 package com.haokan.baiduh5.http;
 
+import com.baiduad.bean.request.RequestBodyBaiduAd;
+import com.baiduad.bean.request.RequestEntityAd;
+import com.baiduad.bean.response.ResponseEntityAd;
 import com.haokan.baiduh5.bean.InitResponseWrapperBean;
 import com.haokan.baiduh5.bean.request.RequestBody_Config;
 import com.haokan.baiduh5.bean.request.RequestEntity;
@@ -37,4 +40,10 @@ public interface RetrofitHttpService {
      */
     @POST
     Observable<ResponseEntity<ResponseBody_Config>> getConfig(@Url String url, @Body RequestEntity<RequestBody_Config> requestEntity);
+
+    /**
+     * 获取config
+     */
+    @POST
+    Observable<ResponseEntityAd> getBaiduAd(@Url String url, @Body RequestEntityAd<RequestBodyBaiduAd> requestEntity);
 }

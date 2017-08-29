@@ -7,12 +7,19 @@ import android.os.Parcelable;
  * Created by wangzixu on 2017/7/11.
  */
 public class TypeBean implements Parcelable {
+    /**
+     *  //哪个大tab, ['home', 'video', 'list']
+     */
+    public String tabName = "";
     public String name = "";
     public String id = "";
 
     @Override
     public String toString() {
         return name;
+    }
+
+    public TypeBean() {
     }
 
     @Override
@@ -22,19 +29,18 @@ public class TypeBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.tabName);
         dest.writeString(this.name);
         dest.writeString(this.id);
     }
 
-    public TypeBean() {
-    }
-
     protected TypeBean(Parcel in) {
+        this.tabName = in.readString();
         this.name = in.readString();
         this.id = in.readString();
     }
 
-    public static final Parcelable.Creator<TypeBean> CREATOR = new Parcelable.Creator<TypeBean>() {
+    public static final Creator<TypeBean> CREATOR = new Creator<TypeBean>() {
         @Override
         public TypeBean createFromParcel(Parcel source) {
             return new TypeBean(source);

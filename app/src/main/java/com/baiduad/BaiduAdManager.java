@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,9 @@ import com.baidu.mobads.AdView;
 import com.baidu.mobads.AdViewListener;
 import com.baidu.mobads.InterstitialAd;
 import com.baidu.mobads.InterstitialAdListener;
+import com.baidu.mobads.SplashAd;
+import com.baidu.mobads.SplashAdListener;
+import com.baiduad.bean.response.ResponseBodyBaiduAd;
 import com.bumptech.glide.Glide;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
@@ -44,36 +48,39 @@ public class BaiduAdManager {
     private AdView mHenffuAdView;
     private boolean mIsDestory = false;
 
-    /**
-     * @param type 分类, 1首页, 2视频, 3图片
-     * @param channel 频道名称
-     * @param isDetail 是否是详情页, 0列表页, 1详情页
-     * @param detailType 详情页的类型, 1代表图片, 2代表视频, 3代表列表
-     */
     public void fillAdView(final Context context, final RelativeLayout adParent
-            , String type, String channel, int isDetail, int detailType) {
-        new ModelAd().getAdType(context, type, channel, isDetail, detailType, new onDataResponseListener<BaiduAdBean>() {
+            , String positionType, String positionChannel
+            , String positionArea, String detailType, String positionPage) {
+        new ModelAd().getAdFromNet(context, positionType, positionChannel, positionArea, detailType, positionPage, new onDataResponseListener<ResponseBodyBaiduAd>() {
+//        new ModelAd().getAdType(context, type, channel, isDetail, detailType, new onDataResponseListener<BaiduAdBean>() {
             @Override
             public void onStart() {
             }
 
             @Override
-            public void onDataSucess(BaiduAdBean baiduAdBean) {
+            public void onDataSucess(ResponseBodyBaiduAd baiduAdBean) {
                 if (mIsDestory) {
                     return;
                 }
+                if (!baiduAdBean.state) {
+                    return;
+                }
                 LogHelper.i(TAG, "fillAdView onDataSucess adType = " + baiduAdBean.adType);
-                if (baiduAdBean.adType == 0) {
-                    getDetailPageBannerAd(context, adParent, baiduAdBean);
-                } else if (baiduAdBean.adType == 1) {
-                    getDetailPageFeedH5Ad(context, adParent, baiduAdBean);
-                } else if (baiduAdBean.adType == 2) {
-                    getDetailPageFeedNativeAd(context, adParent, baiduAdBean);
-                } else if (baiduAdBean.adType == 3) {
+                if (baiduAdBean.adType.equals("横幅")) {
+                    getBaiduBannerAd(context, adParent, baiduAdBean);
+                } else if (baiduAdBean.adType.equals("开屏")) {
+                    getBaiduSplashAd(context, adParent, baiduAdBean);
+                } else if (baiduAdBean.adType.equals("插屏")) {
                     getMainPageInsertAd((ActivityBase) context, adParent, baiduAdBean);
-                } else if (baiduAdBean.adType == 4) {
-//                    getMainPageFeedH5Ad(context, adParent, baiduAdBean);
-                    getDetailPageFeedH5Ad(context, adParent, baiduAdBean);
+                } else if (baiduAdBean.adType.equals("信息流")) {
+                    if (baiduAdBean.adStyle.equals("元素")) {
+                        getBaiduFeedNativeAd(context, adParent, baiduAdBean);
+                    } else {
+                        getBaiduFeedH5Ad(context, adParent, baiduAdBean);
+                    }
+                } else if (baiduAdBean.adType.equals("视频贴片")) {
+//                    getDetailPageFeedH5Ad(context, adParent, baiduAdBean);
+                    //nothing
                 }
             }
 
@@ -94,9 +101,9 @@ public class BaiduAdManager {
         });
     }
 
-    public void getDetailPageBannerAd(final Context context, final RelativeLayout adParent, final BaiduAdBean baiduAdBean) {
+    public void getBaiduBannerAd(final Context context, final RelativeLayout adParent, final ResponseBodyBaiduAd baiduAdBean) {
         AdSettings.setKey(new String[]{"baidu", "中国"});
-        String adPlaceID = baiduAdBean.adId;// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+        String adPlaceID = baiduAdBean.id;// 重要：请填上你的 代码位ID, 否则 无法请求到广告
         mHenffuAdView = new AdView(context, adPlaceID);
         //设置监听器
         mHenffuAdView.setListener(new AdViewListener() {
@@ -144,9 +151,16 @@ public class BaiduAdManager {
         int winW = dm.widthPixels;
         int winH = dm.heightPixels;
         int width = Math.min(winW, winH);
-        int height = (int)(width * baiduAdBean.adHFactor);
+
+        float adHFactor;
+        if (baiduAdBean.ratio == null || baiduAdBean.ratio.height == 0 || baiduAdBean.ratio.width == 0) {
+            adHFactor = 0.1f;
+        } else {
+            adHFactor = baiduAdBean.ratio.height / (float)baiduAdBean.ratio.width;
+        }
+        int height = (int)(width * adHFactor);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
-        if (baiduAdBean.adLocation == 1) {
+        if ("middle".equals(baiduAdBean.positionPage)) {
             params.addRule(RelativeLayout.CENTER_VERTICAL);
 
             //如果在中间, 需要添加背景色
@@ -161,7 +175,7 @@ public class BaiduAdManager {
                     adParent.setVisibility(View.GONE);
                 }
             });
-        } else if (baiduAdBean.adLocation == 2) {
+        } else if ("down".equals(baiduAdBean.positionPage)) {
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         }
         adParent.addView(mHenffuAdView, params);
@@ -170,7 +184,7 @@ public class BaiduAdManager {
     /**
      * 获取信息流轮播模板广告
      */
-    public void getDetailPageFeedH5Ad(final Context context, final RelativeLayout adParent, final BaiduAdBean baiduAdBean) {
+    public void getBaiduFeedH5Ad(final Context context, final RelativeLayout adParent, final ResponseBodyBaiduAd baiduAdBean) {
         if (mIsDestory) {
             return;
         }
@@ -179,25 +193,30 @@ public class BaiduAdManager {
          * 上下文context，广告位ID, BaiduNativeNetworkListener监听（监听广告请求的成功与失败）
          *  注意：请将YOUR_AD_PALCE_ID 替换为自己的广告位ID
          */
-
         final DisplayMetrics dm = context.getResources().getDisplayMetrics();
         final int winW = dm.widthPixels;
         int winH = dm.heightPixels;
         final int width = Math.min(winW, winH);
-        final int height = (int)(width * baiduAdBean.adHFactor);
+        float adHFactor;
+        if (baiduAdBean.ratio == null || baiduAdBean.ratio.height == 0 || baiduAdBean.ratio.width == 0) {
+            adHFactor = 0.1f;
+        } else {
+            adHFactor = baiduAdBean.ratio.height / (float)baiduAdBean.ratio.width;
+        }
+        final int height = (int)(width * adHFactor);
 
-        BaiduNative baidu = new BaiduNative(context, baiduAdBean.adId,
+        BaiduNative baidu = new BaiduNative(context, baiduAdBean.id,
                 new BaiduNative.BaiduNativeNetworkListener() {
                     @Override
                     public void onNativeFail(NativeErrorCode arg0) {
-                        LogHelper.d(TAG, "getDetailPageFeedH5Ad onNativeFail = " + arg0.toString());
+                        LogHelper.d(TAG, "getBaiduFeedH5Ad onNativeFail = " + arg0.toString());
                     }
                     @Override
                     public void onNativeLoad(List<NativeResponse> arg0) {
                         if (mIsDestory) {
                             return;
                         }
-                        LogHelper.d(TAG, "getDetailPageFeedH5Ad onNativeLoad arg0 = " + arg0.size());
+                        LogHelper.d(TAG, "getBaiduFeedH5Ad onNativeLoad arg0 = " + arg0.size());
                         if (arg0 != null && arg0.size() > 0) {
                             NativeResponse mNrAd = arg0.get(0);
                             if (mNrAd.getMaterialType() == NativeResponse.MaterialType.HTML) {
@@ -211,7 +230,7 @@ public class BaiduAdManager {
                                 //展示广告部分
                                 WebView webView = mNrAd.getWebView();
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
-                                if (baiduAdBean.adLocation == 1) {
+                                if ("middle".equals(baiduAdBean.positionPage)) {
                                     params.addRule(RelativeLayout.CENTER_VERTICAL);
 
                                     //如果在中间, 需要添加背景色
@@ -226,7 +245,7 @@ public class BaiduAdManager {
                                             adParent.setVisibility(View.GONE);
                                         }
                                     });
-                                } else if (baiduAdBean.adLocation == 2) {
+                                } else if ("down".equals(baiduAdBean.positionPage)) {
                                     params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                 }
 
@@ -265,14 +284,6 @@ public class BaiduAdManager {
                 .downloadAppConfirmPolicy(RequestParameters.DOWNLOAD_APP_CONFIRM_ALWAYS)
                 .build();
         baidu.makeRequest(requestParameters);
-
-//        App.sMainHanlder.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                LogHelper.i(TAG, "updateNativeAd 重新请求了");
-//                getDetailPageFeedH5Ad(context, adParent, baiduAdBean);
-//            }
-//        }, 10000);
     }
 
 //    /**
@@ -368,7 +379,7 @@ public class BaiduAdManager {
     /**
      * 百度信息流元素广告
      */
-    private void getDetailPageFeedNativeAd(final Context context, final RelativeLayout adParent, final BaiduAdBean baiduAdBean) {
+    private void getBaiduFeedNativeAd(final Context context, final RelativeLayout adParent, final ResponseBodyBaiduAd baiduAdBean) {
 
         /**
          * Step 1. 创建 BaiduNative 对象，参数分别为：
@@ -376,7 +387,7 @@ public class BaiduAdManager {
          败）
          *  注意：请将 YOUR_AD_PALCE_ID  替换为自己的代码位 ID ，不填写无法请求到广告
          */
-        BaiduNative baidu = new BaiduNative(context, baiduAdBean.adId,
+        BaiduNative baidu = new BaiduNative(context, baiduAdBean.id,
                 new BaiduNative.BaiduNativeNetworkListener() {
                     @Override
                     public void onNativeFail(NativeErrorCode arg0) {
@@ -409,7 +420,7 @@ public class BaiduAdManager {
                             int width = Math.min(winW, winH);
                             int height = (int)(64 * dm.density);
                             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
-                            if (baiduAdBean.adLocation == 1) {
+                            if ("middle".equals(baiduAdBean.positionPage)) {
                                 params.addRule(RelativeLayout.CENTER_VERTICAL);
 
                                 //如果在中间, 需要添加背景色
@@ -424,7 +435,7 @@ public class BaiduAdManager {
                                         adParent.setVisibility(View.GONE);
                                     }
                                 });
-                            } else if (baiduAdBean.adLocation == 2) {
+                            } else if ("down".equals(baiduAdBean.positionPage)) {
                                 params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                             }
                             adParent.addView(mNativeAdHolder.rootView, params);
@@ -531,8 +542,8 @@ public class BaiduAdManager {
     /**
      * 百度插屏广告
      */
-    private void getMainPageInsertAd(final ActivityBase context, final RelativeLayout adParent, final BaiduAdBean baiduAdBean) {
-        String adPlaceId = baiduAdBean.adId;// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+    private void getMainPageInsertAd(final ActivityBase context, final RelativeLayout adParent, final ResponseBodyBaiduAd baiduAdBean) {
+        String adPlaceId = baiduAdBean.id;// 重要：请填上你的 代码位ID, 否则 无法请求到广告
         final InterstitialAd mInterAd = new InterstitialAd(context, adPlaceId);
         mInterAd.setListener(new InterstitialAdListener() {
             @Override
@@ -581,20 +592,22 @@ public class BaiduAdManager {
         }
     }
 
-    private boolean isShow(Context context, BaiduAdBean baiduAdBean) {
-        String type = baiduAdBean.type;
-        String channel = baiduAdBean.channel;
-        int isDetail = baiduAdBean.isDetail;
-        int detailType = baiduAdBean.detailType;
+    private boolean isShow(Context context, ResponseBodyBaiduAd baiduAdBean) {
+        String type = baiduAdBean.positionType;
+        String channel = baiduAdBean.positionChannel;
+        String positionArea = baiduAdBean.positionArea;
+        String detailType = baiduAdBean.detailType;
+        String positionPage = baiduAdBean.positionPage;
 
         //处理显示频率的逻辑begin
-        if (baiduAdBean.countType == 1) {//总共
+        if ("sum".equals(baiduAdBean.frequency)) {//总共
             String key = new StringBuilder(type)
                     .append("_").append(channel)
-                    .append("_").append(isDetail)
+                    .append("_").append(positionArea)
                     .append("_").append(detailType)
+                    .append("_").append(positionPage)
                     .toString();
-            int limitCount = baiduAdBean.limitCount;
+            int limitCount = baiduAdBean.showTimes;
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             int nowCount = preferences.getInt(key, 0);
             if (nowCount>limitCount) {
@@ -603,18 +616,20 @@ public class BaiduAdManager {
                 preferences.edit().putInt(key, nowCount+1).apply();
                 return true;
             }
-        } else if (baiduAdBean.countType == 2) { //每日
+        } else if ("day".equals(baiduAdBean.frequency)) { //每日
             String key = new StringBuilder(type)
                     .append("_").append(channel)
-                    .append("_").append(isDetail)
+                    .append("_").append(positionArea)
                     .append("_").append(detailType)
+                    .append("_").append(positionPage)
                     .toString();
 
             String keyDate = "d_" + key;
 
-            int limitCount = baiduAdBean.limitCount;
+            int limitCount = baiduAdBean.showTimes;
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor edit = preferences.edit();
+
             String data = preferences.getString(keyDate, "xxxx");
             int nowCount = preferences.getInt(key, 0);
 
@@ -635,5 +650,35 @@ public class BaiduAdManager {
         }
         return true;
         //处理显示频率的逻辑end
+    }
+
+    private void getBaiduSplashAd(final Context context, final RelativeLayout adParent, final ResponseBodyBaiduAd baiduAdBean) {
+        SplashAdListener listener = new SplashAdListener() {
+            @Override
+            public void onAdDismissed() {
+            }
+            @Override
+            public void onAdFailed(String arg0) {
+                Log.i("loadInsertBaiduAd", "onAdFailed");
+            }
+            @Override
+            public void onAdPresent() {
+                Log.i("loadInsertBaiduAd", "onAdPresent");
+            }
+            @Override
+            public void onAdClick() {
+            }
+        };
+
+        /**
+         * 构造函数：
+         百度 Mobile SSP  移动应用推广 SDK
+         10
+         * new SplashAd(Context context, ViewGroup adsParent,
+         *    SplashAdListener listener,String adPlaceId, boolean canClick);
+         */
+        String adPlaceId = baiduAdBean.id;
+//        String adPlaceId = "4589696";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
+        SplashAd mSplashAd = new SplashAd(context, adParent, listener, adPlaceId, true);
     }
 }

@@ -74,6 +74,7 @@ public class FragmentHomePage extends FragmentBase{
                 }
             }
             TypeBean bean = new TypeBean();
+            bean.tabName = "home";
             bean.name = name;
             bean.id = mImgFLIds[i];
             list.add(bean);

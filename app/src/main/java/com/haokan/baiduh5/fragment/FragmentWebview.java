@@ -160,6 +160,7 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
                 if (url.startsWith("http") || url.startsWith("https")) {
                     Intent i = new Intent(mActivity, ActivityWebview.class);
                     i.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, url);
+                    i.putExtra(TYPE_BEAN, mTypeBean);
                     startActivity(i);
                     mActivity.overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
                     return true;

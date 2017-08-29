@@ -8,12 +8,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.baidu.mobads.SplashAd;
-import com.baidu.mobads.SplashAdListener;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.util.CommonUtil;
@@ -31,7 +28,6 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
 //    private boolean mIsLoadWeb = false;
     private boolean mHasLoadAd = false;
     private FrameLayout mAdwraper;
-    private SplashAd mSplashAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,47 +50,7 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
 //        mTvJumpAd = (TextView) findViewById(R.id.jumpad);
 //        mTvJumpAd.setOnClickListener(this);
         mAdwraper = (FrameLayout) findViewById(R.id.adwrapper);
-        loadBaiduAd();
     }
-
-    private void loadBaiduAd() {
-        SplashAdListener listener = new SplashAdListener() {
-            @Override
-            public void onAdDismissed() {
-                Log.i("RSplashActivity", "onAdDismissed");
-                launcherHome();
-            }
-            @Override
-            public void onAdFailed(String arg0) {
-                Log.i("RSplashActivity", "onAdFailed");
-                mHasLoadAd = true;
-            }
-            @Override
-            public void onAdPresent() {
-                Log.i("RSplashActivity", "onAdPresent");
-                mHasLoadAd = true;
-                mCountdown = 3;
-            }
-            @Override
-            public void onAdClick() {
-                //设置开屏可接受点击时，该回调可用
-                Log.i("RSplashActivity", "onAdClick");
-            }
-        };
-
-        /**
-         * 构造函数：
-         百度 Mobile SSP  移动应用推广 SDK
-         10
-         * new SplashAd(Context context, ViewGroup adsParent,
-         *    SplashAdListener listener,String adPlaceId, boolean canClick);
-         */
-//        String adPlaceId = "4584884";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
-        String adPlaceId = "4589696";// 重要：请填上你的 代码位ID, 否则 无法请求到广告
-        mSplashAd = new SplashAd(this, mAdwraper, listener, adPlaceId, true);
-    }
-
-
 
     /**
      * 检查权限
@@ -151,17 +107,11 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
         initData();
     }
 
-    @Override
-    protected void onDestroy() {
-//        mSplashAd.destroy();
-        super.onDestroy();
-    }
-
     /**
      * 初始化数据
      */
     public void initData() {
-        mHandler.postDelayed(mLaunchHomeRunnable, 1000);
+        mHandler.postDelayed(mLaunchHomeRunnable, 3000);
     }
 
     @Override
@@ -183,7 +133,7 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
         public void run() {
             mCountdown --;
             LogHelper.d(TAG, "mLaunchHomeRunnable  mCountdown =  " + mCountdown);
-            if (mCountdown <= 0 && mHasLoadAd) {
+            if (mCountdown <= 0) {
                 launcherHome();
             } else {
                 if (mCountdown<0) {
