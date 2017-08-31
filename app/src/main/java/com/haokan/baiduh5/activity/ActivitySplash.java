@@ -9,8 +9,9 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
+import com.baiduad.BaiduAdManager;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.util.CommonUtil;
@@ -27,7 +28,8 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
 //    private WebView mWebView;
 //    private boolean mIsLoadWeb = false;
     private boolean mHasLoadAd = false;
-    private FrameLayout mAdwraper;
+    private RelativeLayout mAdwraper;
+    private BaiduAdManager mBaiduAdManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,17 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
         //好看广告相关
 //        mTvJumpAd = (TextView) findViewById(R.id.jumpad);
 //        mTvJumpAd.setOnClickListener(this);
-        mAdwraper = (FrameLayout) findViewById(R.id.adwrapper);
+        mAdwraper = (RelativeLayout) findViewById(R.id.adwrapper);
+        mBaiduAdManager = new BaiduAdManager();
+        mBaiduAdManager.fillAdView(this, mAdwraper, "splash", null, null, null, null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mBaiduAdManager != null) {
+            mBaiduAdManager.onDestory();
+        }
     }
 
     /**

@@ -1,5 +1,13 @@
 apply plugin: 'com.android.application'
 
+def appName() {
+    return "kd"
+}
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getDefault())
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
@@ -7,14 +15,25 @@ android {
         applicationId "com.haokanhaokan.news"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 414
-        versionName "4.1.4"
+        versionCode 415
+        versionName "4.1.5"
     }
     buildTypes {
         release {
             minifyEnabled false
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //将release版本的包名重命名，加上版本及日期
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('release.apk')) {
+                        def productFlavorsName = variant.productFlavors[0].name;
+                        def fileName = "${appName()}_" + productFlavorsName + "_v${versionCode}_${releaseTime()}.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
         }
 
         debug {
@@ -80,6 +99,7 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     //此处为百度广告
     compile files('libs/Baidu_MobAds_SDK.jar')
+    compile files('libs/haokan-ad-v1.0.jar')
     compile project(':umsharelibrary')
     //
     compile 'org.greenrobot:eventbus:3.0.0'

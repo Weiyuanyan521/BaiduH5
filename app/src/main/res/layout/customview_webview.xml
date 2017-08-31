@@ -16,4 +16,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"   >
     </WebView>
+
+    <RelativeLayout
+        android:id="@+id/adParent_top"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/adParent_middle"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/adParent_down"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </RelativeLayout>
 </RelativeLayout>

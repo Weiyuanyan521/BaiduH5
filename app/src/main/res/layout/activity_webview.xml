@@ -132,7 +132,23 @@
 
         <!--android:visibility="gone"-->
     <RelativeLayout
-        android:id="@+id/adParent"
+        android:id="@+id/adParent_top"
+        android:layout_below="@+id/divider"
+        android:layout_above="@id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/adParent_middle"
+        android:layout_below="@+id/divider"
+        android:layout_above="@id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/adParent_down"
         android:layout_below="@+id/divider"
         android:layout_above="@id/bottom_bar"
         android:layout_width="match_parent"

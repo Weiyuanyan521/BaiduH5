@@ -48,6 +48,13 @@ public class ResponseBodyBaiduAd {
      */
     public String positionPage;
 
+    /**
+     * 广告来源、 参数: ['baidu', 'haokanPmp']
+     */
+    public String adFrom;
+
+
+
     public static class Ratio {
         public int width;
         public int height;

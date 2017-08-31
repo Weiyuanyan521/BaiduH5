@@ -83,9 +83,10 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     private ViewGroup mBigViedioParent;
     private View mTvCollection;
     private FragmentComment mFragmentComment;
-    private RelativeLayout mAdParent;
+    private RelativeLayout mAdParentTop;
+    private RelativeLayout mAdParentMiddle;
+    private RelativeLayout mAdParentBottom;
     private BaiduAdManager mAdManager;
-    private boolean mIsAdPage = false;
     private View mBottomBar;
 
     @Override
@@ -139,7 +140,9 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
 //        mAdWraper1.findViewById(R.id.ad_close).setOnClickListener(this);
 //        mAdWraper2.findViewById(R.id.ad_close).setOnClickListener(this);
 
-        mAdParent = (RelativeLayout) findViewById(R.id.adParent);
+        mAdParentTop = (RelativeLayout) findViewById(R.id.adParent_top);
+        mAdParentMiddle = (RelativeLayout) findViewById(R.id.adParent_middle);
+        mAdParentBottom = (RelativeLayout) findViewById(R.id.adParent_down);
 
         mTvCollection = findViewById(R.id.iv_collect);
         mTvCollection.setOnClickListener(this);
@@ -189,15 +192,6 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
             return;
         }
 
-        LogHelper.i("WebViewActivity", "loadData mweburl = " + mWeb_Url);
-        if (mWeb_Url.startsWith("http://cpro.baidu.com")) {
-            mIsAdPage = true;
-            mBottomBar.setVisibility(View.GONE);
-        } else {
-            mIsAdPage = false;
-            mBottomBar.setVisibility(View.VISIBLE);
-        }
-
         if (mWeb_Url.startsWith("www")) {
             mWeb_Url = "http://" + mWeb_Url;
         }
@@ -215,7 +209,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     }
 
     private void loadBaiduAd() {
-        if (mAdParent == null || mIsDestory) {
+        if (mIsDestory || mTypeBean == null) {
             return;
         }
         if (mAdManager == null) {
@@ -224,17 +218,34 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
             mAdManager.onDestory();
             mAdManager = new BaiduAdManager();
         }
-        String detailType;
+        String detailType = "";
         if (mWeb_Url.contains("image?")) {
             detailType = "image";
         } else if (mWeb_Url.contains("video?")) {
             detailType = "video";
-        } else {
+        } else if (mWeb_Url.contains("news?")){
             detailType = "info";
+        } else if (mWeb_Url.contains("cpro.baidu.com")){
+            detailType = "ad";
         }
-        mAdManager.fillAdView(this, mAdParent, mTypeBean.tabName, mTypeBean.name, "detail", detailType, "top");
-        mAdManager.fillAdView(this, mAdParent, mTypeBean.tabName, mTypeBean.name, "detail", detailType, "middle");
-        mAdManager.fillAdView(this, mAdParent, mTypeBean.tabName, mTypeBean.name, "detail", detailType, "down");
+        mAdParentTop.removeAllViews();
+        mAdParentTop.setVisibility(View.GONE);
+        mAdParentMiddle.removeAllViews();
+        mAdParentMiddle.setVisibility(View.GONE);
+        mAdParentBottom.removeAllViews();
+        mAdParentBottom.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(detailType)) {
+            return;
+        }
+        if (detailType.equals("ad")) {
+            mAdManager.fillAdView(this, mAdParentTop, detailType, null, null, null, "top");
+            mAdManager.fillAdView(this, mAdParentMiddle, detailType, null, null, null, "middle");
+            mAdManager.fillAdView(this, mAdParentBottom, detailType, null, null, null, "down");
+        } else {
+            mAdManager.fillAdView(this, mAdParentTop, mTypeBean.tabName, mTypeBean.name, "detail", detailType, "top");
+            mAdManager.fillAdView(this, mAdParentMiddle, mTypeBean.tabName, mTypeBean.name, "detail", detailType, "middle");
+            mAdManager.fillAdView(this, mAdParentBottom, mTypeBean.tabName, mTypeBean.name, "detail", detailType, "down");
+        }
     }
 
     private void initWebView() {
@@ -298,10 +309,17 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                 LogHelper.i("WebViewActivity", "onPageFinished mweburl = " + url + ", title = " + title);
                 if (!TextUtils.isEmpty(title)) {
                     if (!title.equals(mTitleText)) {
+                        LogHelper.i("WebViewActivity", "loadData mweburl = " + mWeb_Url);
                         mTitleText = title;
                         mTvTitle.setText(mTitleText);
-                        if (!mIsAdPage) {
+
+                        if (mWeb_Url.contains("image?")
+                                || mWeb_Url.contains("video?")
+                                || mWeb_Url.contains("news?")) {
+                            mBottomBar.setVisibility(View.VISIBLE);
                             App.sCyanSdk.addCommentToolbar((ViewGroup)mFragmentComment.getRootView(), mTitleText, mTitleText, url);
+                        } else {
+                            mBottomBar.setVisibility(View.GONE);
                         }
                         checkIsCollect();
                         loadBaiduAd();

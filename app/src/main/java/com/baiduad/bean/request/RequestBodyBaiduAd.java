@@ -5,7 +5,7 @@ package com.baiduad.bean.request;
  */
 public class RequestBodyBaiduAd {
     /**
-     * 位置类型、参数：['home', 'video', 'list']
+     * 位置类型、参数：['home', 'video', 'image', 'splash', 'ad']
      */
     public String positionType;
     /**

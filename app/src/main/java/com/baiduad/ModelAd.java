@@ -3,6 +3,7 @@ package com.baiduad;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.baiduad.bean.request.RequestBodyBaiduAd;
 import com.baiduad.bean.request.RequestEntityAd;
@@ -14,6 +15,7 @@ import com.haokan.baiduh5.http.HttpStatusManager;
 import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.Values;
 
+import java.util.List;
 import java.util.Random;
 
 import rx.Observable;
@@ -94,17 +96,35 @@ public class ModelAd {
 
     public void getAdFromNet(final Context context, String positionType, String positionChannel
             , String positionArea, String detailType, String positionPage
-            , final onDataResponseListener<ResponseBodyBaiduAd> listener) {
+            , final onDataResponseListener<List<ResponseBodyBaiduAd>> listener) {
         listener.onStart();
+//        if (positionType.equals("splash")) {
+//            ResponseBodyBaiduAd bodyBaiduAd = new ResponseBodyBaiduAd();
+//            bodyBaiduAd.state = true;
+//            bodyBaiduAd.id = "4589696";
+//            bodyBaiduAd.adType = "开屏";
+//            listener.onDataSucess(bodyBaiduAd);
+//            return;
+//        }
 
         final RequestEntityAd<RequestBodyBaiduAd> requestEntity = new RequestEntityAd<>();
 
         final RequestBodyBaiduAd body = new RequestBodyBaiduAd();
-        body.positionType = positionType;
-        body.positionChannel = positionChannel;
-        body.positionArea = positionArea;
-        body.detailType = detailType;
-        body.positionPage = positionPage;
+        if (!TextUtils.isEmpty(positionType)) {
+            body.positionType = positionType;
+        }
+        if (!TextUtils.isEmpty(positionChannel)) {
+            body.positionChannel = positionChannel;
+        }
+        if (!TextUtils.isEmpty(positionArea)) {
+            body.positionArea = positionArea;
+        }
+        if (!TextUtils.isEmpty(detailType)) {
+            body.detailType = detailType;
+        }
+        if (!TextUtils.isEmpty(positionPage)) {
+            body.positionPage = positionPage;
+        }
 
         RequestHeaderAd<RequestBodyBaiduAd> header = new RequestHeaderAd(body);
         requestEntity.setHeader(header);
@@ -135,7 +155,7 @@ public class ModelAd {
                     public void onNext(ResponseEntityAd config) {
                         if (config != null && config.info.code == 200) {
                             if (config.data != null && config.data.size() > 0) {
-                                listener.onDataSucess(config.data.get(0));
+                                listener.onDataSucess(config.data);
                             } else {
                                 listener.onDataEmpty();
                             }

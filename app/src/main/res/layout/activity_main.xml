@@ -73,13 +73,13 @@
         android:layout_height="match_parent">
     </FrameLayout>
 
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/adwrapper"
-        android:layout_above="@id/divider"
-        android:layout_marginTop="45dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--<RelativeLayout-->
+        <!--android:visibility="gone"-->
+        <!--android:id="@+id/adwrapper"-->
+        <!--android:layout_above="@id/divider"-->
+        <!--android:layout_marginTop="45dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
 
         <!--<ImageView-->
             <!--android:visibility="gone"-->
@@ -114,7 +114,7 @@
             <!--android:gravity="center"-->
             <!--android:layout_width="25dp"-->
             <!--android:layout_height="14dp"/>-->
-    </RelativeLayout>
+    <!--</RelativeLayout>-->
 
     <!--<com.haokan.baiduh5.custompage.Custom_Homepage-->
         <!--android:visibility="gone"-->

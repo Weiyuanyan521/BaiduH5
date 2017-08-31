@@ -54,12 +54,12 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/adwrapper"
         android:layout_above="@id/rl_bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </FrameLayout>
+    </RelativeLayout>
 
     <TextView
         android:visibility="gone"

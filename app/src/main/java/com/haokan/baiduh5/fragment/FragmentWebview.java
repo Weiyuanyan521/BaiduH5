@@ -22,8 +22,10 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.RelativeLayout;
 
 import com.baidu.mobads.CpuInfoManager;
+import com.baiduad.BaiduAdManager;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.activity.ActivityWebview;
@@ -39,6 +41,11 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
     private View mView;
     private WebView mWebView;
     private String mWeb_Url;
+    private RelativeLayout mAdTop;
+    private RelativeLayout mAdMiddle;
+    private RelativeLayout mAdDown;
+    private BaiduAdManager mBaiduAdManager;
+    private long mAdTime;
 
     public static FragmentWebview newInstance(TypeBean type) {
 //        LogHelper.d("wangzixu", "FragmentWebview newInstance");
@@ -65,6 +72,43 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
             loadData();
         }
         return mView;
+    }
+
+    public void onSelected() {
+        mIsSelected = true;
+        if (mTypeBean == null) {
+            App.sMainHanlder.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    onSelected();
+                }
+            }, 600);
+        } else {
+            LogHelper.d("fragmentweb", "onSelected type = " + mTypeBean.tabName + ", " + mTypeBean.name);
+            long currentTimeMillis = System.currentTimeMillis();
+            if (currentTimeMillis - mAdTime > 60000) {
+//            if (currentTimeMillis - mAdTime > 0) {
+                if (mBaiduAdManager != null) {
+                    mBaiduAdManager.onDestory();
+                }
+                mBaiduAdManager = new BaiduAdManager();
+                mAdTime = currentTimeMillis;
+                mBaiduAdManager.fillAdView(mActivity, mAdTop, mTypeBean.tabName, mTypeBean.name, "list", "", "top");
+                mBaiduAdManager.fillAdView(mActivity, mAdMiddle, mTypeBean.tabName, mTypeBean.name, "list", "", "middle");
+                mBaiduAdManager.fillAdView(mActivity, mAdDown, mTypeBean.tabName, mTypeBean.name, "list", "", "down");
+            }
+        }
+    }
+
+    private void onSelectedDelay() {
+        if (mIsSelected) {
+            onSelected();
+        }
+    }
+
+    public boolean mIsSelected = false;
+    public void onUnSelected() {
+        mIsSelected = false;
     }
 
     private void loadData() {
@@ -111,6 +155,10 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
 //        serveErrorView.setOnClickListener(this);
 //        nocontentView.setOnClickListener(this);
         setPromptLayout(loadingLayout, null, null, null);
+
+        mAdTop = (RelativeLayout) view.findViewById(R.id.adParent_top);
+        mAdMiddle = (RelativeLayout) view.findViewById(R.id.adParent_top);
+        mAdDown = (RelativeLayout) view.findViewById(R.id.adParent_top);
 
         mWebView = (WebView)view.findViewById(R.id.webView);
         initWebView();
@@ -256,5 +304,13 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mBaiduAdManager != null) {
+            mBaiduAdManager.onDestory();
+        }
     }
 }
