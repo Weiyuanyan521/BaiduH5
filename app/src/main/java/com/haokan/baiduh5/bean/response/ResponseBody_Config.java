@@ -10,8 +10,21 @@ public class ResponseBody_Config {
      * isShowAd : 1
      */
     private String isReview;
+    /**
+     * 1, review
+     * 0, 没有review
+     */
+    private String kd_isreview_227;
     private String isShowAd;
     private String kd;
+
+    public String getKd_isreview_227() {
+        return kd_isreview_227;
+    }
+
+    public void setKd_isreview_227(String kd_isreview_227) {
+        this.kd_isreview_227 = kd_isreview_227;
+    }
 
     public String getKd() {
         return kd;

@@ -188,22 +188,25 @@ public class CommonUtil {
      */
     public static String getPid(Context c) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
-        String pid = sharedPreferences.getString(Values.PreferenceKey.KEY_SP_USER_PID, "");
+        String pid = "";
+        ApplicationInfo appInfo = null;
+        try {
+            appInfo = c.getPackageManager().getApplicationInfo(c.getPackageName(), PackageManager.GET_META_DATA);
+            pid = String.valueOf(appInfo.metaData.getInt("UMENG_CHANNEL"));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if (TextUtils.isEmpty(pid)) {
-            ApplicationInfo appInfo = null;
-            try {
-                appInfo = c.getPackageManager().getApplicationInfo(c.getPackageName(), PackageManager.GET_META_DATA);
-                pid = String.valueOf(appInfo.metaData.getInt("UMENG_CHANNEL"));
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (TextUtils.isEmpty(pid)) {
-                pid = "239";
-            } else {
-                sharedPreferences.edit().putString(Values.PreferenceKey.KEY_SP_USER_PID, pid).commit();
-            }
+            pid = sharedPreferences.getString(Values.PreferenceKey.KEY_SP_USER_PID, "");
+        }
+
+        if (TextUtils.isEmpty(pid)) {
+            pid = "239";
+        } else {
+            sharedPreferences.edit().putString(Values.PreferenceKey.KEY_SP_USER_PID, pid).commit();
         }
         return pid;
     }

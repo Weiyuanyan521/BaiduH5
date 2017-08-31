@@ -14,6 +14,7 @@ import com.haokan.baiduh5.http.HttpRetrofitManager;
 import com.haokan.baiduh5.http.HttpStatusManager;
 import com.haokan.baiduh5.http.UrlsUtil;
 import com.haokan.baiduh5.util.JsonUtil;
+import com.haokan.baiduh5.util.LogHelper;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -63,11 +64,28 @@ public class ModelInitConfig {
                     public void onNext(ResponseEntity<ResponseBody_Config> config) {
                         if (config != null && config.getHeader().getResCode() == 0) {
                             ResponseBody_Config body1 = config.getBody();
+
+                            if (body1 != null) {
+                                if (App.PID.equals("227")) { //百度渠道
+                                    String kd_isreview_227 = body1.getKd_isreview_227();
+                                    App.sReview = kd_isreview_227;
+                                    if (TextUtils.isEmpty(App.sReview)) {
+                                        App.sReview = "0";
+                                    }
+                                }
+                            }
                             if (body1 != null && !TextUtils.isEmpty(body1.getKd())) {
                                 UpdateBean updateBean = JsonUtil.fromJson(body1.getKd(), UpdateBean.class);
+                                LogHelper.d("getConfigure", "pid = " + App.PID);
+                                if (App.PID.equals("227")) { //百度渠道
+                                    String kd_isreview_227 = body1.getKd_isreview_227();
+                                    App.sReview = kd_isreview_227;
+                                    if (TextUtils.isEmpty(App.sReview)) {
+                                        App.sReview = "0";
+                                    }
+                                    updateBean.setKd_review(kd_isreview_227);
+                                }
 
-//                                updateBean.setKd_vc(2);
-//                                updateBean.setKd_dl("http://uc1-apk.wdjcdn.com/2/f3/e31607c9f5f57acf689910df9f692f32.apk");
                                 listener.onDataSucess(updateBean);
                             } else {
                                 listener.onDataEmpty();
