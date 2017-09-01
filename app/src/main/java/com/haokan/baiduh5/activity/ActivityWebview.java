@@ -50,6 +50,7 @@ import com.haokan.baiduh5.util.DataFormatUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -58,6 +59,8 @@ import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.HashMap;
 
 public class ActivityWebview extends ActivityBase implements View.OnClickListener {
     public static final String KEY_INTENT_WEB_URL = "url";
@@ -159,7 +162,6 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         mShareBg = mBottomShare.findViewById(R.id.bg);
         mShareBg.setOnClickListener(this);
 
-
         mBottomBar = findViewById(R.id.bottom_bar);
         mTvTitle = (TextView) findViewById(R.id.title);
         mProgressHorizontal = (ProgressBar) findViewById(R.id.progress_horizontal);
@@ -225,7 +227,8 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
             detailType = "video";
         } else if (mWeb_Url.contains("news?")){
             detailType = "info";
-        } else if (mWeb_Url.contains("cpro.baidu.com")){
+//        } else if (mWeb_Url.contains("cpro.baidu.com")){
+        } else {
             detailType = "ad";
         }
         mAdParentTop.removeAllViews();
@@ -484,6 +487,14 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                 break;
             case R.id.iv_collect:
                 //收藏
+                if (mTypeBean != null) {
+                    HashMap<String,String> map = new HashMap<String,String>();
+                    map.put("type", mTypeBean.tabName);
+                    map.put("channel", mTypeBean.name);
+                    MobclickAgent.onEvent(this, "click_collect", map);
+                } else {
+                    MobclickAgent.onEvent(this, "click_collect");
+                }
                 if (v.isSelected()) {
                     new ModelMyCollection().deleteCollection(this, mTitleText, new onDataResponseListener<CollectionBean>() {
                         @Override
@@ -614,6 +625,15 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                 .withMedia(web)
                 .setCallback(mUMShareListener)
                 .share();
+
+        if (mTypeBean != null) {
+            HashMap<String,String> map = new HashMap<String,String>();
+            map.put("type", mTypeBean.tabName);
+            map.put("channel", mTypeBean.name);
+            MobclickAgent.onEvent(this, "click_share", map);
+        } else {
+            MobclickAgent.onEvent(this, "click_share");
+        }
     }
 
     private UMShareListener mUMShareListener = new UMShareListener() {

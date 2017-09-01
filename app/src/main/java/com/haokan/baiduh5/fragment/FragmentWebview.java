@@ -31,6 +31,9 @@ import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.activity.ActivityWebview;
 import com.haokan.baiduh5.bean.TypeBean;
 import com.haokan.baiduh5.util.LogHelper;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.HashMap;
 
 /**
  * Created by wangzixu on 2016/12/26.
@@ -85,6 +88,11 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
             }, 600);
         } else {
             LogHelper.d("fragmentweb", "onSelected type = " + mTypeBean.tabName + ", " + mTypeBean.name);
+            HashMap<String,String> map = new HashMap<String,String>();
+            map.put("type", mTypeBean.tabName);
+            map.put("channel", mTypeBean.name);
+            MobclickAgent.onEvent(mActivity, "channel_show", map);
+
             long currentTimeMillis = System.currentTimeMillis();
             if (currentTimeMillis - mAdTime > 60000) {
 //            if (currentTimeMillis - mAdTime > 0) {

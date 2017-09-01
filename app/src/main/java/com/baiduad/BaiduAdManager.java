@@ -231,8 +231,11 @@ public class BaiduAdManager {
         ImageView close = new ImageView(context);
         close.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         close.setImageResource(R.drawable.ad_close);
-        int cloeseW = (int) (dm.density * 20);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(cloeseW, cloeseW);
+        int cloeseW = (int) (dm.density * 18);
+        int cloeseH = (int) (dm.density * 17);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(cloeseW, cloeseH);
+//        lp.rightMargin = (int) (dm.density * 2);
+//        lp.topMargin = (int) (dm.density * 2);
         lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         relativeLayout.addView(close, lp);
         close.setOnClickListener(new View.OnClickListener() {
@@ -322,8 +325,11 @@ public class BaiduAdManager {
                                 ImageView close = new ImageView(context);
                                 close.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                                 close.setImageResource(R.drawable.ad_close);
-                                int cloeseW = (int) (dm.density * 20);
-                                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(cloeseW, cloeseW);
+                                int cloeseW = (int) (dm.density * 18);
+                                int cloeseH = (int) (dm.density * 17);
+                                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(cloeseW, cloeseH);
+//                                lp.rightMargin = (int) (dm.density * 2);
+//                                lp.topMargin = (int) (dm.density * 2);
                                 lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                                 relativeLayout.addView(close, lp);
 
@@ -818,8 +824,11 @@ public class BaiduAdManager {
                 ImageView close = new ImageView(context);
                 close.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                 close.setImageResource(R.drawable.ad_close);
-                int cloeseW = (int) (dm.density * 20);
-                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(cloeseW, cloeseW);
+                int cloeseW = (int) (dm.density * 18);
+                int cloeseH = (int) (dm.density * 17);
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(cloeseW, cloeseH);
+//                lp.rightMargin = (int) (dm.density * 2);
+//                lp.topMargin = (int) (dm.density * 2);
                 lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 relativeLayout.addView(close, lp);
 

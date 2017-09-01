@@ -71,6 +71,8 @@ android {
 }
 
 dependencies {
+    compile project(':WzxLibrary:UmShareLibrary')
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.android.support:design:25.0.0'
@@ -100,7 +102,7 @@ dependencies {
     //此处为百度广告
     compile files('libs/Baidu_MobAds_SDK.jar')
     compile files('libs/haokan-ad-v1.0.jar')
-    compile project(':umsharelibrary')
+//    compile project(':umsharelibrary')
     //
     compile 'org.greenrobot:eventbus:3.0.0'
 }

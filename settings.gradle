@@ -1,1 +1,4 @@
-include ':app', ':umsharelibrary'
+include ':app'
+include ':WzxLibrary'
+project(':WzxLibrary').projectDir = new File('../WzxLibrary/')
+include ':WzxLibrary:UmShareLibrary'
