@@ -27,4 +27,6 @@ public class RequestBodyBaiduAd {
      * 页面区域 、参数：['top', 'middle', 'down']
      */
     public String positionPage;
+    public String pid;
+    public String appId;
 }

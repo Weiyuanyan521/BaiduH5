@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
@@ -28,7 +29,6 @@ import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.LogHelper;
-import com.haokan.baiduh5.util.StatusBarUtil;
 
 public class ActivitySplash extends ActivityBase implements View.OnClickListener {
     public static final String TAG = "SplashActivity";
@@ -49,8 +49,12 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
 
         App.eid = "0";
         App.sStartAppTime = System.currentTimeMillis();
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_splash);
-        StatusBarUtil.setStatusBarTransparnet(this);
+//        StatusBarUtil.setStatusBarTransparnet(this);
 
         initView();
         checkStoragePermission(); //检查是否有相应权限

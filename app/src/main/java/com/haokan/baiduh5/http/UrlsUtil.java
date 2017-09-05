@@ -4,7 +4,7 @@ package com.haokan.baiduh5.http;
  * 用于生成访问网络的url地址的工具类
  */
 public class UrlsUtil {
-    public static String COMPANYID = "10000";
+    public static String COMPANYID = "10002";
     public static String SECRET_KEY = "GVed-Y~of0pLBjlDzN66V5Q)iipr!x5@";
 
     //以后禁止使用ip域名

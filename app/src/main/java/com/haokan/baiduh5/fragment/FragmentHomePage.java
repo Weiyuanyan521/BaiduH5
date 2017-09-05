@@ -22,6 +22,7 @@ public class FragmentHomePage extends FragmentBase{
     private AdapterHomepageVp mAdaperMainHomepage;
     private final String[] mImgFenLei = new String[] {
               "热点"
+            , "精选"
             , "美女"
             , "搞笑"
             , "娱乐"
@@ -35,6 +36,7 @@ public class FragmentHomePage extends FragmentBase{
             , "财经"};
     private final String[] mImgFLIds  = new String[] {
               "1021"
+            , "9999"
             , "1024"
             , "1025"
             , "1001"

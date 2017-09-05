@@ -54,9 +54,10 @@ public class ResponseBodyBaiduAd {
     public String adFrom;
 
 
-
     public static class Ratio {
         public int width;
         public int height;
     }
+
+    public boolean customStyle;
 }
