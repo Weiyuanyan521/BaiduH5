@@ -219,6 +219,7 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
                     i.putExtra(TYPE_BEAN, mTypeBean);
                     startActivity(i);
                     mActivity.overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
+
                     return true;
                 } else {
                     loadLocalApp();
@@ -253,13 +254,13 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
                 mWeb_Url = url;
                 LogHelper.i(mTypeBean.toString(), "onPageFinished mweburl = " + url);
 
-                if (url.equals("http://m.levect.com/appcpu.html?siteId=270872471&channelId=1057")) {
-                    String web_Url = "https://cpu.baidu.com/wap/" + mTypeBean.id + "/270872471"
-//                    +
-//                    "?chk=1"
-                    ;
-                    mWebView.loadUrl(web_Url);
-                }
+//                if (url.equals("http://m.levect.com/appcpu.html?siteId=270872471&channelId=1057")) {
+//                    String web_Url = "https://cpu.baidu.com/wap/" + mTypeBean.id + "/270872471"
+////                    +
+////                    "?chk=1"
+//                    ;
+//                    mWebView.loadUrl(web_Url);
+//                }
 //                dismissAllPromptLayout();
 //                String title = mWebView.getTitle();
 //                if (!TextUtils.isEmpty(title)) {

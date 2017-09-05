@@ -31,6 +31,7 @@ public class App extends Application {
     public static String PID = "000"; //默认值
     public static String sPhoneModel = "defaultPhone";
     public static String eid = "0"; //默认值
+    public static long sStartAppTime; //app开始的时间
     public static String sCountry_code = "CN";
     public static String sLanguage_code = "zh";
     public static String sBigImgSuffix;

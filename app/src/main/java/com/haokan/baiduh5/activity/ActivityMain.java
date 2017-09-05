@@ -1,7 +1,9 @@
 package com.haokan.baiduh5.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -9,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -51,6 +54,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
         StatusBarUtil.setStatusBarBgColor(this, R.color.hong);
         initView();
         checkStoragePermission();
+        urlSchemeJump(getIntent());
     }
 
     private void initView() {
@@ -375,5 +379,35 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
                 LogHelper.d(TAG, "checkUpdata onNetError");
             }
         });
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        urlSchemeJump(intent);
+    }
+
+    private void urlSchemeJump(Intent intent) {
+        if (intent == null) {
+            return;
+        }
+        //schame跳转的统一管理
+        if (intent.getData() != null) {
+            Uri uri = intent.getData();
+            String eid = uri.getQueryParameter("eid");
+            if (TextUtils.isEmpty(eid)) {
+                eid = "0";
+            }
+            App.eid = eid;
+            App.sStartAppTime = System.currentTimeMillis();
+            String host = uri.getHost();
+            if ("webview".equals(host)) {
+                String url = uri.getQueryParameter("url");
+                LogHelper.d(TAG, "urlSchemeJump eid = " + eid + ", url = " + url);
+                Intent web = new Intent(this, ActivityWebview.class);
+                web.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, url);
+                startActivity(web);
+            }
+        }
     }
 }

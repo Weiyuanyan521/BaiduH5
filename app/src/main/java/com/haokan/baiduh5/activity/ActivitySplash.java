@@ -48,6 +48,7 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
         super.onCreate(savedInstanceState);
 
         App.eid = "0";
+        App.sStartAppTime = System.currentTimeMillis();
         setContentView(R.layout.activity_splash);
         StatusBarUtil.setStatusBarTransparnet(this);
 

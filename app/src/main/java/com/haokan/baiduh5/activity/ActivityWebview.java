@@ -2,7 +2,6 @@ package com.haokan.baiduh5.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -259,12 +258,12 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
+        settings.setPluginState(WebSettings.PluginState.ON);
         settings.setAppCacheEnabled(true);
-//        settings.setAppCachePath(CacheManager.getWebViewAppCacheDir(getApplicationContext()).getAbsolutePath());
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
         settings.setAppCacheMaxSize(1024 * 1024 * 100);
         settings.setAllowFileAccess(true);
-        settings.setBuiltInZoomControls(false);
+//        settings.setBuiltInZoomControls(false);
         settings.setDatabaseEnabled(true);
         settings.setUseWideViewPort(true);
         settings.setGeolocationEnabled(true);
@@ -371,38 +370,38 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
             }
 
             //*******全屏播放视频设置相关begin*********
-            @Override
-            public void onShowCustomView(View view, CustomViewCallback callback) {
-//                super.onShowCustomView(view, callback);
-                LogHelper.d("vedio", "onShowCustomView view = " + view + ", callback = " + callback);
-                if (mBigVidioView != null) {
-                    callback.onCustomViewHidden();
-                    return;
-                }
-                mCustomViewCallback = callback;
-                mBigVidioView = view;
-                mBigViedioParent.setVisibility(View.VISIBLE);
-                mBigViedioParent.addView(view);
-                mWebView.setVisibility(View.GONE);
-
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            }
-
-            @Override
-            public void onHideCustomView() {
-                LogHelper.d("vedio", "onHideCustomView");
-                mWebView.setVisibility(View.VISIBLE);
-                if (mCustomViewCallback != null) {
-                    mCustomViewCallback.onCustomViewHidden();
-                    mCustomViewCallback = null;
-                }
-                if (mBigVidioView != null) {
-                    mBigViedioParent.removeView(mBigVidioView);
-                    mBigVidioView = null;
-                }
-                mBigViedioParent.setVisibility(View.GONE);
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            }
+//            @Override
+//            public void onShowCustomView(View view, CustomViewCallback callback) {
+////                super.onShowCustomView(view, callback);
+//                LogHelper.d("vedio", "onShowCustomView view = " + view + ", callback = " + callback);
+//                if (mBigVidioView != null) {
+//                    callback.onCustomViewHidden();
+//                    return;
+//                }
+//                mCustomViewCallback = callback;
+//                mBigVidioView = view;
+//                mBigViedioParent.setVisibility(View.VISIBLE);
+//                mBigViedioParent.addView(view);
+//                mWebView.setVisibility(View.GONE);
+//
+//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//            }
+//
+//            @Override
+//            public void onHideCustomView() {
+//                LogHelper.d("vedio", "onHideCustomView");
+//                mWebView.setVisibility(View.VISIBLE);
+//                if (mCustomViewCallback != null) {
+//                    mCustomViewCallback.onCustomViewHidden();
+//                    mCustomViewCallback = null;
+//                }
+//                if (mBigVidioView != null) {
+//                    mBigViedioParent.removeView(mBigVidioView);
+//                    mBigVidioView = null;
+//                }
+//                mBigViedioParent.setVisibility(View.GONE);
+//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//            }
         });
     }
     private View mBigVidioView = null;

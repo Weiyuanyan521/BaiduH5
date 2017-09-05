@@ -27,17 +27,17 @@ import com.baidu.mobads.SplashAd;
 import com.baidu.mobads.SplashAdListener;
 import com.baiduad.bean.response.ResponseBodyBaiduAd;
 import com.bumptech.glide.Glide;
+import com.haokan.ad.HaokanADManager;
+import com.haokan.ad.callback.EffectiveAdListener;
+import com.haokan.ad.callback.HaokanADInterface;
+import com.haokan.ad.model.AdData;
+import com.haokan.ad.utils.AdTypeCommonUtil;
+import com.haokan.ad.view.MediaView;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.activity.ActivityBase;
 import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.LogHelper;
-import com.haokan.sdk.HaokanADManager;
-import com.haokan.sdk.callback.EffectiveAdListener;
-import com.haokan.sdk.callback.HaokanADInterface;
-import com.haokan.sdk.model.AdData;
-import com.haokan.sdk.utils.AdTypeCommonUtil;
-import com.haokan.sdk.view.MediaView;
 
 import org.json.JSONObject;
 

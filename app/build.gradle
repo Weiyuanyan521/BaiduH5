@@ -74,8 +74,8 @@ dependencies {
     compile project(':WzxLibrary:UmShareLibrary')
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:design:25.1.0'
     //数据库
     compile 'com.j256.ormlite:ormlite-android:5.0'
     compile 'com.j256.ormlite:ormlite-core:5.0'
@@ -101,7 +101,7 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     //此处为百度广告
     compile files('libs/Baidu_MobAds_SDK.jar')
-    compile files('libs/haokan-ad-v1.0.jar')
+    compile files('libs/haokan-v1.6-ad.jar')
 //    compile project(':umsharelibrary')
     //
     compile 'org.greenrobot:eventbus:3.0.0'
