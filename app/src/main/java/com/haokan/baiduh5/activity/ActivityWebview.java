@@ -264,12 +264,11 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
         settings.setAppCacheMaxSize(1024 * 1024 * 100);
         settings.setAllowFileAccess(true);
-//        settings.setBuiltInZoomControls(false);
+        settings.setBuiltInZoomControls(false);
         settings.setDatabaseEnabled(true);
         settings.setUseWideViewPort(true);
         settings.setGeolocationEnabled(true);
         settings.setLoadWithOverviewMode(true);
-        settings.setUseWideViewPort(true);
         settings.setAllowContentAccess(true);
 
 

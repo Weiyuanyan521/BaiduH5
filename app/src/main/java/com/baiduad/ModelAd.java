@@ -128,7 +128,6 @@ public class ModelAd {
             body.positionPage = positionPage;
         }
         body.pid = App.PID;
-        body.pid = "216";
         body.appId = UrlsUtil.COMPANYID;
 
         RequestHeaderAd<RequestBodyBaiduAd> header = new RequestHeaderAd(body);

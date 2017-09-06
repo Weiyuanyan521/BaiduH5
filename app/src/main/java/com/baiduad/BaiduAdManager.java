@@ -141,7 +141,7 @@ public class BaiduAdManager {
             return;
         }
 
-        if (!"splash".equals(baiduAd.positionType) && "list".equals(baiduAd.positionArea) && "middle".equals(baiduAd.positionPage)) {
+        if (!"splash".equals(baiduAd.positionType) && "middle".equals(baiduAd.positionPage)) {
             //说明是插屏广告样式, 有固定的样式
             View view = LayoutInflater.from(context).inflate(R.layout.ad_layout_insert_style1, adParent, false);
             CardView cardView = (CardView) view.findViewById(R.id.cardview);
@@ -159,7 +159,7 @@ public class BaiduAdManager {
             }
 
             final RelativeLayout parent = adParent;
-            view.setOnClickListener(new View.OnClickListener() {
+            view.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (context instanceof ActivityBase) {
@@ -167,6 +167,16 @@ public class BaiduAdManager {
                     } else {
                         parent.setVisibility(View.GONE);
                     }
+                }
+            });
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    if (context instanceof ActivityBase) {
+//                        removeToWindow((ActivityBase) context, sPushView);
+//                    } else {
+//                        parent.setVisibility(View.GONE);
+//                    }
                 }
             });
             baiduAd.customStyle = true;
@@ -388,7 +398,6 @@ public class BaiduAdManager {
                                         return;
                                     }
                                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
                                     adParent.addView(mAdParent, params);
 
                                     RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(width, height);
