@@ -1,6 +1,7 @@
 package com.baiduad;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
@@ -29,6 +30,7 @@ import com.baidu.mobads.SplashAdListener;
 import com.baiduad.bean.response.ResponseBodyBaiduAd;
 import com.bumptech.glide.Glide;
 import com.haokan.ad.HaokanADManager;
+import com.haokan.ad.callback.AdClickListener;
 import com.haokan.ad.callback.EffectiveAdListener;
 import com.haokan.ad.callback.HaokanADInterface;
 import com.haokan.ad.model.AdData;
@@ -37,6 +39,8 @@ import com.haokan.ad.view.MediaView;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.activity.ActivityBase;
+import com.haokan.baiduh5.activity.ActivityMain;
+import com.haokan.baiduh5.activity.ActivitySplash;
 import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.DisplayUtil;
 import com.haokan.baiduh5.util.LogHelper;
@@ -806,8 +810,8 @@ public class BaiduAdManager {
         } else {
             adtype = AdTypeCommonUtil.REQUEST_INSERT_TYPE;
         }
-        LogHelper.d(TAG, "HaokanADManager  haokanAdBean.id = " + haokanAdBean.id);
-        HaokanADManager.getInstance().loadAdData(context, adtype, haokanAdBean.id, 720, 1340, new HaokanADInterface() {
+        LogHelper.d(TAG, "HaokanADManager width,height  = " + width + ", " + height);
+        HaokanADManager.getInstance().loadAdData(context, adtype, haokanAdBean.id, width, height, new HaokanADInterface() {
             @Override
             public void onADSuccess(AdData adData) {
                 if (mIsDestory) {
@@ -816,6 +820,18 @@ public class BaiduAdManager {
                 adParent.removeAllViews();
                 LogHelper.d(TAG, "HaokanADManager  loadAdData onADSuccess ");
                 MediaView mediaView = new MediaView(context);
+                mediaView.setAdJumpWebview(true);
+                mediaView.setAdClickListener(new AdClickListener() {
+                    @Override
+                    public void onAdClick() {
+                        if (context instanceof ActivitySplash) {
+                            ((ActivitySplash)context).removeLauncherHome();
+                        }
+                    }
+                });
+                Intent i = new Intent(context, ActivityMain.class);
+                mediaView.setAdJumpWebViewCloseIntent(i.toUri(0));
+
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
 
                 if ("middle".equals(haokanAdBean.positionPage)) {

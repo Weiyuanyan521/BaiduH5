@@ -156,6 +156,11 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity
+            android:name="com.haokan.ad.Activity.WebViewActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
         <!--畅言begin-->
         <!-- 评论列表界面 -->
         <activity android:name="com.sohu.cyan.android.sdk.activity.CyanCommentActivity"/>
