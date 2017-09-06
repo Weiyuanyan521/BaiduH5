@@ -61,6 +61,7 @@ public class BaiduAdManager {
     private boolean mIsDestory = false;
     public View mAdParent;
     public CardView mAdParentCardView;
+    public static RelativeLayout sPushView;
 
     /**
      * @param adParent 装广告的容器
@@ -135,7 +136,7 @@ public class BaiduAdManager {
         });
     }
 
-    public void getBaiduAd(final Context context, final RelativeLayout adParent, final ResponseBodyBaiduAd baiduAd) {
+    public void getBaiduAd(final Context context, RelativeLayout adParent, final ResponseBodyBaiduAd baiduAd) {
         if (baiduAd == null) {
             return;
         }
@@ -144,10 +145,28 @@ public class BaiduAdManager {
             //说明是插屏广告样式, 有固定的样式
             View view = LayoutInflater.from(context).inflate(R.layout.ad_layout_insert_style1, adParent, false);
             CardView cardView = (CardView) view.findViewById(R.id.cardview);
+            if (context instanceof  ActivityBase) {
+                if (sPushView == null) {
+                    sPushView = new RelativeLayout(context);
+                } else {
+                    sPushView.removeAllViews();
+                }
+                sPushView.setBackgroundColor(context.getResources().getColor(R.color.hei_60));
+                addParentTowindow((ActivityBase) context, sPushView);
+                adParent.setVisibility(View.GONE);
+                adParent = sPushView;
+                adParent.setVisibility(View.GONE);
+            }
+
+            final RelativeLayout parent = adParent;
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    adParent.setVisibility(View.GONE);
+                    if (context instanceof ActivityBase) {
+                        removeToWindow((ActivityBase) context, sPushView);
+                    } else {
+                        parent.setVisibility(View.GONE);
+                    }
                 }
             });
             baiduAd.customStyle = true;
@@ -240,6 +259,7 @@ public class BaiduAdManager {
             LogHelper.d(TAG, "getBaiduBannerAd height = " + height);
             ViewGroup.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             adParent.removeAllViews();
+
             adParent.addView(mAdParent, params);
 
             ViewGroup.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
@@ -368,7 +388,9 @@ public class BaiduAdManager {
                                         return;
                                     }
                                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                                    adParent.addView(mAdParent, params); //  将SDK 渲染好的WebView 加入父控件
+
+                                    adParent.addView(mAdParent, params);
+
                                     RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(width, height);
                                     mAdParentCardView.addView(webView, lp2);
                                 } else {
@@ -481,8 +503,10 @@ public class BaiduAdManager {
                                 int width = Math.min(winW, winH);
                                 int height = (int)(64 * dm.density);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
                                 adParent.addView(mAdParent, params);
                                 ImageView imageView = new ImageView(context);
+                                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(width, height);
                                 mAdParentCardView.addView(imageView, lp);
 
@@ -818,6 +842,7 @@ public class BaiduAdManager {
                     return;
                 }
                 adParent.removeAllViews();
+
                 LogHelper.d(TAG, "HaokanADManager  loadAdData onADSuccess ");
                 MediaView mediaView = new MediaView(context);
                 mediaView.setAdJumpWebview(true);
@@ -919,5 +944,37 @@ public class BaiduAdManager {
                 getBaiduAd(context, adParent, baiduAdBean);
             }
         });
+    }
+
+    private void addParentTowindow(ActivityBase activityBase, View pushView) {
+//        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+//                WindowManager.LayoutParams.MATCH_PARENT,
+//                WindowManager.LayoutParams.MATCH_PARENT,
+//                WindowManager.LayoutParams.TYPE_TOAST,
+//                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+//                        | WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                PixelFormat.TRANSLUCENT);
+//
+//        params.gravity = Gravity.TOP | Gravity.LEFT;
+//        params.y = 0;
+//        params.x = 0;
+//
+        if (pushView.getParent() != null) {
+            ((ViewGroup)pushView.getParent()).removeView(pushView);
+        }
+//        WindowManager windowManager = activityBase.getWindowManager();
+
+        ViewGroup decorView = (ViewGroup) activityBase.getWindow().getDecorView();
+        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        decorView.addView(pushView, lp);
+    }
+
+    private void removeToWindow(ActivityBase activityBase, View pushView) {
+//        WindowManager windowManager = activityBase.getWindowManager();
+//        windowManager.removeView(pushView);
+
+        ViewGroup decorView = (ViewGroup) activityBase.getWindow().getDecorView();
+//        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        decorView.removeView(pushView);
     }
 }

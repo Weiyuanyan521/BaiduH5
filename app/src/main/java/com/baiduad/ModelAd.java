@@ -10,8 +10,10 @@ import com.baiduad.bean.request.RequestEntityAd;
 import com.baiduad.bean.request.RequestHeaderAd;
 import com.baiduad.bean.response.ResponseBodyBaiduAd;
 import com.baiduad.bean.response.ResponseEntityAd;
+import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.http.HttpRetrofitManager;
 import com.haokan.baiduh5.http.HttpStatusManager;
+import com.haokan.baiduh5.http.UrlsUtil;
 import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.Values;
 
@@ -125,9 +127,9 @@ public class ModelAd {
         if (!TextUtils.isEmpty(positionPage)) {
             body.positionPage = positionPage;
         }
-//        body.pid = App.PID;
-//        body.pid = "216";
-//        body.appId = UrlsUtil.COMPANYID;
+        body.pid = App.PID;
+        body.pid = "216";
+        body.appId = UrlsUtil.COMPANYID;
 
         RequestHeaderAd<RequestBodyBaiduAd> header = new RequestHeaderAd(body);
         requestEntity.setHeader(header);
