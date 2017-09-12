@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.bean.UpdateBean;
+import com.haokan.baiduh5.event.EventUrlSchemeJump;
 import com.haokan.baiduh5.fragment.FragmentBase;
 import com.haokan.baiduh5.fragment.FragmentHomePage;
 import com.haokan.baiduh5.fragment.FragmentImagePage;
@@ -29,6 +30,8 @@ import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
 import com.haokan.baiduh5.util.UpdateUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 
 /**
@@ -50,11 +53,12 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
+        App.sUrlSuffix = "c92936a5"; //通过点击图标进入的计费路径
         setContentView(R.layout.activity_main);
         StatusBarUtil.setStatusBarBgColor(this, R.color.hong);
+        urlSchemeJump(getIntent());
         initView();
         checkStoragePermission();
-        urlSchemeJump(getIntent());
     }
 
     private void initView() {
@@ -308,6 +312,8 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             ToastManager.showShort(this, "再按一次退出");
         } else {
             super.onBackPressed();
+//            Process.killProcess(Process.myPid());
+//            System.exit(0);
         }
     }
 
@@ -328,8 +334,6 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             checkUpdata();
         }
     }
-
-
 
     //检查权限的回调
     @Override
@@ -384,7 +388,10 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        LogHelper.d(TAG, "urlSchemeJump onNewIntent--");
         urlSchemeJump(intent);
+
+        EventBus.getDefault().post(new EventUrlSchemeJump());
     }
 
     private void urlSchemeJump(Intent intent) {
@@ -400,14 +407,24 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             }
             App.eid = eid;
             App.sStartAppTime = System.currentTimeMillis();
+            App.sUrlSuffix = "e24b3745"; //通过拉起的计费路径
+
+            String suffix = uri.getQueryParameter("suffix");
+            if (!TextUtils.isEmpty(suffix)) {
+                App.sUrlSuffix = suffix;
+            }
+
             String host = uri.getHost();
             if ("webview".equals(host)) {
                 String url = uri.getQueryParameter("url");
-                LogHelper.d(TAG, "urlSchemeJump eid = " + eid + ", url = " + url);
+                String decode = Uri.decode(url);
+                LogHelper.d(TAG, "urlSchemeJump eid = " + eid + ", url = " + url + ", App.sUrlSuffix = " + App.sUrlSuffix + ", decode = " + decode);
                 Intent web = new Intent(this, ActivityWebview.class);
-                web.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, url);
+                web.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, decode);
                 startActivity(web);
             }
+
+            intent.setData(null);
         }
     }
 }
