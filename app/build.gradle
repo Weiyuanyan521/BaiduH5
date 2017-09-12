@@ -15,8 +15,8 @@ android {
         applicationId "com.haokanhaokan.news"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 415
-        versionName "4.1.5"
+        versionCode 420
+        versionName "4.2.0"
     }
     buildTypes {
         release {
@@ -72,6 +72,7 @@ android {
 
 dependencies {
     compile project(':WzxLibrary:UmShareLibrary')
+    compile project(':WzxLibrary:UmPush')
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.1.0'

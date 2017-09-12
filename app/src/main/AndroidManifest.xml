@@ -44,6 +44,7 @@
         <!--友盟分享begin-->
         <meta-data android:value="596d83f182b6354e8e0016a8" android:name="UMENG_APPKEY"/>
         <meta-data android:value="${CHANNEL_NAME}" android:name="UMENG_CHANNEL"/>
+        <meta-data android:name="UMENG_MESSAGE_SECRET" android:value="f8add01337b505a9d70415c287b03dfc"/>
 
         <!--微博begin-->
         <activity

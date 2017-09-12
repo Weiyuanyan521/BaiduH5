@@ -18,6 +18,8 @@ import com.haokan.baiduh5.util.Values;
 import com.sohu.cyan.android.sdk.api.Config;
 import com.sohu.cyan.android.sdk.api.CyanSdk;
 import com.sohu.cyan.android.sdk.exception.CyanException;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.PushAgent;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
@@ -54,6 +56,29 @@ public class App extends Application {
         PlatformConfig.setQQZone("1101819412", "pvH55D7PJ3XTii7j");
 
         initCY();
+
+        //友盟推送begin
+        PushAgent mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.setAppkeyAndSecret("596d83f182b6354e8e0016a8", "f8add01337b505a9d70415c287b03dfc");
+        mPushAgent.setMessageChannel("pidTest");
+        //注册推送服务，每次调用register方法都会回调该接口
+//        mPushAgent.setResourcePackageName("com.haokan.baiduh5");
+        mPushAgent.register(new IUmengRegisterCallback() {
+
+            @Override
+            public void onSuccess(String deviceToken) {
+                //注册成功会返回device token
+                LogHelper.d(TAG, "mPushAgent.register deviceToken = " + deviceToken);
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+                LogHelper.d(TAG, "mPushAgent.register onFailure s = " + s + ", s1 = " + s1);
+            }
+        });
+        mPushAgent.setPushCheck(true);
+//        mPushAgent.setDebugMode(false);
+        //友盟推送end
     }
 
     public static void init(final Context context) {
@@ -113,9 +138,9 @@ public class App extends Application {
     public void initCY(){
         Config config = new Config();
         config.ui.toolbar_bg = Color.WHITE;
-         config.ui.style="indent";
-         config.ui.depth = 1;
-         config.ui.sub_size = 20;
+        config.ui.style="indent";
+        config.ui.depth = 1;
+        config.ui.sub_size = 20;
         config.comment.showScore = false;
         config.comment.uploadFiles = false;
 

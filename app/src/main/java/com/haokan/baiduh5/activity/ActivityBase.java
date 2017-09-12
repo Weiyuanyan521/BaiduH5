@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.haokan.baiduh5.util.ToastManager;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 
 
 /**
@@ -22,6 +23,7 @@ public class ActivityBase extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PushAgent.getInstance(this).onAppStart();
     }
 
     protected void onResume() {
