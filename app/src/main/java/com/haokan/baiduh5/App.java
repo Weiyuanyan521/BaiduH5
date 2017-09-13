@@ -33,6 +33,7 @@ public class App extends Application {
     public static String PID = "000"; //默认值
     public static String sPhoneModel = "defaultPhone";
     public static String eid = "0"; //默认值
+    public static String sUrlSuffix = "c92936a5"; //默认值
     public static long sStartAppTime; //app开始的时间
     public static String sCountry_code = "CN";
     public static String sLanguage_code = "zh";
@@ -47,7 +48,8 @@ public class App extends Application {
         init(this);
 
         UMShareAPI.get(this);
-        com.umeng.socialize.utils.Log.LOG = false; //友盟分享的log开关
+//        MobclickAgent.setDebugMode(false);
+//        com.umeng.socialize.utils.Log.LOG = false; //友盟分享的log开关
         //微信 appid appsecret
         PlatformConfig.setWeixin("wx9f0b565235da43e1", "759db4319d6c23b09c2d28b9a4fcb4ad");
         //新浪微博 appkey appsecret

@@ -30,8 +30,12 @@ import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.activity.ActivityWebview;
 import com.haokan.baiduh5.bean.TypeBean;
+import com.haokan.baiduh5.event.EventUrlSchemeJump;
 import com.haokan.baiduh5.util.LogHelper;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
 
@@ -62,6 +66,7 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         mTypeBean = getArguments().getParcelable(TYPE_BEAN);
     }
 
@@ -125,7 +130,7 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
             if (mTypeBean.id.equals("9999")) {
                 mWeb_Url = "http://m.levect.com/article?nohead=1";
             } else {
-                CpuInfoManager.getCpuInfoUrl(mActivity, "c92936a5", Integer.valueOf(mTypeBean.id), new CpuInfoManager.UrlListener() {
+                CpuInfoManager.getCpuInfoUrl(mActivity, App.sUrlSuffix, Integer.valueOf(mTypeBean.id), new CpuInfoManager.UrlListener() {
                     @Override
                     public void onUrl(String url) {
                         LogHelper.d("getCpuInfoUrl", "url = " + url);
@@ -135,10 +140,10 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
                 });
                 return;
             }
+//                mWeb_Url = "https://cpu.baidu.com/" + mTypeBean.id + "/c92936a5";
 //            mWeb_Url = "https://cpu.baidu.com/wap/" + mTypeBean.id + "/270872471"
 //                    +
 //                    "?chk=1";
-//            mWeb_Url = "https://cpu.baidu.com/" + mTypeBean.id + "/c92936a5";
         } else {
             mWeb_Url = "https://image.baidu.com";
         }
@@ -153,7 +158,7 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
                 public void run() {
                     mWebView.loadUrl(mWeb_Url);
                 }
-            }, 300);
+            }, 100);
         } else {
             loadLocalApp();
         }
@@ -322,9 +327,19 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
 
     }
 
+    @Subscribe
+    public void onEvent(EventUrlSchemeJump event) {
+        if (mTypeBean != null) {
+            if (!mTypeBean.id.equals("9999")) {
+                loadData();
+            }
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (mBaiduAdManager != null) {
             mBaiduAdManager.onDestory();
         }

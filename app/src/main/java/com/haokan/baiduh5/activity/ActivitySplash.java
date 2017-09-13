@@ -49,6 +49,7 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
 
         App.eid = "0";
         App.sStartAppTime = System.currentTimeMillis();
+        App.sUrlSuffix = "f93f8007"; //通过点击图标进入的计费路径
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -63,7 +64,7 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
     private void initView() {
         mWebView = (WebView) findViewById(R.id.webView);
         initWebView();
-        mWebView.loadUrl("https://cpu.baidu.com/1021/c92936a5");
+        mWebView.loadUrl("https://cpu.baidu.com/1021/" + App.sUrlSuffix);
 
         //好看广告相关
 //        mTvJumpAd = (TextView) findViewById(R.id.jumpad);

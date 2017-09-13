@@ -72,7 +72,6 @@ android {
 
 dependencies {
     compile project(':WzxLibrary:UmShareLibrary')
-    compile project(':WzxLibrary:UmPush')
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.1.0'

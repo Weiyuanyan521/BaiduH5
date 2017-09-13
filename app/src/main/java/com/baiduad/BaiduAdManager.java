@@ -44,11 +44,13 @@ import com.haokan.baiduh5.activity.ActivitySplash;
 import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.DisplayUtil;
 import com.haokan.baiduh5.util.LogHelper;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -221,6 +223,11 @@ public class BaiduAdManager {
             public void onAdShow(JSONObject jsonObject) {
                 if (isShow(context, baiduAdBean)) {
                     adParent.setVisibility(View.VISIBLE);
+                    HashMap<String,String> map = new HashMap<String,String>();
+                    map.put("pid", App.PID);
+                    map.put("eid", App.eid);
+                    map.put("adid", baiduAdBean.id);
+                    MobclickAgent.onEvent(context, "onAdShow", map);
                 } else {
                     adParent.setVisibility(View.GONE);
                     adParent.removeAllViews();
@@ -231,6 +238,11 @@ public class BaiduAdManager {
             @Override
             public void onAdClick(JSONObject jsonObject) {
                 LogHelper.i(TAG, "getBaiduBannerAd onAdClick");
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("pid", App.PID);
+                map.put("eid", App.eid);
+                map.put("adid", baiduAdBean.id);
+                MobclickAgent.onEvent(context, "onAdClick", map);
             }
 
             @Override
@@ -447,12 +459,34 @@ public class BaiduAdManager {
                                         }
                                     });
                                 }
+
+                                HashMap<String,String> map = new HashMap<String,String>();
+                                map.put("pid", App.PID);
+                                map.put("eid", App.eid);
+                                map.put("adid", baiduAdBean.id);
+                                MobclickAgent.onEvent(context, "onAdShow", map);
                             } else {
                                 LogHelper.d(TAG, "getDetailPageFeedH5Ad onNativeLoad 收到广告,但不是模板广告,请检查");
                             }
                         }
                     }
                 });
+
+        baidu.setNativeEventListener(new BaiduNative.BaiduNativeEventListener() {
+            @Override
+            public void onImpressionSended() {
+
+            }
+
+            @Override
+            public void onClicked() {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("pid", App.PID);
+                map.put("eid", App.eid);
+                map.put("adid", baiduAdBean.id);
+                MobclickAgent.onEvent(context, "onAdClick", map);
+            }
+        });
 
         /**
          * Step 2. 创建requestParameters对象，并将其传给baidu.makeRequest来请求广告
@@ -535,6 +569,12 @@ public class BaiduAdManager {
                                     @Override
                                     public void onClick(View view) {
                                         nativeResponse.handleClick(view);//  点击响应
+
+                                        HashMap<String,String> map = new HashMap<String,String>();
+                                        map.put("pid", App.PID);
+                                        map.put("eid", App.eid);
+                                        map.put("adid", baiduAdBean.id);
+                                        MobclickAgent.onEvent(context, "onAdClick", map);
                                     }
                                 });
                             } else {
@@ -566,15 +606,20 @@ public class BaiduAdManager {
                                     bg.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            adParent.setVisibility(View.GONE);
                                         }
                                     });
                                 } else if ("down".equals(baiduAdBean.positionPage)) {
                                     params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                                 }
                                 adParent.addView(mNativeAdHolder.rootView, params);
-                                updateNativeAd(context);
+                                updateNativeAd(context, baiduAdBean);
                             }
+
+                            HashMap<String,String> map = new HashMap<String,String>();
+                            map.put("pid", App.PID);
+                            map.put("eid", App.eid);
+                            map.put("adid", baiduAdBean.id);
+                            MobclickAgent.onEvent(context, "onAdShow", map);
                         }
                     }
                 });
@@ -588,7 +633,7 @@ public class BaiduAdManager {
         baidu.makeRequest(requestParameters);
     }
 
-    private void updateNativeAd(final Context context) {
+    private void updateNativeAd(final Context context, final ResponseBodyBaiduAd baiduAdBean) {
         if (mIsDestory || mNativeResponseList == null || mNativeResponseList.size() == 0 || mNativeAdHolder == null
                 || mNativeAdHolder.rootView.getVisibility() != View.VISIBLE) {
             return;
@@ -636,17 +681,21 @@ public class BaiduAdManager {
             @Override
             public void onClick(View view) {
                 nativeResponse.handleClick(view);//  点击响应
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("pid", App.PID);
+                map.put("eid", App.eid);
+                map.put("adid", baiduAdBean.id);
+                MobclickAgent.onEvent(context, "onAdClick", map);
             }
         });
 
-
-        App.sMainHanlder.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                LogHelper.i(TAG, "updateNativeAd 重新请求了");
-                updateNativeAd(context);
-            }
-        }, 10000);
+//        App.sMainHanlder.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                LogHelper.i(TAG, "updateNativeAd 重新请求了");
+//                updateNativeAd(context);
+//            }
+//        }, 10000);
     }
 
     public static class DetailPageBaiduFeedNativeAdHolder implements View.OnClickListener {
@@ -694,10 +743,20 @@ public class BaiduAdManager {
 
             @Override
             public void onAdPresent() {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("pid", App.PID);
+                map.put("eid", App.eid);
+                map.put("adid", baiduAdBean.id);
+                MobclickAgent.onEvent(context, "onAdShow", map);
             }
 
             @Override
             public void onAdClick(InterstitialAd interstitialAd) {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("pid", App.PID);
+                map.put("eid", App.eid);
+                map.put("adid", baiduAdBean.id);
+                MobclickAgent.onEvent(context, "onAdClick", map);
             }
 
             @Override
@@ -796,16 +855,27 @@ public class BaiduAdManager {
             }
             @Override
             public void onAdFailed(String arg0) {
-                Log.i("loadInsertBaiduAd", "onAdFailed");
+                Log.i("getBaiduSplashAd", "onAdFailed arg0 = " + arg0);
                 adParent.removeAllViews();
                 adParent.setVisibility(View.GONE);
             }
             @Override
             public void onAdPresent() {
-                Log.i("loadInsertBaiduAd", "onAdPresent");
+                Log.i("getBaiduSplashAd", "onAdPresent");
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("pid", App.PID);
+                map.put("eid", App.eid);
+                map.put("adid", baiduAdBean.id);
+                map.put("testArg", "测试用");
+                MobclickAgent.onEvent(context, "onAdShow", map);
             }
             @Override
             public void onAdClick() {
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("pid", App.PID);
+                map.put("eid", App.eid);
+                map.put("adid", baiduAdBean.id);
+                MobclickAgent.onEvent(context, "onAdClick", map);
             }
         };
 
@@ -858,6 +928,12 @@ public class BaiduAdManager {
                 mediaView.setAdClickListener(new AdClickListener() {
                     @Override
                     public void onAdClick() {
+                        HashMap<String,String> map = new HashMap<String,String>();
+                        map.put("pid", App.PID);
+                        map.put("eid", App.eid);
+                        map.put("adid", haokanAdBean.id);
+                        MobclickAgent.onEvent(context, "onAdClick", map);
+
                         if (context instanceof ActivitySplash) {
                             ((ActivitySplash)context).removeLauncherHome();
                         }
@@ -928,6 +1004,12 @@ public class BaiduAdManager {
 
                     @Override
                     public void onLoadSuccess() {
+                        HashMap<String,String> map = new HashMap<String,String>();
+                        map.put("pid", App.PID);
+                        map.put("eid", App.eid);
+                        map.put("adid", haokanAdBean.id);
+                        MobclickAgent.onEvent(context, "onAdShow", map);
+
                         LogHelper.d(TAG, "HaokanADManager  setNativeAd onLoadSuccess ");
                         if (mIsDestory) {
                             return;

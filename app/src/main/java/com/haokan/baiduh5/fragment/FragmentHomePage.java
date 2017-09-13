@@ -21,10 +21,15 @@ public class FragmentHomePage extends FragmentBase{
     private View mView;
     private AdapterHomepageVp mAdaperMainHomepage;
     private final String[] mImgFenLei = new String[] {
-              "热点"
+            "推荐"
+            , "热点"
+            , "本地"
             , "精选"
             , "美女"
+            , "女人"
             , "搞笑"
+            , "视频"
+            , "图片"
             , "娱乐"
             , "时尚"
             , "科技"
@@ -33,12 +38,24 @@ public class FragmentHomePage extends FragmentBase{
             , "军事"
             , "体育"
             , "汽车"
-            , "财经"};
+            , "财经"
+            , "看点"
+            , "母婴"
+            , "动漫"
+            , "文化"
+            , "生活"
+            , "房产"
+    };
     private final String[] mImgFLIds  = new String[] {
-              "1021"
+            "1022"
+            , "1021"
+            , "1080"
             , "9999"
             , "1024"
+            , "1034"
             , "1025"
+            , "1033"
+            , "1003"
             , "1001"
             , "1009"
             , "1013"
@@ -48,6 +65,12 @@ public class FragmentHomePage extends FragmentBase{
             , "1002"
             , "1007"
             , "1006"
+            , "1047"
+            , "1042"
+            , "1055"
+            , "1036"
+            , "1035"
+            , "1008"
     };
 
     @Override

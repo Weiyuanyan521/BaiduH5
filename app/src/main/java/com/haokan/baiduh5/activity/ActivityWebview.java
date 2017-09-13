@@ -252,8 +252,8 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
     }
 
     private void initWebView() {
-        mWebView.setHorizontalScrollBarEnabled(true);//水平不显示
-        mWebView.setVerticalScrollBarEnabled(true); //垂直不显示
+        mWebView.setHorizontalScrollBarEnabled(false);//水平不显示
+        mWebView.setVerticalScrollBarEnabled(false); //垂直不显示
 
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
