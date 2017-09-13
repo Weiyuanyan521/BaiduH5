@@ -46,7 +46,8 @@ public class App extends Application {
         init(this);
 
         UMShareAPI.get(this);
-        com.umeng.socialize.utils.Log.LOG = false; //友盟分享的log开关
+//        MobclickAgent.setDebugMode(false);
+//        com.umeng.socialize.utils.Log.LOG = false; //友盟分享的log开关
         //微信 appid appsecret
         PlatformConfig.setWeixin("wx9f0b565235da43e1", "759db4319d6c23b09c2d28b9a4fcb4ad");
         //新浪微博 appkey appsecret

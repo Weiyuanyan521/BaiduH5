@@ -30,8 +30,11 @@ import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
 import com.haokan.baiduh5.util.UpdateUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.HashMap;
 
 
 /**
@@ -53,7 +56,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
-        App.sUrlSuffix = "c92936a5"; //通过点击图标进入的计费路径
+        App.sUrlSuffix = "f93f8007"; //通过点击图标进入的计费路径
         setContentView(R.layout.activity_main);
         StatusBarUtil.setStatusBarBgColor(this, R.color.hong);
         urlSchemeJump(getIntent());
@@ -414,6 +417,11 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
                 App.sUrlSuffix = suffix;
             }
 
+            HashMap<String,String> map = new HashMap<String,String>();
+            map.put("eid", App.eid);
+            map.put("suffix", App.sUrlSuffix);
+            MobclickAgent.onEvent(this, "schemepull", map);
+
             String host = uri.getHost();
             if ("webview".equals(host)) {
                 String url = uri.getQueryParameter("url");
@@ -423,7 +431,6 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
                 web.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, decode);
                 startActivity(web);
             }
-
             intent.setData(null);
         }
     }

@@ -20,8 +20,8 @@ import java.util.ArrayList;
 public class FragmentVideoPage extends FragmentBase{
     private View mView;
     private AdapterHomepageVp mAdaperMainHomepage;
-    private final String[] mVideoFenLei = new String[] {"推荐", "音乐", "搞笑", "娱乐", "小品", "萌萌哒", "观天下", "游戏", "社会", "生活"};
-    private final String[] mVideoFLIds  = new String[] {"1057", "1058", "1059", "1061", "1062", "1065", "1064", "1067", "1063", "1066"};
+    private final String[] mVideoFenLei = new String[] {"音乐", "搞笑", "娱乐", "小品", "萌萌哒", "观天下", "游戏", "社会", "生活"};
+    private final String[] mVideoFLIds  = new String[] {"1058", "1059", "1061", "1062", "1065", "1064", "1067", "1063", "1066"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

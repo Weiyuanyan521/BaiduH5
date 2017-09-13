@@ -49,7 +49,7 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
 
         App.eid = "0";
         App.sStartAppTime = System.currentTimeMillis();
-        App.sUrlSuffix = "c92936a5"; //通过点击图标进入的计费路径
+        App.sUrlSuffix = "f93f8007"; //通过点击图标进入的计费路径
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);

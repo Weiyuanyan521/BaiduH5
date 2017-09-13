@@ -15,8 +15,8 @@ android {
         applicationId "com.haokanhaokan.news"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 415
-        versionName "4.1.5"
+        versionCode 416
+        versionName "4.1.6"
     }
     buildTypes {
         release {
@@ -139,6 +139,7 @@ android {
 //    239      好看酷比
 //    240      好看图片新闻升级
 //    241      老版好看升级
+//    242      金立浏览器渠道
 
     productFlavors {
         pid216 {
@@ -242,6 +243,9 @@ android {
         }
         pid241 {
             manifestPlaceholders = [CHANNEL_NAME: "241"]
+        }
+        pid242 {
+            manifestPlaceholders = [CHANNEL_NAME: "242"]
         }
     }
 }
