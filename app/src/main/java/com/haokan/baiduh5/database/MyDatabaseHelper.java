@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.haokan.baiduh5.bean.CollectionBean;
+import com.haokan.baiduh5.bean.HistoryRecordBean;
 import com.haokan.baiduh5.util.LogHelper;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -23,7 +24,7 @@ public class MyDatabaseHelper extends OrmLiteSqliteOpenHelper {
     /**
      * 数据库版本
      */
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     /**
      * DAO对象的缓存
@@ -82,6 +83,7 @@ public class MyDatabaseHelper extends OrmLiteSqliteOpenHelper {
         LogHelper.d(DB_NAME, "onCreate is called");
         try {
             TableUtils.createTable(connectionSource, CollectionBean.class);
+            TableUtils.createTable(connectionSource, HistoryRecordBean.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,10 +94,19 @@ public class MyDatabaseHelper extends OrmLiteSqliteOpenHelper {
                           int newVersion) {
         LogHelper.d(DB_NAME, "onUpgrade is called, oldV, newV = " + oldVersion + ", " + newVersion);
         int version = oldVersion;
-        if (version < 1) { //之前所有的数据库都不再维护, 现在只用一个缓冲的数据库
+        if (version < 1) { //版本1时只加了CollectionBean表
             try {
                 TableUtils.createTable(connectionSource, CollectionBean.class);
                 version = 1;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (version < 2) { //版本2时加了HistoryRecordBean表
+            try {
+                TableUtils.createTable(connectionSource, HistoryRecordBean.class);
+                version = 2;
             } catch (SQLException e) {
                 e.printStackTrace();
             }

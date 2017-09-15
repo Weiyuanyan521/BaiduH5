@@ -39,10 +39,12 @@ import com.baiduad.BaiduAdManager;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.bean.CollectionBean;
+import com.haokan.baiduh5.bean.HistoryRecordBean;
 import com.haokan.baiduh5.bean.TypeBean;
 import com.haokan.baiduh5.event.EventCollectionChange;
 import com.haokan.baiduh5.fragment.FragmentComment;
 import com.haokan.baiduh5.fragment.FragmentWebview;
+import com.haokan.baiduh5.model.ModelHistoryRecord;
 import com.haokan.baiduh5.model.ModelMyCollection;
 import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.CommonUtil;
@@ -315,6 +317,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                     if (!title.equals(mTitleText)) {
                         LogHelper.i("WebViewActivity", "loadData mweburl = " + mWeb_Url);
                         mTitleText = title;
+                        mWeb_Url = url;
                         mTvTitle.setText(mTitleText);
 
                         if (mWeb_Url.contains("image?")
@@ -326,6 +329,7 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
                             mBottomBar.setVisibility(View.GONE);
                         }
                         checkIsCollect();
+                        addHistory();
                         loadBaiduAd();
                     }
                 } else {
@@ -736,6 +740,44 @@ public class ActivityWebview extends ActivityBase implements View.OnClickListene
             @Override
             public void onNetError() {
                 mTvCollection.setSelected(false);
+            }
+        });
+    }
+
+    public void addHistory() {
+        final HistoryRecordBean bean = new HistoryRecordBean();
+        bean.url = mWeb_Url;
+        bean.title = mTitleText;
+        if (TextUtils.isEmpty(bean.title)) {
+            bean.title = mWeb_Url;
+        }
+        bean.create_time = System.currentTimeMillis();
+        bean.date = DataFormatUtil.format(bean.create_time);
+
+        new ModelHistoryRecord().addHistory(this, bean, new onDataResponseListener<HistoryRecordBean>() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onDataSucess(HistoryRecordBean collectionBean) {
+                if (mIsDestory) {
+                    return;
+                }
+                LogHelper.d("addHistory", "addHistory onDataSucess");
+            }
+
+            @Override
+            public void onDataEmpty() {
+            }
+
+            @Override
+            public void onDataFailed(String errmsg) {
+                LogHelper.d("addHistory", "addHistory onDataFailed errmsg = " + errmsg);
+            }
+
+            @Override
+            public void onNetError() {
             }
         });
     }

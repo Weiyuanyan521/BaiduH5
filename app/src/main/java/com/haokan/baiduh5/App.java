@@ -1,12 +1,14 @@
 package com.haokan.baiduh5;
 
 import android.app.Application;
+import android.app.Notification;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 
 import com.haokan.baiduh5.bean.UpdateBean;
@@ -20,6 +22,10 @@ import com.sohu.cyan.android.sdk.api.CyanSdk;
 import com.sohu.cyan.android.sdk.exception.CyanException;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.common.inter.ITagManager;
+import com.umeng.message.entity.UMessage;
+import com.umeng.message.tag.TagManager;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
 
@@ -59,27 +65,7 @@ public class App extends Application {
 
         initCY();
 
-        //友盟推送begin
-        PushAgent mPushAgent = PushAgent.getInstance(this);
-        mPushAgent.setAppkeyAndSecret("596d83f182b6354e8e0016a8", "f8add01337b505a9d70415c287b03dfc");
-        mPushAgent.setMessageChannel("pidTest");
-        //注册推送服务，每次调用register方法都会回调该接口
-//        mPushAgent.setResourcePackageName("com.haokan.baiduh5");
-        mPushAgent.register(new IUmengRegisterCallback() {
-
-            @Override
-            public void onSuccess(String deviceToken) {
-                //注册成功会返回device token
-                LogHelper.d(TAG, "mPushAgent.register deviceToken = " + deviceToken);
-            }
-
-            @Override
-            public void onFailure(String s, String s1) {
-                LogHelper.d(TAG, "mPushAgent.register onFailure s = " + s + ", s1 = " + s1);
-            }
-        });
-        mPushAgent.setPushCheck(true);
-//        mPushAgent.setDebugMode(false);
+        initPush();
         //友盟推送end
     }
 
@@ -165,5 +151,73 @@ public class App extends Application {
             e.printStackTrace();
         }
         sCyanSdk = CyanSdk.getInstance(this);
+    }
+
+    private void initPush() {
+        //友盟推送begin
+        PushAgent mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.setAppkeyAndSecret("596d83f182b6354e8e0016a8", "f8add01337b505a9d70415c287b03dfc");
+        mPushAgent.setMessageChannel(CommonUtil.getPid(this));
+//        mPushAgent.setMessageChannel("pidTest");
+        //注册推送服务，每次调用register方法都会回调该接口
+//        mPushAgent.setResourcePackageName("com.haokan.baiduh5");
+        mPushAgent.register(new IUmengRegisterCallback() {
+
+            @Override
+            public void onSuccess(String deviceToken) {
+                //注册成功会返回device token
+                LogHelper.d(TAG, "mPushAgent.register deviceToken = " + deviceToken);
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+                LogHelper.d(TAG, "mPushAgent.register onFailure s = " + s + ", s1 = " + s1);
+            }
+        });
+        mPushAgent.setPushCheck(true);
+//        mPushAgent.setDebugMode(false);
+        mPushAgent.setNoDisturbMode(0, 0, 0, 0); //关闭免打扰模式
+        /*
+        默认情况下，同一台设备在1分钟内收到同一个应用的多条通知时，
+        不会重复提醒，同时在通知栏里新的通知会替换掉旧的通知。
+        可以通过如下方法来设置冷却时间
+         */
+        mPushAgent.setMuteDurationSeconds(10); //通知冷却时间
+        mPushAgent.setDisplayNotificationNumber(0);//参数number可以设置为0~10之间任意整数。当参数为0时，表示不合并通知
+
+        //您可以为用户加上标签，方便推送时按照标签来筛选
+        mPushAgent.getTagManager().add(new TagManager.TCallBack() {
+            @Override
+            public void onMessage(final boolean isSuccess, final ITagManager.Result result) {
+                //isSuccess表示操作是否成功
+                LogHelper.d(TAG, "mPushAgent addtag isSuccess = " + isSuccess);
+            }
+        }, "hktest");
+
+
+        UmengMessageHandler messageHandler = new UmengMessageHandler() {
+            @Override
+            public Notification getNotification(Context context, UMessage msg) {
+                LogHelper.d(TAG, "mPushAgent getNotification msg = " + msg.custom);
+                switch (msg.builder_id) {
+                    case 1:
+                    default:
+                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(App.this)
+                                .setContentTitle(msg.title)
+                                .setContentText(msg.text)
+//                                .setContentInfo(msg.title)
+                                .setTicker(msg.title)
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setAutoCancel(true);
+                        Notification notification = mBuilder.build();
+//                        mNotificationManager.notify(NOTIFY_ID, notification);
+//                        break;
+                        //默认为0，若填写的builder_id并不存在，也使用默认。
+                        return notification;
+//                        return super.getNotification(context, msg);
+                }
+            }
+        };
+        mPushAgent.setMessageHandler(messageHandler);
     }
 }

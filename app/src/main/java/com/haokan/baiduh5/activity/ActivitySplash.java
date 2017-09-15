@@ -36,7 +36,7 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
     private static final int REQUEST_CODE_PERMISSION_STORAGE = 201;
     private static final int REQUEST_CODE_SETTING_PERMISSION = 202;
     private Handler mHandler = new Handler();
-    private int mCountdown = 3; //倒计时
+    volatile private int mCountdown = 3; //倒计时
     private WebView mWebView;
     private boolean mIsLoadWeb = false;
     private boolean mHasLoadAd = false;
@@ -160,6 +160,10 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
     public void removeLauncherHome() {
         mHandler.removeCallbacks(mLaunchHomeRunnable);
         finish();
+    }
+
+    public void resetCountDown() {
+        mCountdown = 2;
     }
 
     private Runnable mLaunchHomeRunnable = new Runnable() {

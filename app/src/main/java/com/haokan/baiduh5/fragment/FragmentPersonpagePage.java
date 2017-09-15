@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.haokan.baiduh5.R;
 import com.haokan.baiduh5.activity.ActivityAboutUs;
+import com.haokan.baiduh5.activity.ActivityHistoryRecord;
 import com.haokan.baiduh5.activity.ActivityMyCollection;
 import com.haokan.baiduh5.activity.ActivityWebview;
 import com.haokan.baiduh5.cachesys.CacheManager;
@@ -31,6 +32,7 @@ import rx.schedulers.Schedulers;
 public class FragmentPersonpagePage extends FragmentBase implements View.OnClickListener {
     private View mView;
     private LinearLayout mCollection;
+    private LinearLayout mHistory;
     private LinearLayout mClearcache;
     private LinearLayout mExtra;
     private View mExtraDivider;
@@ -50,6 +52,7 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
 
     private void initView() {
         mCollection = (LinearLayout) mView.findViewById(R.id.collection);
+        mHistory = (LinearLayout) mView.findViewById(R.id.history);
         mClearcache = (LinearLayout) mView.findViewById(R.id.clearcache);
         mTvCacheSize = (TextView) mClearcache.findViewById(R.id.cachesize);
         mCacheProgressBar = (ProgressBar) mClearcache.findViewById(R.id.progress);
@@ -74,6 +77,7 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
         mCollection.setOnClickListener(this);
         mClearcache.setOnClickListener(this);
         mAboutus.setOnClickListener(this);
+        mHistory.setOnClickListener(this);
 
         updataCacheSize();
     }
@@ -88,6 +92,11 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
             case R.id.collection:
                 Intent iCollect = new Intent(mActivity, ActivityMyCollection.class);
                 mActivity.startActivity(iCollect);
+                mActivity.overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
+                break;
+            case R.id.history:
+                Intent ihistory = new Intent(mActivity, ActivityHistoryRecord.class);
+                mActivity.startActivity(ihistory);
                 mActivity.overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
                 break;
             case R.id.clearcache:

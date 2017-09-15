@@ -866,8 +866,12 @@ public class BaiduAdManager {
                 map.put("pid", App.PID);
                 map.put("eid", App.eid);
                 map.put("adid", baiduAdBean.id);
-                map.put("testArg", "测试用");
+//                map.put("testArg", "测试用");
                 MobclickAgent.onEvent(context, "onAdShow", map);
+
+                if (context instanceof ActivitySplash) {
+                    ((ActivitySplash)context).resetCountDown();
+                }
             }
             @Override
             public void onAdClick() {
@@ -1013,6 +1017,10 @@ public class BaiduAdManager {
                         LogHelper.d(TAG, "HaokanADManager  setNativeAd onLoadSuccess ");
                         if (mIsDestory) {
                             return;
+                        }
+
+                        if (context instanceof ActivitySplash) {
+                            ((ActivitySplash)context).resetCountDown();
                         }
                     }
 

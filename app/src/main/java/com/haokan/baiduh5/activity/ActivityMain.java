@@ -397,6 +397,8 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
         EventBus.getDefault().post(new EventUrlSchemeJump());
     }
 
+    public static String sUrlSchemePushTime = "default";
+    public static String sUrlSchemePullTime = "default";
     private void urlSchemeJump(Intent intent) {
         if (intent == null) {
             return;
@@ -404,15 +406,29 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
         //schame跳转的统一管理
         if (intent.getData() != null) {
             Uri uri = intent.getData();
+            LogHelper.d(TAG, "urlSchemeJump uri = " + uri);
+            if (uri == null) {
+                return;
+            }
             String eid = uri.getQueryParameter("eid");
+            String url = uri.getQueryParameter("url");
+            String suffix = uri.getQueryParameter("suffix");
+            LogHelper.d(TAG, "urlSchemeJump suffix = " + suffix);
+            String host = uri.getHost();
+            String time = uri.getQueryParameter("time");
+            if ((sUrlSchemePullTime != null && sUrlSchemePullTime.equals(time))
+                    || TextUtils.isEmpty(url)) {
+                return;
+            }
+            sUrlSchemePullTime = time;
             if (TextUtils.isEmpty(eid)) {
                 eid = "0";
+            } else {
+                App.sUrlSuffix = "e24b3745"; //通过拉起的计费路径
             }
             App.eid = eid;
             App.sStartAppTime = System.currentTimeMillis();
-            App.sUrlSuffix = "e24b3745"; //通过拉起的计费路径
 
-            String suffix = uri.getQueryParameter("suffix");
             if (!TextUtils.isEmpty(suffix)) {
                 App.sUrlSuffix = suffix;
             }
@@ -422,9 +438,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             map.put("suffix", App.sUrlSuffix);
             MobclickAgent.onEvent(this, "schemepull", map);
 
-            String host = uri.getHost();
             if ("webview".equals(host)) {
-                String url = uri.getQueryParameter("url");
                 String decode = Uri.decode(url);
                 LogHelper.d(TAG, "urlSchemeJump eid = " + eid + ", url = " + url + ", App.sUrlSuffix = " + App.sUrlSuffix + ", decode = " + decode);
                 Intent web = new Intent(this, ActivityWebview.class);
@@ -432,6 +446,17 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
                 startActivity(web);
             }
             intent.setData(null);
+        } else {
+            String time = intent.getStringExtra("time");
+            String url = intent.getStringExtra("url");
+            LogHelper.d(TAG, "urlSchemeJump getStringExtra uri = " + url + ", time = " + time);
+            if ((sUrlSchemePushTime != null && sUrlSchemePushTime.equals(time)) || TextUtils.isEmpty(url)) {
+                return;
+            }
+            sUrlSchemePushTime = time;
+            Intent web = new Intent(this, ActivityWebview.class);
+            web.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, url);
+            startActivity(web);
         }
     }
 }

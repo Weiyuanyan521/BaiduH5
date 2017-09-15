@@ -158,6 +158,12 @@
         </activity>
 
         <activity
+            android:name=".activity.ActivityHistoryRecord"
+            android:screenOrientation="portrait">
+        </activity>
+
+
+        <activity
             android:name="com.haokan.ad.Activity.WebViewActivity"
             android:screenOrientation="portrait">
         </activity>

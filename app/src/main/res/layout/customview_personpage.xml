@@ -60,6 +60,47 @@
         />
 
     <LinearLayout
+        android:id="@+id/history"
+        android:orientation="horizontal"
+        android:background="@drawable/drawable_selector_bai"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+        <ImageView
+            android:src="@drawable/icon_history_record"
+            android:layout_marginLeft="18dp"
+            android:scaleType="centerInside"
+            android:layout_gravity="center_vertical"
+            android:padding="2dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"/>
+
+        <TextView
+            android:text="历史记录"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:src="@drawable/icon_setting_into"
+            android:scaleType="center"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#d8d8d8"
+        android:layout_marginLeft="15dp"
+        />
+
+    <LinearLayout
         android:id="@+id/clearcache"
         android:orientation="horizontal"
         android:background="@drawable/drawable_selector_bai"
