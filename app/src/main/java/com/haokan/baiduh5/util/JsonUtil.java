@@ -2,6 +2,14 @@ package com.haokan.baiduh5.util;
 
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 
 /**
@@ -31,6 +39,31 @@ public class JsonUtil {
     public static <T> T fromJson(String str, Class<T> type) {
 //        Gson gson = new Gson();
         return sGson.fromJson(str, type);
+    }
+
+    public static <T> T fromJson(File file, Class<T> type) throws FileNotFoundException, UnsupportedEncodingException {
+        InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
+        return sGson.fromJson(reader, type);
+    }
+
+    public static <T> T fromJson(File file, Type type) throws FileNotFoundException, UnsupportedEncodingException {
+        InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
+        return sGson.fromJson(reader, type);
+    }
+
+    public static <T> T fromJson(InputStream inputStream, Type type) throws FileNotFoundException, UnsupportedEncodingException {
+        InputStreamReader reader = new InputStreamReader(inputStream);
+        return sGson.fromJson(reader, type);
+    }
+
+    public static void toJson(Object obj, File file) throws FileNotFoundException, UnsupportedEncodingException {
+        OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file));
+        sGson.toJson(obj, writer);
+    }
+
+    public static void toJson(Object obj, File file, Type type) throws FileNotFoundException, UnsupportedEncodingException {
+        OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(file));
+        sGson.toJson(obj, type, writer);
     }
 
     /**

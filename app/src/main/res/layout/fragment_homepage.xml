@@ -7,8 +7,20 @@
         <!--app:tabPadding="0dp"-->
         <!--app:tabPaddingStart="15dp"-->
         <!--app:tabPaddingEnd="15dp"-->
+        <!--app:tabBackground="@color/touming"-->
+    <ImageView
+        android:id="@+id/edit_channel"
+        android:layout_alignParentRight="true"
+        android:scaleType="centerInside"
+        android:background="@drawable/drawable_selector_bai"
+        android:src="@drawable/icon_write_comment"
+        android:layout_width="44dp"
+        android:layout_height="44dp"/>
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
+        android:layout_toLeftOf="@id/edit_channel"
+        android:layout_marginRight="1px"
         android:layout_width="match_parent"
         android:layout_height="@dimen/actionbar_h"
         app:tabMinWidth="1dp"
@@ -21,7 +33,7 @@
         android:fadingEdgeLength="30dp"
         android:background="@color/bai"
         />
-        <!--app:tabBackground="@color/touming"-->
+
 
     <View
         android:id="@+id/divider"

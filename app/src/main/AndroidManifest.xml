@@ -162,6 +162,10 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity
+            android:name=".activity.ActivityEditChannel"
+            android:screenOrientation="portrait">
+        </activity>
 
         <activity
             android:name="com.haokan.ad.Activity.WebViewActivity"

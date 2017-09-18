@@ -1,5 +1,6 @@
 package com.haokan.baiduh5.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -7,110 +8,106 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.reflect.TypeToken;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
+import com.haokan.baiduh5.activity.ActivityEditChannel;
 import com.haokan.baiduh5.adapter.AdapterHomepageVp;
 import com.haokan.baiduh5.bean.TypeBean;
+import com.haokan.baiduh5.util.JsonUtil;
+import com.haokan.baiduh5.util.LogHelper;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+
+import rx.Scheduler;
+import rx.functions.Action0;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by wangzixu on 2016/12/26.
  */
-public class FragmentHomePage extends FragmentBase{
+public class FragmentHomePage extends FragmentBase implements View.OnClickListener {
     private View mView;
     private AdapterHomepageVp mAdaperMainHomepage;
-    private final String[] mImgFenLei = new String[] {
-            "推荐"
-            , "热点"
-            , "本地"
-            , "精选"
-            , "美女"
-            , "女人"
-            , "搞笑"
-            , "视频"
-            , "图片"
-            , "娱乐"
-            , "时尚"
-            , "科技"
-            , "游戏"
-            , "手机"
-            , "军事"
-            , "体育"
-            , "汽车"
-            , "财经"
-            , "看点"
-            , "母婴"
-            , "动漫"
-            , "文化"
-            , "生活"
-            , "房产"
-    };
-    private final String[] mImgFLIds  = new String[] {
-            "1022"
-            , "1021"
-            , "1080"
-            , "9999"
-            , "1024"
-            , "1034"
-            , "1025"
-            , "1033"
-            , "1003"
-            , "1001"
-            , "1009"
-            , "1013"
-            , "1040"
-            , "1005"
-            , "1012"
-            , "1002"
-            , "1007"
-            , "1006"
-            , "1047"
-            , "1042"
-            , "1055"
-            , "1036"
-            , "1035"
-            , "1008"
-    };
+    private final ArrayList<TypeBean> mDataList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (mView == null) {
             mView = inflater.inflate(R.layout.fragment_homepage, container, false);
-            init();
+            initViews();
+            loadData();
         }
         return mView;
     }
 
-    public void init() {
+    public void initViews() {
         TabLayout homepageTabLayout = (TabLayout) mView.findViewById(R.id.tabLayout);
         ViewPager homepageViewpager = (ViewPager) mView.findViewById(R.id.vp);
         mAdaperMainHomepage = new AdapterHomepageVp(getChildFragmentManager(), mActivity);
         homepageViewpager.setAdapter(mAdaperMainHomepage);
         homepageTabLayout.setupWithViewPager(homepageViewpager);
 
-        ArrayList<TypeBean> list = new ArrayList<>();
-        for (int i = 0; i < mImgFenLei.length; i++) {
-            String name = mImgFenLei[i];
-            if (App.sReview.equals("1")) {
-                if (name.equals("美女")||name.equals("搞笑")||name.equals("推荐")
-                        ||name.equals("娱乐")
-                        ||name.equals("时尚")
-                        ||name.equals("热点")
-                        ||name.equals("视频")
-                        ||name.equals("女人")
-                        ||name.equals("图片")
-                        ||name.equals("精选")
-                        ||name.equals("军事")) {
-                    continue;
+        mView.findViewById(R.id.edit_channel).setOnClickListener(this);
+    }
+
+    private void loadData() {
+        final Scheduler.Worker worker = Schedulers.io().createWorker();
+        worker.schedule(new Action0() {
+            @Override
+            public void call() {
+                try {
+                    InputStream open = mActivity.getAssets().open("default_homepage.json");
+                    ArrayList<TypeBean> oriList = JsonUtil.fromJson(open, new TypeToken<ArrayList<TypeBean>>(){}.getType());
+                    mDataList.clear();
+                    if (App.sReview.equals("1")) {
+                        for (int i = 0; i < oriList.size(); i++) {
+                            TypeBean typeBean = oriList.get(i);
+                            String name = typeBean.name;
+                            if (name.equals("美女")||name.equals("搞笑")||name.equals("推荐")
+                                    ||name.equals("娱乐")
+                                    ||name.equals("时尚")
+                                    ||name.equals("热点")
+                                    ||name.equals("视频")
+                                    ||name.equals("女人")
+                                    ||name.equals("图片")
+                                    ||name.equals("精选")
+                                    ||name.equals("军事")) {
+                                continue;
+                            }
+                            mDataList.add(typeBean);
+                        }
+                    } else {
+                        mDataList.addAll(oriList);
+                    }
+                    App.sMainHanlder.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdaperMainHomepage.addData(mDataList);
+                        }
+                    });
+                    LogHelper.d("fraghomepage", "loadData success default---");
+                } catch (Exception e) {
+                    LogHelper.d("fraghomepage", "loadData default 没取到---");
+                    e.printStackTrace();
                 }
+                worker.unsubscribe();
             }
-            TypeBean bean = new TypeBean();
-            bean.tabName = "home";
-            bean.name = name;
-            bean.id = mImgFLIds[i];
-            list.add(bean);
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.edit_channel:
+                Intent i = new Intent(mActivity, ActivityEditChannel.class);
+                i.putParcelableArrayListExtra(ActivityEditChannel.KEY_INTENT_CHANNELS, mDataList);
+                mActivity.startActivity(i);
+                mActivity.overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
+                break;
+            default:
+                break;
         }
-        mAdaperMainHomepage.addData(list);
     }
 }

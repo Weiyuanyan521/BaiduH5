@@ -3,10 +3,13 @@ package com.haokan.baiduh5.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by wangzixu on 2017/7/11.
  */
-public class TypeBean implements Parcelable {
+public class TypeBean implements Parcelable , Serializable {
+
     /**
      *  //哪个大tab, ['home', 'video', 'list']
      */
