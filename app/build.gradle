@@ -141,6 +141,13 @@ android {
 //    239      好看酷比
 //    240      好看图片新闻升级
 //    241      老版好看升级
+//    242      金立浏览器拉起
+
+//   242      金立浏览器拉起
+//   243      申请百度计费名用的渠道
+
+
+
 
     productFlavors {
         pid200 {
@@ -227,20 +234,17 @@ android {
         pid227 {
             manifestPlaceholders = [CHANNEL_NAME: "227"]
         }
-        pid301 {
-            manifestPlaceholders = [CHANNEL_NAME: "301"]
-        }
-        pid302 {
-            manifestPlaceholders = [CHANNEL_NAME: "302"]
-        }
-        pid303 {
-            manifestPlaceholders = [CHANNEL_NAME: "303"]
-        }
         pid240 {
             manifestPlaceholders = [CHANNEL_NAME: "240"]
         }
         pid241 {
             manifestPlaceholders = [CHANNEL_NAME: "241"]
+        }
+        pid242 {
+            manifestPlaceholders = [CHANNEL_NAME: "242"]
+        }
+        pid243 {
+            manifestPlaceholders = [CHANNEL_NAME: "243"]
         }
     }
 }
