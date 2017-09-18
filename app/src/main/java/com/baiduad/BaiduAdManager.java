@@ -975,24 +975,22 @@ public class BaiduAdManager {
                 RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(width, height);
                 relativeLayout.addView(mediaView, lp2);
 
-                ImageView close = new ImageView(context);
-                close.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                close.setImageResource(R.drawable.ad_close);
-                int cloeseW = (int) (dm.density * 18);
-                int cloeseH = (int) (dm.density * 17);
-                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(cloeseW, cloeseH);
-//                lp.rightMargin = (int) (dm.density * 2);
-//                lp.topMargin = (int) (dm.density * 2);
-                lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                relativeLayout.addView(close, lp);
-
-                close.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        adParent.setVisibility(View.GONE);
-                        adParent.removeAllViews();
-                    }
-                });
+//                ImageView close = new ImageView(context);
+//                close.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+//                close.setImageResource(R.drawable.ad_close);
+//                int cloeseW = (int) (dm.density * 18);
+//                int cloeseH = (int) (dm.density * 17);
+//                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(cloeseW, cloeseH);
+//                lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//                relativeLayout.addView(close, lp);
+//
+//                close.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        adParent.setVisibility(View.GONE);
+//                        adParent.removeAllViews();
+//                    }
+//                });
 
                 mediaView.setNativeAd(adData, new EffectiveAdListener() {
                     @Override

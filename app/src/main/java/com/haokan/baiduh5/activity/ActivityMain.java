@@ -400,6 +400,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     public static String sUrlSchemePushTime = "default";
     public static String sUrlSchemePullTime = "default";
     private void urlSchemeJump(Intent intent) {
+        LogHelper.d(TAG, "urlSchemeJump eid = " + App.eid + ", App.sUrlSuffix = " + App.sUrlSuffix);
         if (intent == null) {
             return;
         }
@@ -416,7 +417,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             LogHelper.d(TAG, "urlSchemeJump suffix = " + suffix);
             String host = uri.getHost();
             String time = uri.getQueryParameter("time");
-            if ((sUrlSchemePullTime != null && sUrlSchemePullTime.equals(time))
+            if ((!TextUtils.isEmpty(sUrlSchemePullTime) && sUrlSchemePullTime.equals(time))
                     || TextUtils.isEmpty(url)) {
                 return;
             }
@@ -440,7 +441,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
 
             if ("webview".equals(host)) {
                 String decode = Uri.decode(url);
-                LogHelper.d(TAG, "urlSchemeJump eid = " + eid + ", url = " + url + ", App.sUrlSuffix = " + App.sUrlSuffix + ", decode = " + decode);
+                LogHelper.d(TAG, "urlSchemeJump 跳转webview eid = " + eid + ", url = " + url + ", App.sUrlSuffix = " + App.sUrlSuffix + ", decode = " + decode);
                 Intent web = new Intent(this, ActivityWebview.class);
                 web.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, decode);
                 startActivity(web);
@@ -450,7 +451,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             String time = intent.getStringExtra("time");
             String url = intent.getStringExtra("url");
             LogHelper.d(TAG, "urlSchemeJump getStringExtra uri = " + url + ", time = " + time);
-            if ((sUrlSchemePushTime != null && sUrlSchemePushTime.equals(time)) || TextUtils.isEmpty(url)) {
+            if ((!TextUtils.isEmpty(sUrlSchemePushTime) && sUrlSchemePushTime.equals(time)) || TextUtils.isEmpty(url)) {
                 return;
             }
             sUrlSchemePushTime = time;

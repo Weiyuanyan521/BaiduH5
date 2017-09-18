@@ -3,12 +3,14 @@ package com.haokan.baiduh5.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -27,8 +29,12 @@ import android.widget.RelativeLayout;
 import com.baiduad.BaiduAdManager;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.R;
+import com.haokan.baiduh5.bean.UpdateBean;
+import com.haokan.baiduh5.model.ModelInitConfig;
+import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.LogHelper;
+import com.haokan.baiduh5.util.Values;
 
 public class ActivitySplash extends ActivityBase implements View.OnClickListener {
     public static final String TAG = "SplashActivity";
@@ -59,6 +65,39 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
 
         initView();
         checkStoragePermission(); //检查是否有相应权限
+
+        new ModelInitConfig().getConfigure(this, new onDataResponseListener<UpdateBean>() {
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onDataSucess(UpdateBean updateBean) {
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ActivitySplash.this);
+
+                SharedPreferences.Editor edit = sp.edit();
+                LogHelper.d(TAG, "checkUpdata onDataSucess SHOWEXTRA  = " + updateBean.getKd_showextra());
+                edit.putString(Values.PreferenceKey.KEY_SP_SHOWEXTRA, updateBean.getKd_showextra()).apply();
+                edit.putString(Values.PreferenceKey.KEY_SP_EXTRANAME, updateBean.getKd_extraname()).apply();
+                edit.putString(Values.PreferenceKey.KEY_SP_EXTRAURL, updateBean.getKd_extraurl()).apply();
+                edit.putString(Values.PreferenceKey.KEY_SP_SHOWIMGAD, updateBean.getKd_localad()).apply();
+            }
+
+            @Override
+            public void onDataEmpty() {
+                LogHelper.d(TAG, "checkUpdata onDataEmpty");
+            }
+
+            @Override
+            public void onDataFailed(String errmsg) {
+                LogHelper.d(TAG, "checkUpdata onDataFailed errmsg = " + errmsg);
+            }
+
+            @Override
+            public void onNetError() {
+                LogHelper.d(TAG, "checkUpdata onNetError");
+            }
+        });
     }
 
     private void initView() {

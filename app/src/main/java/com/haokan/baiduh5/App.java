@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.text.TextUtils;
 
 import com.haokan.baiduh5.bean.UpdateBean;
 import com.haokan.baiduh5.model.ModelInitConfig;
@@ -91,13 +90,8 @@ public class App extends Application {
             @Override
             public void onDataSucess(UpdateBean updateBean) {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-                String sw = updateBean.getKd_review(); //是否review的开关
-                sReview = sw;
-                if (TextUtils.isEmpty(sReview)) {
-                    sReview = "0";
-                }
+
                 SharedPreferences.Editor edit = sp.edit();
-                edit.putString(Values.PreferenceKey.KEY_SP_REVIEW, sw).apply();
                 LogHelper.d(TAG, "checkUpdata onDataSucess SHOWEXTRA  = " + updateBean.getKd_showextra());
                 edit.putString(Values.PreferenceKey.KEY_SP_SHOWEXTRA, updateBean.getKd_showextra()).apply();
                 edit.putString(Values.PreferenceKey.KEY_SP_EXTRANAME, updateBean.getKd_extraname()).apply();

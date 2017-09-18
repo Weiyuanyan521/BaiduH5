@@ -13,7 +13,6 @@ import com.baiduad.bean.response.ResponseEntityAd;
 import com.haokan.baiduh5.App;
 import com.haokan.baiduh5.http.HttpRetrofitManager;
 import com.haokan.baiduh5.http.HttpStatusManager;
-import com.haokan.baiduh5.http.UrlsUtil;
 import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.Values;
 
@@ -128,7 +127,7 @@ public class ModelAd {
             body.positionPage = positionPage;
         }
         body.pid = App.PID;
-        body.appId = UrlsUtil.COMPANYID;
+        body.appId = "10002";
 
         RequestHeaderAd<RequestBodyBaiduAd> header = new RequestHeaderAd(body);
         requestEntity.setHeader(header);

@@ -17,6 +17,20 @@ public class ResponseBody_Config {
     private String kd_isreview_227;
     private String isShowAd;
     private String kd;
+    /**
+     * 控制审核状态的字符串
+     * 227_420,216_420   pid_vercode 多个逗号分隔
+     * pid_vercode
+     */
+    private String rwStatusStr;
+
+    public String getRwStatusStr() {
+        return rwStatusStr;
+    }
+
+    public void setRwStatusStr(String rwStatusStr) {
+        this.rwStatusStr = rwStatusStr;
+    }
 
     public String getKd_isreview_227() {
         return kd_isreview_227;

@@ -82,7 +82,7 @@ public class ModelHistoryRecord {
                     }
 
                     long l = dao.countOf();
-                    if (l > 30) {
+                    if (l > 500) {
                         List<HistoryRecordBean> query = dao.queryBuilder().orderBy("create_time", true).limit(1l).query();
                         if (query != null && query.size() > 0) {
                             dao.delete(query);

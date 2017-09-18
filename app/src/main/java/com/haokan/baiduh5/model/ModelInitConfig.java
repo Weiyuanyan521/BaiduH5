@@ -1,6 +1,8 @@
 package com.haokan.baiduh5.model;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.haokan.baiduh5.App;
@@ -15,6 +17,7 @@ import com.haokan.baiduh5.http.HttpStatusManager;
 import com.haokan.baiduh5.http.UrlsUtil;
 import com.haokan.baiduh5.util.JsonUtil;
 import com.haokan.baiduh5.util.LogHelper;
+import com.haokan.baiduh5.util.Values;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -66,26 +69,26 @@ public class ModelInitConfig {
                             ResponseBody_Config body1 = config.getBody();
 
                             if (body1 != null) {
-                                if (App.PID.equals("227")) { //百度渠道
-                                    String kd_isreview_227 = body1.getKd_isreview_227();
-                                    App.sReview = kd_isreview_227;
-                                    if (TextUtils.isEmpty(App.sReview)) {
+                                String rwStatusStr = body1.getRwStatusStr();
+                                String localStr = App.PID+"_"+App.APP_VERSION_CODE;
+                                LogHelper.d("getConfigure", "onNext localStr = " + localStr + ", rwStatusStr = " + rwStatusStr);
+                                if (TextUtils.isEmpty(rwStatusStr)) {
+                                    App.sReview = "0";
+                                } else {
+                                    boolean has = rwStatusStr.contains(localStr);
+                                    if (has) {
+                                        App.sReview = "1";
+                                    } else {
                                         App.sReview = "0";
                                     }
                                 }
+                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                                SharedPreferences.Editor edit = sp.edit();
+                                edit.putString(Values.PreferenceKey.KEY_SP_REVIEW, App.sReview).apply();
                             }
+
                             if (body1 != null && !TextUtils.isEmpty(body1.getKd())) {
                                 UpdateBean updateBean = JsonUtil.fromJson(body1.getKd(), UpdateBean.class);
-                                LogHelper.d("getConfigure", "pid = " + App.PID);
-                                if (App.PID.equals("227")) { //百度渠道
-                                    String kd_isreview_227 = body1.getKd_isreview_227();
-                                    App.sReview = kd_isreview_227;
-                                    if (TextUtils.isEmpty(App.sReview)) {
-                                        App.sReview = "0";
-                                    }
-                                    updateBean.setKd_review(kd_isreview_227);
-                                }
-
                                 listener.onDataSucess(updateBean);
                             } else {
                                 listener.onDataEmpty();

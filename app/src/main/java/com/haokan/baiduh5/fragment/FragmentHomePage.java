@@ -94,7 +94,14 @@ public class FragmentHomePage extends FragmentBase{
             String name = mImgFenLei[i];
             if (App.sReview.equals("1")) {
                 if (name.equals("美女")||name.equals("搞笑")||name.equals("推荐")
-                        ||name.equals("娱乐")||name.equals("时尚")||name.equals("热点") ||name.equals("军事")) {
+                        ||name.equals("娱乐")
+                        ||name.equals("时尚")
+                        ||name.equals("热点")
+                        ||name.equals("视频")
+                        ||name.equals("女人")
+                        ||name.equals("图片")
+                        ||name.equals("精选")
+                        ||name.equals("军事")) {
                     continue;
                 }
             }
