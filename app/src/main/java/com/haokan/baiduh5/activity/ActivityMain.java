@@ -460,4 +460,11 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             startActivity(web);
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (mCurrentFragment != null) {
+            mCurrentFragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 }

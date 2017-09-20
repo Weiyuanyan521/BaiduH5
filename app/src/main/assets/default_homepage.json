@@ -16,8 +16,8 @@
     },
     {
         "tabName": "home",
-        "name": "精选",
-        "id": "9999"
+        "name": "视频",
+        "id": "1033"
     },
     {
         "tabName": "home",
@@ -26,28 +26,13 @@
     },
     {
         "tabName": "home",
-        "name": "女人",
-        "id": "1034"
+        "name": "娱乐",
+        "id": "1001"
     },
     {
         "tabName": "home",
         "name": "搞笑",
         "id": "1025"
-    },
-    {
-        "tabName": "home",
-        "name": "视频",
-        "id": "1033"
-    },
-    {
-        "tabName": "home",
-        "name": "图片",
-        "id": "1003"
-    },
-    {
-        "tabName": "home",
-        "name": "娱乐",
-        "id": "1001"
     },
     {
         "tabName": "home",
@@ -61,13 +46,13 @@
     },
     {
         "tabName": "home",
-        "name": "游戏",
-        "id": "1040"
+        "name": "图片",
+        "id": "1003"
     },
     {
         "tabName": "home",
-        "name": "手机",
-        "id": "1005"
+        "name": "游戏",
+        "id": "1040"
     },
     {
         "tabName": "home",
@@ -86,6 +71,11 @@
     },
     {
         "tabName": "home",
+        "name": "生活",
+        "id": "1035"
+    },
+    {
+        "tabName": "home",
         "name": "财经",
         "id": "1006"
     },
@@ -96,8 +86,8 @@
     },
     {
         "tabName": "home",
-        "name": "母婴",
-        "id": "1042"
+        "name": "女人",
+        "id": "1034"
     },
     {
         "tabName": "home",
@@ -111,8 +101,18 @@
     },
     {
         "tabName": "home",
-        "name": "生活",
-        "id": "1035"
+        "name": "母婴",
+        "id": "1042"
+    },
+    {
+        "tabName": "home",
+        "name": "精选",
+        "id": "9999"
+    },
+    {
+        "tabName": "home",
+        "name": "手机",
+        "id": "1005"
     },
     {
         "tabName": "home",

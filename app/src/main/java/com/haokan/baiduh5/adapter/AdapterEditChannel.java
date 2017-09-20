@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.haokan.baiduh5.R;
-import com.haokan.baiduh5.activity.ActivityBase;
+import com.haokan.baiduh5.activity.ActivityEditChannel;
 import com.haokan.baiduh5.bean.TypeBean;
 import com.haokan.baiduh5.customview.HeaderFooterStatusRecyclerViewAdapter;
 import com.haokan.baiduh5.util.CommonUtil;
@@ -18,11 +18,11 @@ import java.util.List;
 /**
  * Created by wangzixu on 2016/8/18.
  */
-public class AdapterEditChannel extends HeaderFooterStatusRecyclerViewAdapter<AdapterEditChannel.ViewHolder> {
+public class AdapterEditChannel extends HeaderFooterStatusRecyclerViewAdapter<AdapterEditChannel.ViewHolder>{
     private ArrayList<TypeBean> mData = new ArrayList<>();
-    private ActivityBase mContext;
+    private ActivityEditChannel mContext;
 
-    public AdapterEditChannel(ActivityBase context) {
+    public AdapterEditChannel(ActivityEditChannel context) {
         mContext = context;
 //        mScreenW = context.getResources().getDisplayMetrics().widthPixels;
     }
@@ -102,12 +102,12 @@ public class AdapterEditChannel extends HeaderFooterStatusRecyclerViewAdapter<Ad
             super(itemView);
             itemView.setOnClickListener(this);
             mTvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            mTvTitle.setOnClickListener(this);
         }
 
         @Override
         public void renderView(int position) {
             mBean = mData.get(position);
-
             mTvTitle.setText(mBean.name);
         }
 
@@ -116,6 +116,7 @@ public class AdapterEditChannel extends HeaderFooterStatusRecyclerViewAdapter<Ad
             if (CommonUtil.isQuickClick()) {
                 return;
             }
+            mContext.click(mBean.name);
         }
     }
     //holder end------------------------------

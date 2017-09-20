@@ -1,0 +1,47 @@
+﻿[
+    {
+        "tabName": "video",
+        "name": "音乐",
+        "id": "1058"
+    },
+    {
+        "tabName": "video",
+        "name": "搞笑",
+        "id": "1059"
+    },
+    {
+        "tabName": "video",
+        "name": "娱乐",
+        "id": "1061"
+    },
+    {
+        "tabName": "video",
+        "name": "小品",
+        "id": "1062"
+    },
+    {
+        "tabName": "video",
+        "name": "萌萌哒",
+        "id": "1065"
+    },
+    {
+        "tabName": "video",
+        "name": "观天下",
+        "id": "1064"
+    },
+    {
+        "tabName": "video",
+        "name": "游戏",
+        "id": "1067"
+    },
+    {
+        "tabName": "video",
+        "name": "社会",
+        "id": "1063"
+    },
+    {
+        "tabName": "video",
+        "name": "生活",
+        "id": "1066"
+    }
+]

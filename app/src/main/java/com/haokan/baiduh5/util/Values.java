@@ -80,32 +80,19 @@ public class Values {
     }
 
     public static class AcacheKey {
-        public static final String KEY_ACACHE_SPLASH_IMAGES = "splash_image"; //保存第二启动页的图片
-        public static final String KEY_ACACHE_SPLASH_LAST_TIME = "splash_image_last_time"; //保存第二启动页的日期
-        public static final String KEY_ACACHE_SEARCH_HISTORY = "search_history";//搜索历史
-        /**
-         * 锁屏用的离线图片json对象key
-         */
-        public static final String KEY_ACACHE_OFFLINE_JSONNAME = "offline_json";
 
         /**
-         * 锁屏用的离线Ad对象key
+         * 首页type列表
          */
-        public static final String KEY_ACACHE_OFFLINE_AD_NAME = "offline_ad";
+        public static final String KEY_HOME_TYPELIST = "hometypelist";
         /**
-         * 锁屏上锁定图片用到的key
+         * 视频type列表
          */
-        public static final String KEY_ACACHE_LOCKIMAGE = "lockimage";
-
+        public static final String KEY_VIDEO_TYPELIST = "videotypelist";
         /**
-         * 首页typelist缓存用的key
+         * 图片type列表
          */
-        public static final String KEY_ACACHE_TYPELIST = "typelist";
-
-        /**
-         * 首页imglistByType缓存用的key
-         */
-        public static final String KEY_ACACHE_IMGLIST_BYTYPE = "typeimglist_";
+        public static final String KEY_IMAGE_TYPELIST = "imagetypelist";
     }
 
     public static class PreferenceKey {

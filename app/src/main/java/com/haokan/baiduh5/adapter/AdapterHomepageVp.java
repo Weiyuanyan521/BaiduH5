@@ -32,6 +32,23 @@ public class AdapterHomepageVp extends FragmentPagerAdapter {
         notifyDataSetChanged();
     }
 
+    public ArrayList<TypeBean> getData() {
+        return mData;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        try {
+            TypeBean typeBean = mData.get(position);
+            if (typeBean != null) {
+                return Long.valueOf(typeBean.id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.getItemId(position);
+    }
+
     @Override
     public Fragment getItem(int position) {
         return FragmentWebview.newInstance(mData.get(position));
