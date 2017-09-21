@@ -53,7 +53,7 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        App.eid = "0";
+        App.eid = "138003";
         App.sStartAppTime = System.currentTimeMillis();
         App.sUrlSuffix = "c92936a5"; //通过点击图标进入的计费路径
 

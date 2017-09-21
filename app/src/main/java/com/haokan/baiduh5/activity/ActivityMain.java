@@ -422,7 +422,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
                 return;
             }
             sUrlSchemePullTime = time;
-            if (TextUtils.isEmpty(eid)) {
+            if (!TextUtils.isEmpty(eid)) {
                 App.eid = eid;
                 App.sUrlSuffix = "e24b3745"; //通过拉起的计费路径
             }
