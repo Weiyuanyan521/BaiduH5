@@ -27,6 +27,7 @@ import com.umeng.message.entity.UMessage;
 import com.umeng.message.tag.TagManager;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
+import com.wzxlib.lockscreen.ga.GaInitManager;
 
 import java.util.Locale;
 
@@ -47,6 +48,7 @@ public class App extends Application {
     public static final Handler sMainHanlder = new Handler(Looper.getMainLooper());
     public static String sReview = "0"; //1表示review, 0表示没有
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -66,6 +68,8 @@ public class App extends Application {
 
         initPush();
         //友盟推送end
+
+        GaInitManager.getInstance().init(this);
     }
 
     public static void init(final Context context) {

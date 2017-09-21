@@ -3,3 +3,4 @@ include ':WzxLibrary'
 project(':WzxLibrary').projectDir = new File('../WzxLibrary/')
 include ':WzxLibrary:UmShareLibrary'
 include ':WzxLibrary:UmPush'
+include ':WzxLibrary:LockScreen'

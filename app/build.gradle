@@ -13,7 +13,7 @@ android {
     buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.haokanhaokan.news"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 24
         versionCode 422
         versionName "4.2.2"
@@ -73,6 +73,7 @@ android {
 dependencies {
     compile project(':WzxLibrary:UmShareLibrary')
     compile project(':WzxLibrary:UmPush')
+    compile project(':WzxLibrary:LockScreen')
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.1.0'
