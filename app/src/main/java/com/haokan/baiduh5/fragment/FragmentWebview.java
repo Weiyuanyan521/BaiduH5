@@ -129,7 +129,7 @@ public class FragmentWebview extends FragmentBase implements View.OnClickListene
         showLoadingLayout();
         if (mTypeBean != null) {
             if (mTypeBean.id.equals("9999")) {
-                mWeb_Url = "http://m.levect.com/?nohead=1";
+                mWeb_Url = "http://m.levect.com/?nohead=1&eid="+App.eid;
             } else {
                 CpuInfoManager.getCpuInfoUrl(mActivity, App.sUrlSuffix, Integer.valueOf(mTypeBean.id), new CpuInfoManager.UrlListener() {
                     @Override

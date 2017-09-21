@@ -111,6 +111,8 @@ dependencies {
 }
 
 android {
+//    199      自升级
+
 //    200       华为应用市场
 //    201       金立应用市场
 //    202       oppo应用市场
@@ -142,7 +144,11 @@ android {
 //    240      好看图片新闻升级
 //    241      老版好看升级
 
+
     productFlavors {
+        pid199 {
+            manifestPlaceholders = [CHANNEL_NAME: "199"]
+        }
         pid200 {
             manifestPlaceholders = [CHANNEL_NAME: "200"]
         }
@@ -226,15 +232,6 @@ android {
         }
         pid227 {
             manifestPlaceholders = [CHANNEL_NAME: "227"]
-        }
-        pid301 {
-            manifestPlaceholders = [CHANNEL_NAME: "301"]
-        }
-        pid302 {
-            manifestPlaceholders = [CHANNEL_NAME: "302"]
-        }
-        pid303 {
-            manifestPlaceholders = [CHANNEL_NAME: "303"]
         }
         pid240 {
             manifestPlaceholders = [CHANNEL_NAME: "240"]
