@@ -27,7 +27,6 @@ import com.umeng.message.entity.UMessage;
 import com.umeng.message.tag.TagManager;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
-import com.wzxlib.lockscreen.ga.GaInitManager;
 
 import java.util.Locale;
 
@@ -36,7 +35,7 @@ public class App extends Application {
     public static String APP_VERSION_NAME = "";
     public static int APP_VERSION_CODE;
     public static String DID = "default"; //默认值
-    public static String PID = "000"; //默认值
+    public static String PID = "138003"; //默认值
     public static String sPhoneModel = "defaultPhone";
     public static String eid = "0"; //默认值
     public static String sUrlSuffix = "c92936a5"; //默认值
@@ -68,8 +67,6 @@ public class App extends Application {
 
         initPush();
         //友盟推送end
-
-        GaInitManager.getInstance().init(this);
     }
 
     public static void init(final Context context) {

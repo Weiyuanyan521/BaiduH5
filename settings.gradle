@@ -3,4 +3,10 @@ include ':WzxLibrary'
 project(':WzxLibrary').projectDir = new File('../WzxLibrary/')
 include ':WzxLibrary:UmShareLibrary'
 include ':WzxLibrary:UmPush'
-include ':WzxLibrary:LockScreen'
+include ':HkLockScreenStandard'
+project(':HkLockScreenStandard').projectDir = new File('../HkLockScreenStandard/')
+//include ':HkLockScreenStandard:app'
+include ':HkLockScreenStandard:lockapplication'
+include ':Hk-public-library'
+project(':Hk-public-library').projectDir = new File('../Hk-public-library/')
+include ':Hk-public-library:statistics'
