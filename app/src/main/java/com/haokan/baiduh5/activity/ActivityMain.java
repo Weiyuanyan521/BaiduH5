@@ -56,7 +56,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
-        App.sUrlSuffix = "f93f8007"; //通过点击图标进入的计费路径
+        App.sUrlSuffix = "c92936a5"; //通过点击图标进入的计费路径
         setContentView(R.layout.activity_main);
         StatusBarUtil.setStatusBarBgColor(this, R.color.hong);
         urlSchemeJump(getIntent());

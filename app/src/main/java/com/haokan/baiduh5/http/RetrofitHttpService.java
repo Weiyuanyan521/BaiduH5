@@ -23,6 +23,12 @@ import rx.Observable;
  */
 public interface RetrofitHttpService {
     /**
+     * 基本的get请求
+     */
+    @GET
+    Observable<Object> get(@Url String url);
+
+    /**
      * 获取升级信息
      */
     @GET
@@ -46,4 +52,6 @@ public interface RetrofitHttpService {
      */
     @POST
     Observable<ResponseEntityAd> getBaiduAd(@Url String url, @Body RequestEntityAd<RequestBodyBaiduAd> requestEntity);
+
+
 }
