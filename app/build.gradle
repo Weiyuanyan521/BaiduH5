@@ -12,7 +12,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
     defaultConfig {
-        applicationId "com.haokanhaokan.news03"
+        applicationId "com.haokanhaokan.news02"
         minSdkVersion 16
         targetSdkVersion 24
         versionCode 420
@@ -29,7 +29,7 @@ android {
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('release.apk')) {
                         def productFlavorsName = variant.productFlavors[0].name;
-                        def fileName = "${appName()}_" + productFlavorsName + "news03_v${versionCode}_${releaseTime()}.apk"
+                        def fileName = "${appName()}_" + productFlavorsName + "news02_v${versionCode}_${releaseTime()}.apk"
                         output.outputFile = new File(outputFile.parent, fileName)
                     }
                 }
