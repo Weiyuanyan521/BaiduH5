@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.haokan.ad.view.MediaView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/av_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    ></com.haokan.ad.view.MediaView>

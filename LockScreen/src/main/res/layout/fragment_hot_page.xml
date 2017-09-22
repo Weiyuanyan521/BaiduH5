@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.haokan.screen.view.HaokanSwipeRefreshLayout
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/hotpage_recy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="12dp" />
+    </com.haokan.screen.view.HaokanSwipeRefreshLayout>
+    <!--<android.support.v4.widget.SwipeRefreshLayout-->
+        <!--android:id="@+id/swipe_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/hotpage_recy"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:clipToPadding="false"-->
+            <!--android:paddingBottom="12dp" />-->
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+
+    <include
+        android:id="@+id/layout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        layout="@layout/layout_loading_my"/>
+
+    <include
+        android:id="@+id/layout_net_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        layout="@layout/layout_error_net"/>
+
+    <include
+        android:id="@+id/layout_serve_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/layout_error_serve"
+        android:visibility="gone"
+        />
+
+    <include
+        android:id="@+id/layout_no_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/layout_error_no_img"
+        android:visibility="gone"
+        />
+</RelativeLayout>

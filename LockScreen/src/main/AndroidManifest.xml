@@ -1,0 +1,128 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
+          package="com.haokan.lockscreen"
+>
+
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <!--好看锁屏的privider需要的权限-->
+    <uses-permission android:name="${applicationId}.haokan.provider.READ_WRITE" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
+
+    <!-- 获取mac地址作为用户的备用唯一标识 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 获取用户手机的IMEI，用来唯一的标识用户 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- QQ、QQ空间所需权限 -->
+    <uses-permission android:name="android.permission.READ_LOGS" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        >
+
+        <activity android:name="com.haokan.lockscreen.activity.LockMainActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+
+        <service
+            android:name="com.haokan.lockscreen.service.LockScreenService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name="com.haokan.lockscreen.receiver.LockScreenBootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!--来自好看appbase begin-->
+        <service
+            android:name="com.haokan.statistics.service.HaoKanMaiDianService"
+            android:label="LogCollection">
+            <intent-filter>
+                <action android:name="com.haokan.service.logcollection" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.haokan.screen.lockscreen.activity.ActivitySetting"
+            android:launchMode="singleTask"
+            >
+            <intent-filter>
+                <action android:name="com.haokan.setting" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.haokan.screen.lockscreen.activity.ActivityWebView"
+            android:process=":lockwebview"
+            android:launchMode="singleInstance"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            >
+            <intent-filter>
+                <action android:name="com.haokan.webview" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.haokan.screen.lockscreen.activity.ActivityMySubscribe2"
+            />
+        <activity
+            android:name="com.haokan.screen.lockscreen.activity.ActivityMyCollection"
+            />
+        <activity
+            android:name="com.haokan.screen.lockscreen.activity.ActivityMyCollection_Detail"
+            />
+        <activity
+            android:name="com.haokan.screen.lockscreen.activity.ActivityMyDCIM2"
+            android:launchMode="singleTask"
+            />
+        <activity
+            android:name="com.haokan.screen.lockscreen.activity.ActivityCropPicture"
+            />
+        <activity
+            android:name="com.haokan.screen.lockscreen.activity.ActivityItemDetail_DCIM"
+            android:launchMode="singleTask"
+            />
+        <!-- Register AnalyticsReceiver and AnalyticsService to support background
+      dispatching on non-Google Play devices. -->
+        <!--<receiver android:name="com.google.android.gms.analytics.AnalyticsReceiver"-->
+        <!--android:enabled="true">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="com.google.android.gms.analytics.ANALYTICS_DISPATCH" />-->
+        <!--</intent-filter>-->
+        <!--</receiver>-->
+        <!--<service android:name="com.google.android.gms.analytics.AnalyticsService"-->
+        <!--android:enabled="true"-->
+        <!--android:exported="false"/>-->
+
+        <!--阿里云热修复  各个产品id需要不一样防止更新错误-->
+        <meta-data
+            android:name="com.taobao.android.hotfix.IDSECRET"
+            android:value="24527645-1" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.APPSECRET"
+            android:value="7105ad8417da068390367499d3deb1cd" />
+        <meta-data
+            android:name="com.taobao.android.hotfix.RSASECRET"
+            android:value="MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDarwpbhZ69X/GE0QWu2p46TnITobdxlrr3eYipk7seg2VZahb3Guqw3xXPz4RDNH04eOWS34rGSIp8JEcQzupFz/75keh917J1L/bPNgSBlf3zRQpFGvkZ2W5VAxlQTHT1MSiESFte8bo6CdHjuHRMX5DKXYzvo5as6/gv2LtYXkx6U2ZpMlNBYZGoWpTjKrin/tbs6KE92Nj2S+UJ2NKDeqM25MQavzpU3rv+lIkfMtqMkZeODUUeJ9bsYz6iCnJMQf3Vh9AFEURSMrrHLwyMqymoVr4TnrnC7Ed8E50Np8Zf9PFbLoj3Kean/56rQYWIQpuZbjsV3WLs49FRlyT7AgMBAAECggEBAJirJQb6BPVemuVHa7lDpL098MQl3USunz6QGUmR+kt2HfZLa1b98qSiSb73t/WXGmindlaQO3jsQcojJX3lhoZQjEg9hdr9D/hiEONeaczyIwWHyICwMQHL2wv8itqVVf2rYQbg4PEqvwEvw9k/9+ktuo6cuvy97z4vyufUXg51FGwt6OPBxUCJO7EnRVWDXwViCKE7PazpOaO8ZuLmVALKvOc+bYSeYICxYMUSTQENiFezXManD4aCf7F4KzLYSVFBJ0YZojIpt9Y6MpEVNDxR419AzGqyoIi4jvCGEirw6WfSWigAKfq2HEo/96Qk52Bqj7VToR0rgNIjqLPljpECgYEA8aixj/y2YDfPJn4i5RnBNvoqd8xD2oFyAr8/BqJ89nSE2C2xDheObPu1ZOcP2V8oIS/nBDh4tIehKlznNMC3pCiHQWJmC7bQuHG9h493nv06eEeXmFv+ipHJZhcFS+r243WtNCTHZ8CZyfBd2aACl7rtu/s3dzVDXtfDhuRxu+MCgYEA56lOJh0EPonDJBBSpzGTPoU9wh4NxC2VTWZhXto744cGT+D1goIAkf+7q6UbIxgxNi9z4RG18fQbT6ED55NW7wI6XHBw69wWPwgiNOrCtMvXIfWaIBXvAOURcpA3vBsMIcj2OMx120jE+HmLoq1dj1/pNAR/v00yVIh/bBh0bgkCgYAqmpUDT4hPmkc5AA/i2BGKQbxu9mIYCa4x8cmIv+jMAmrROez3EQwZBp9KNLpEllQa1bkis1oEaczuDQbt8/PsSwDddB2NfyN5AQRq+84ZB4fhYK3HPKC5iU46Y2CZq8ju/PYWNU26augyA+Bn15/dZCU5eOaka41/EQb1pxyuBQKBgQCwSdZ+inZAYPVu7Dz5nnA+k4Z7wgMX1thXHiHa3JfWfVoAT2CFAAkPEVzvMaWE/1PzuAimraOXi/t8jTs7bpQpLbjbv3UvBzymmrntKvkgPD5qSUwQPqCyPZ8ZX0YKj0qcKyGz92N4i9fYfiYUlXktMf905jeQjF5Qlc7ho3p2gQKBgQC7YDcJujUAfDZok0UFicEPV6yiohD7drwPsAQrsX/qSN0WrKI0E5WYU3N7ZgaFJqoaRc9QrDcqmMmPXPrMAcTTWRPB/z3nus12PO+C610NlwRXmaMhK9zg0us1nUgBWJfZeX6H+bbqY1Qdg5gTH7iWwD+EPPCocc0x+lBE1Lykuw==" />
+
+        <service android:name="com.haokan.screen.service.KillSelfService"
+                 android:process=":kill_server"/>
+        <!--来自好看appbase end-->
+    </application>
+</manifest>

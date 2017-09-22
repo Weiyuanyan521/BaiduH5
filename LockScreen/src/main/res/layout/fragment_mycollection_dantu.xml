@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recy_collection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:paddingBottom="10dp"
+        android:scrollbars="vertical"
+        android:clipToPadding="false"
+        android:layout_marginRight="5dp"/>
+
+    <include
+        android:id="@+id/layout_loading"
+        layout="@layout/layout_loading_native1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+    <include
+        android:id="@+id/layout_net_error"
+        layout="@layout/layout_error_net"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+    <include
+        android:id="@+id/layout_serve_error"
+        layout="@layout/layout_error_serve"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        />
+    <include
+        android:id="@+id/layout_no_content"
+        layout="@layout/layout_error_no_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        />
+</FrameLayout>

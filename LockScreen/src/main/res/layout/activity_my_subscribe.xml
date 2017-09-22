@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/actionbar"
+        android:background="@color/bai"
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="42dp"
+            android:layout_height="match_parent"
+            android:scaleType="center"
+            android:background="@drawable/bg_selector_touming_borderless"
+            android:src="@drawable/icon_nav_back_n" />
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:text="@string/subscribe"
+            android:textSize="16sp"
+            android:textColor="@color/hei_80"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <View
+            android:background="#d8d8d8"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="1px"/>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_below="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#d8d8d8"
+        />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_below="@id/divider"
+        android:background="#f4f4f4"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_below="@id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="64dp"
+        />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        app:tabMinWidth="1dp"
+        app:tabPadding="0dp"
+        app:tabIndicatorColor="#ffb100"
+        app:tabMode="scrollable"
+        android:requiresFadingEdge="horizontal"
+        android:fadingEdgeLength="30dp"
+        app:tabBackground="@color/touming"
+        android:layout_below="@+id/actionbar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/bai"/>
+
+
+    <Button
+        android:id="@+id/btn_all_picture"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:text="@string/coloum_all_picture"
+        android:background="@color/bai"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/shape_button_shadow_top"
+        android:layout_alignBottom="@id/viewPager"/>
+</RelativeLayout>

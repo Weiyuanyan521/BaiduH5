@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bai"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share to Twitter:"
+        android:textSize="14sp"
+        android:textColor="#444444"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        />
+
+    <EditText
+        android:id="@+id/edit"
+        android:background="#eeeeee"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:hint="Please enter the description of this picture."
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="15dp"
+        android:padding="5dp"
+        android:gravity="left|top"
+        android:textSize="15sp"
+        android:textColor="@color/hei"
+        android:maxLength="140"
+        />
+
+    <TextView
+        android:id="@+id/tv_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit"
+        android:text="0/140"
+        android:textColor="#666666"
+        android:textSize="14sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="15dp"
+        />
+
+    <TextView
+        android:id="@+id/confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit"
+        android:layout_alignParentRight="true"
+        android:text="Done"
+        android:textSize="15sp"
+        android:textColor="#259bdf"
+        android:padding="15dp"
+        />
+</RelativeLayout>

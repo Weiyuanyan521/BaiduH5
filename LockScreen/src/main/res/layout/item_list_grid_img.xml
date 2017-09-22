@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/grid_img_height"
+              android:showDividers="middle"
+              android:divider="@drawable/bg_item_girdimg_divider"
+              android:paddingBottom="2dp"
+              android:baselineAligned="false">
+
+    <RelativeLayout
+        android:id="@+id/rl_item_content_1"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="@dimen/grid_img_height">
+        <ImageView
+            android:id="@+id/iv_item_content_1"
+            android:scaleType="centerCrop"
+            android:background="#eaeaea"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/iv_zututag_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_photos"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_item_content_2"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="@dimen/grid_img_height">
+        <ImageView
+            android:id="@+id/iv_item_content_2"
+            android:scaleType="centerCrop"
+            android:background="#eaeaea"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/iv_zututag_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_photos"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_item_content_3"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="@dimen/grid_img_height">
+        <ImageView
+            android:id="@+id/iv_item_content_3"
+            android:scaleType="centerCrop"
+            android:background="#eaeaea"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/iv_zututag_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_photos"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"/>
+    </RelativeLayout>
+</LinearLayout>

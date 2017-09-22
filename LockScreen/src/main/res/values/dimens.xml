@@ -1,0 +1,80 @@
+<resources>
+    <dimen name="left_drawer_itemh">51dp</dimen>
+    <dimen name="setting_itemh">55dp</dimen>
+
+    <!--首页下面的组图小图的宽高-->
+    <dimen name="main_activity_zutu_preview_width">36dp</dimen>
+    <dimen name="main_activity_zutu_preview_height">64dp</dimen>
+
+    <!-- 我的收藏，展示标签供图商的listview中图片的宽高-->
+    <dimen name="collection_tags_img_height">142dp</dimen>
+    <dimen name="collection_tags_img_width">80dp</dimen>
+
+    <!-- 网格形式展示图片的宽高-->
+    <dimen name="grid_img_height">212dp</dimen>
+    <dimen name="grid_img_width">119dp</dimen>
+
+    <dimen name="grid_img_height_1">189dp</dimen>
+    <dimen name="grid_img_width_1">106dp</dimen>
+
+    <dimen name="bigimg_bottom_padding_top">50dp</dimen>
+
+    <!--***************************-->
+
+    <dimen name="issue_bottom_tv_gap">10dp</dimen>
+    <dimen name="home_page_item_gap">10dp</dimen>
+    <dimen name="home_page_item_inner_gap">15dp</dimen>
+    <dimen name="home_page_item_title_textsize">15sp</dimen>
+    <dimen name="home_page_item_hight">200dp</dimen>
+
+    <dimen name="settings_item_gap">15dp</dimen>
+    <dimen name="settings_item_high">49dp</dimen>
+    <dimen name="settings_item_padding_horizontial">25dp</dimen>
+    <dimen name="settings_item_title_size">16sp</dimen>
+
+    <!-- 首页条目的图片高度 -->
+    <dimen name="home_page_banner_img_height">210dp</dimen>
+    <dimen name="home_page_itemad_height">70dp</dimen>
+
+    <dimen name="home_page_item1_img_height">178dp</dimen>
+    <dimen name="home_page_item1_img_width">100dp</dimen>
+
+    <dimen name="home_page_item2_img_height">127dp</dimen>
+    <dimen name="home_page_item2_img_width">71.5dp</dimen>
+
+    <dimen name="home_page_item3_img_height">130dp</dimen>
+    <dimen name="home_page_item3_img_width">85dp</dimen>
+
+    <!-- 期刊界面用到的图片的宽高-->
+    <dimen name="issuelist_header_img_height">130dp</dimen>
+    <dimen name="issuelist_header_img_width">85dp</dimen>
+
+    <dimen name="discover_item_img_height1">266dp</dimen>
+    <dimen name="discover_item_img_width1">150dp</dimen>
+    <dimen name="discover_item_img_height2">130dp</dimen>
+    <dimen name="discover_item_img_width2">85dp</dimen>
+
+    <dimen name="category_img_height">178dp</dimen>
+    <dimen name="category_img_width">100dp</dimen>
+
+    <dimen name="issuelist_img_height">160dp</dimen>
+    <dimen name="issuelist_img_width">90dp</dimen>
+
+    <dimen name="hotpage_item_vertical_distance">6dp</dimen>
+    <dimen name="hotpage_item_horizontal_distance">0dp</dimen>
+
+    <dimen name="channelpage_item_vertical_distance">6dp</dimen>
+    <dimen name="channelpage_item_horizontal_distance">0dp</dimen>
+
+    <dimen name="dimen_8">8dp</dimen>
+    <dimen name="dimen_4">4dp</dimen>
+
+    <dimen name="detailpage_settinglayout_bg_h">274dp</dimen>
+    <dimen name="detailpage_settinglayout_avatarsize">62dp</dimen>
+    <!--setting的整个高 = 背景的高 + 1/2 头像的高-->
+    <dimen name="detailpage_settinglayout_h">305dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+</resources>

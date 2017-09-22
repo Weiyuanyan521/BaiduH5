@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/channpage_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.haokan.screen.view.TopCropImageView
+        android:id="@+id/channpage_buttom_img"
+        android:scaleType="matrix"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/channpage_buttom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/hei_50"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/channpage_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="8dp"
+            android:lines="2"
+            android:lineSpacingExtra="5dp"
+            android:textSize="13sp"
+            android:textColor="@color/bai"
+            tools:text="寻觅宋仲基背后那抹希腊蓝" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/channpage_zan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="9dp"
+            android:layout_marginBottom="10dp"
+            android:drawableLeft="@drawable/icon_item_like"
+            android:drawablePadding="6dp"
+            android:textColor="@color/bai"
+            android:textSize="14sp"
+            tools:text="208" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/channpage_size"
+        android:layout_above="@+id/channpage_buttom_layout"
+        android:text="18张"
+        android:textSize="12sp"
+        android:textColor="#ffffff"
+        android:background="@drawable/shape_collection_count_bg"
+        android:paddingLeft="7dp"
+        android:paddingRight="6dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/icon_arrow"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/shadow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/hei_50" />
+
+    <LinearLayout
+        android:id="@+id/more_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="167dp"
+        android:background="@color/bai"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp">
+            <TextView
+                android:id="@+id/refresh"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/icon_refresh"
+                android:drawablePadding="9dp"
+                android:text="@string/refresh"
+                android:paddingTop="25dp"
+                android:paddingBottom="24dp"
+                android:gravity="center"
+                android:textColor="@color/text_color1"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/copy_link"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/icon_copylink"
+                android:drawablePadding="9dp"
+                android:text="@string/copy_link"
+                android:paddingTop="25dp"
+                android:paddingBottom="24dp"
+                android:gravity="center"
+                android:textColor="@color/text_color1"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/open_with_browser"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/icon_browser"
+                android:drawablePadding="9dp"
+                android:text="@string/open_with_browse"
+                android:paddingTop="25dp"
+                android:paddingBottom="24dp"
+                android:gravity="center"
+                android:textColor="@color/text_color1"
+                android:textSize="12sp" />
+            <TextView
+                android:id="@+id/else_online"
+                android:visibility="gone"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/icon_browser"
+                android:drawablePadding="9dp"
+                android:text="@string/open_with_browse"
+                android:paddingTop="25dp"
+                android:paddingBottom="24dp"
+                android:gravity="center"
+                android:textColor="@color/text_color1"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:background="#d8d8d8" />
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:background="@drawable/bg_selector_touming"
+            android:textColor="@color/text_color1"
+            android:textSize="14sp" />
+    </LinearLayout>
+</RelativeLayout>

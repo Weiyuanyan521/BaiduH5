@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:fitsSystemWindows="true"
+                android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_no_content"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image"
+            android:src="@drawable/img_nopictures"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_below="@id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:textColor="@color/hei_40"
+            android:textSize="16sp"
+            android:text="@string/myfavorite_no_favorite"
+            android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+    <GridView
+        android:layout_marginLeft="@dimen/home_page_item_gap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/gv_gridview"
+        android:listSelector="@android:color/transparent"
+        android:verticalSpacing="5dp"
+        android:numColumns="3"
+        android:gravity="center"
+        android:stretchMode="columnWidth"
+        />
+
+    <include
+        android:id="@+id/layout_loading"
+        android:layout_below="@id/tabpi_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        layout="@layout/layout_loading_my"/>
+</RelativeLayout>

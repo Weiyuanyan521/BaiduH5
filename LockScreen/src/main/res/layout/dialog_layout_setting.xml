@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="180dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/tv_dialog_tv_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_dialog_title"
+        android:orientation="vertical"
+        android:paddingTop="17dp">
+
+        <TextView
+            android:id="@+id/tv_dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="确定要解除绑定？"
+            android:textColor="#333333"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_dialog_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="16dp"
+            android:text="解除绑定后，系统将清除该账号下所有内容。"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:visibility="gone"
+            android:layout_marginTop="-10dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginBottom="7dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="10dp"
+            android:text="同时取消锁定"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/tv_dialog_tv_layout"
+        android:background="#d8d8d8" />
+
+    <LinearLayout
+        android:id="@+id/ll_dialog_need_update"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_below="@id/divider"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/bg_dialog_button_left"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="#e3464a"
+            android:textSize="17sp" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#d8d8d8" />
+
+        <TextView
+            android:id="@+id/unbind"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/bg_dialog_button_right"
+            android:gravity="center"
+            android:text="解除绑定"
+            android:textColor="#999999"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_dialog_not_need_update"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/divider"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/dialog_positive"
+        android:textColor="@color/selector_click_a8a8a8"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+</RelativeLayout>

@@ -1,0 +1,67 @@
+<resources>
+    <style name="myCircleLoadingProgressBarStyleSmall">
+        <item name="android:indeterminateDrawable">@drawable/update_loading_progressbar_anim</item>
+        <item name="android:maxHeight">33dp</item>
+        <item name="android:minHeight">33dp</item>
+        <item name="android:maxWidth">33dp</item>
+        <item name="android:minWidth">33dp</item>
+    </style>
+
+    <style name="loading_progress" parent="@style/dialog">
+        <!-- 背景昏暗 -->
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="dialog" parent="Theme.AppCompat.Dialog">
+        <!-- 边框 -->
+        <item name="android:windowFrame">@null</item>
+
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">true</item>
+
+        <!-- 半透明 -->
+        <item name="android:windowIsTranslucent">true</item>
+
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+
+        <!-- 背景透明 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+        <!-- 背景昏暗 -->
+        <item name="android:backgroundDimEnabled">true</item>
+
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/default_color</item>
+    </style>
+
+    <style name="ActivityColums" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/bai</item>
+    </style>
+
+    <style name="ActivityShareTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/touming</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+    <!--<style name="ActivityLockScreen" parent="AppTheme">-->
+        <!--<item name="android:windowAnimationStyle">@style/activityAnim</item>-->
+    <!--</style>-->
+
+    <!--<style name="activityAnim" parent="@android:style/Animation.Activity">-->
+        <!--<item name="android:activityOpenEnterAnimation">@anim/activity_in_right2left</item>-->
+        <!--<item name="android:activityOpenExitAnimation">@anim/activity_out_right2left</item>-->
+        <!--<item name="android:activityCloseEnterAnimation">@anim/activity_in_left2right</item>-->
+        <!--<item name="android:activityCloseExitAnimation">@anim/activity_out_left2right</item>-->
+    <!--</style>-->
+</resources>

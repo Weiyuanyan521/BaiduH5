@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/layout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/layout_loading_my" />
+
+    <com.haokan.screen.view.HaokanSwipeRefreshLayout
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <ListView
+            android:id="@+id/lv_list_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:listSelector="@color/touming"
+            android:divider="@color/touming"
+            android:dividerHeight="0dp"
+            />
+    </com.haokan.screen.view.HaokanSwipeRefreshLayout>
+
+    <!--<com.handmark.pulltorefresh.library.PullToRefreshListView-->
+        <!--xmlns:ptr="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/lv_grid_image"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:listSelector="@color/touming"-->
+        <!--android:divider="@color/touming"-->
+        <!--android:dividerHeight="0dp"-->
+        <!--ptr:ptrAnimationStyle = "rotate"-->
+        <!--ptr:ptrHeaderBackground="@color/touming"-->
+        <!--ptr:ptrMode="pullDownFromTop"-->
+        <!--/>-->
+
+    <ViewStub
+        android:layout="@layout/layout_error_no_img"
+        android:id="@+id/vb_no_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <include
+        android:id="@+id/layout_net_error"
+        layout="@layout/layout_error_net"
+        android:visibility="gone"
+        />
+</RelativeLayout>

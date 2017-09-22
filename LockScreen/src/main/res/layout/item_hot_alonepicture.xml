@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hot_alonepicture_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/recycler_bg"
+    android:padding="15dp">
+
+    <ImageView
+        android:id="@+id/hot_alonepicture_img"
+        android:layout_width="75dp"
+        android:layout_height="123dp"
+        tools:background="@color/hei_30" />
+
+    <TextView
+        android:id="@+id/hot_alonepicture_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:singleLine="true"
+        android:layout_marginRight="15dp"
+        android:ellipsize="end"
+        android:layout_toRightOf="@+id/hot_alonepicture_img"
+        android:textColor="@color/hot_item_title_color"
+        android:textSize="16sp"
+        tools:text="寻觅宋仲基背后那抹希腊蓝" />
+
+
+    <TextView
+        android:id="@+id/hot_alonepicture_labey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/hot_alonepicture_title"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/color_9"
+        android:textSize="13sp"
+        tools:text="＃宋仲基＃" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/hot_alonepicture_img"
+        android:layout_alignLeft="@+id/hot_alonepicture_title"
+        android:layout_marginBottom="4dp">
+
+        <TextView
+            android:id="@+id/hot_alonepicture_derivation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/hot_item_bottomtext_color"
+            android:textSize="12sp"
+            tools:text="@东方IC" />
+
+        <TextView
+            android:id="@+id/hot_alonepicture_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/hot_item_bottomtext_color"
+            android:textSize="12sp"
+            tools:text="39人喜欢" />
+    </RelativeLayout>
+</RelativeLayout>

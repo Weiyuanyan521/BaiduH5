@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <com.haokan.screen.view.BgImageView
+        android:id="@+id/blurbgview"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <ViewStub
+        android:id="@+id/content_zh"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:layout_alignParentBottom="true"
+        android:layout="@layout/lock_layout_bottom_share_content_zh"
+        />
+    
+    <ViewStub
+        android:id="@+id/content_en"
+        android:layout_width="match_parent"
+        android:layout_height="178dp"
+        android:layout_alignParentBottom="true"
+        android:layout="@layout/lock_layout_bottom_share_content_en"
+        />
+</RelativeLayout>

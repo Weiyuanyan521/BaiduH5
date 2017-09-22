@@ -86,6 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <ImageView
+            android:id="@+id/iv_closestartlock"
             android:layout_below="@id/iv_image"
             android:src="@drawable/ic_lockclose"
             android:scaleType="centerInside"

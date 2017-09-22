@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bai">
+
+    <View
+        android:id="@+id/divider_item"
+        android:background="@color/default_color"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"/>
+
+<!--订阅的标签item-->
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_below="@id/divider_item"
+        android:layout_margin="14dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_subscriber_tag"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        />
+
+    <TextView
+        android:id="@+id/title"
+        android:text="汽车之家"
+        android:textSize="14sp"
+        android:textColor="#4a90a2"
+        android:layout_below="@id/divider_item"
+        android:paddingTop="15dp"
+        android:paddingRight="13dp"
+        android:paddingBottom="12dp"
+        android:layout_toRightOf="@id/iv_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <include
+        android:id="@+id/img_bar"
+        android:layout_below="@id/title"
+        android:layout_toRightOf="@id/iv_logo"
+        android:layout_marginRight="14dp"
+        layout="@layout/fragment_subscribe_page_item_imgbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+</RelativeLayout>

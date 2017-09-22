@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.haokan.screen.view.HkClickImageView
+        android:id="@+id/iv_main_big_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+    <include
+        android:id="@+id/layout_loading"
+        layout="@layout/layout_loading_native2" />
+
+    <ImageView
+        android:id="@+id/fail_layout"
+        android:visibility="gone"
+        android:src="@drawable/icon_pic_crack"
+        android:scaleType="center"
+        android:layout_centerInParent="true"
+        android:padding="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

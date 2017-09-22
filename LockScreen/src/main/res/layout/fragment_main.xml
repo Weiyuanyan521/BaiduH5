@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:fitsSystemWindows="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <com.haokan.screen.view.pagerindicater.TabPageIndicator
+        android:id="@+id/tabpi_topbar"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:background="@color/bai"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_alignParentTop="true"
+        android:overScrollMode="ifContentScrolls"
+        />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_below="@id/tabpi_topbar"
+        android:background="#d8d8d8"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_content"
+        android:layout_below="@id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <include
+        android:id="@+id/layout_loading"
+        android:layout_below="@id/tabpi_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        layout="@layout/layout_loading_my"/>
+
+    <include
+        android:id="@+id/layout_net_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/layout_error_net"
+        android:visibility="gone"
+        />
+
+    <include
+        android:id="@+id/layout_serve_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/layout_error_serve"
+        android:visibility="gone"
+        />
+
+    <include
+        android:id="@+id/layout_no_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/layout_error_no_img"
+        android:visibility="gone"
+        />
+</RelativeLayout>

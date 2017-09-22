@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_toast_subtag_bg">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="62dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/already_follow"
+            android:textColor="@color/bai"
+            android:textSize="15sp" />
+    </RelativeLayout>
+</FrameLayout>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_below="@id/title"
+    android:layout_gravity="bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_marginLeft="17dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/ll_link"
+        android:id="@+id/title"
+        android:focusable="false"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
+        android:includeFontPadding="false"
+        android:typeface="normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:maxWidth="324dp"
+        android:text="xxxxxxx"
+        android:textColor="@color/selector_click_bai"
+        android:textSize="16sp" />
+
+    <HorizontalScrollView
+        android:layout_marginLeft="17dp"
+        android:layout_marginRight="17dp"
+        android:id="@+id/hsv_zutu_container"
+        android:layout_below="@id/title"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="2dp"
+        android:layout_width="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:layout_height="@dimen/main_activity_zutu_preview_height">
+        <RelativeLayout
+            android:id="@+id/rl_zutu_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </RelativeLayout>
+    </HorizontalScrollView>
+</RelativeLayout>

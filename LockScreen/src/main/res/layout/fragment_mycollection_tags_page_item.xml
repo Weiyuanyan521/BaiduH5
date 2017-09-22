@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_item_title"
+        android:text=""
+        android:textSize="15sp"
+        android:textColor="#666666"
+        android:drawablePadding="6dp"
+        android:drawableLeft="@drawable/icon_red"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="19dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/ll_imgbar"
+        android:layout_below="@id/tv_item_title"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="@dimen/collection_tags_img_height">
+        <ImageView
+            android:id="@+id/img1"
+            android:scaleType="centerCrop"
+            android:background="#eaeaea"
+            android:layout_width="@dimen/collection_tags_img_width"
+            android:layout_height="@dimen/collection_tags_img_height"/>
+        <ImageView
+            android:id="@+id/img2"
+            android:layout_marginLeft="3dp"
+            android:scaleType="centerCrop"
+            android:background="#eaeaea"
+            android:layout_width="@dimen/collection_tags_img_width"
+            android:layout_height="@dimen/collection_tags_img_height"/>
+        <ImageView
+            android:id="@+id/img3"
+            android:layout_marginLeft="3dp"
+            android:scaleType="centerCrop"
+            android:background="#eaeaea"
+            android:layout_width="@dimen/collection_tags_img_width"
+            android:layout_height="@dimen/collection_tags_img_height"/>
+        <ImageView
+            android:id="@+id/img4"
+            android:layout_marginLeft="3dp"
+            android:scaleType="centerCrop"
+            android:background="#eaeaea"
+            android:layout_width="@dimen/collection_tags_img_width"
+            android:layout_height="@dimen/collection_tags_img_height"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_cancel_collect"
+        android:text="@string/cancel_collect"
+        android:textSize="13sp"
+        android:textColor="#999999"
+        android:drawablePadding="3dp"
+        android:drawableLeft="@drawable/icon_cancel_collect"
+        android:layout_alignParentRight="true"
+        android:layout_above="@id/ll_imgbar"
+        android:layout_marginRight="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_below="@id/ll_imgbar"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:background="#e0e0e0"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
+</RelativeLayout>

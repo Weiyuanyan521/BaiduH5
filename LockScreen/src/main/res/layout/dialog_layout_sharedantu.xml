@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_centerInParent="true"
+        android:layout_width="248dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="92dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/bg_dialog_title"
+            android:text="确定分享此图片"
+            android:textColor="#333333"
+            android:textSize="15sp"/>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@id/tv_title"
+            android:background="#d8d8d8" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_below="@id/divider"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_share_zutu"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_dialog_button_left"
+                android:gravity="center"
+                android:text="@string/share_zutu"
+                android:textColor="#4a90e2"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="#d8d8d8" />
+
+            <TextView
+                android:id="@+id/tv_share_dantu"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_dialog_button_right"
+                android:gravity="center"
+                android:text="@string/share_dantu"
+                android:textColor="#4a90e2"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

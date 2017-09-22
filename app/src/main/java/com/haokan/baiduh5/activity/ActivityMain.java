@@ -33,6 +33,7 @@ import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
 import com.haokan.baiduh5.util.UpdateUtils;
 import com.haokan.baiduh5.util.Values;
+import com.haokan.lockscreen.service.LockScreenService;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -90,12 +91,14 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
         mBtnStartLock = mLayoutStartLock.findViewById(R.id.startlock);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean aBoolean = preferences.getBoolean(Values.PreferenceKey.KEY_SP_STARTLOCK, true);
-        if (aBoolean) {
+        if (aBoolean || true) {
             SharedPreferences.Editor edit = preferences.edit();
             edit.putBoolean(Values.PreferenceKey.KEY_SP_STARTLOCK, false).apply();
 
             mLayoutStartLock.setVisibility(View.VISIBLE);
             mBtnStartLock.setOnClickListener(this);
+            mLayoutStartLock.setOnClickListener(this);
+            mLayoutStartLock.findViewById(R.id.iv_closestartlock).setOnClickListener(this);
         }
 
         onClick(mTabHomepage);
@@ -105,13 +108,16 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     public void onClick(View v) {
         FragmentTransaction fragmentTransaction =  mFragmentManager.beginTransaction();
         switch (v.getId()) {
+            case R.id.iv_closestartlock:
+                mLayoutStartLock.setVisibility(View.GONE);
+                break;
             case R.id.startlock:
                 try {
-                    Intent intent = new Intent("com.haokan.start.alarm.action");
-                    sendBroadcast(intent);
-                    LogHelper.d("sendlock", "success");
+                    Intent intent = new Intent(this, LockScreenService.class);
+                    startService(intent);
+                    LogHelper.d("startLockService", "success");
                 } catch (Exception e) {
-                    LogHelper.d("sendlock", "Exception");
+                    LogHelper.d("startLockService", "Exception");
                     e.printStackTrace();
                 }
                 mLayoutStartLock.setVisibility(View.GONE);

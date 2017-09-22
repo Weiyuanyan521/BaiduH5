@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/magazine_view_layout"
+    android:layout_width="match_parent"
+    android:layout_height="132dp"
+    android:background="@drawable/recycler_bg"
+    android:padding="15dp">
+
+    <ImageView
+        android:id="@+id/magazine_img"
+        android:layout_width="62dp"
+        android:layout_height="103dp"
+        android:scaleType="centerCrop"
+        tools:background="@color/hei_30" />
+
+    <RelativeLayout
+        android:id="@+id/magazine_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/magazine_img">
+
+        <TextView
+            android:id="@+id/magazine_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/hot_item_title_color"
+            android:textSize="14sp"
+            tools:text="旗云旅游" />
+
+        <TextView
+            android:id="@+id/magazine_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/cp_overview_button_bg"
+            android:drawableLeft="@drawable/icon_cp_subscribe"
+            android:drawablePadding="6dp"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="订阅"
+            android:textColor="@color/cp_overview_button_text_color"
+            android:textSize="12sp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/magazine_unsub"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/cp_overview_un_subbutton_bg"
+            android:gravity="center"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:text="@string/subscribe_already"
+            android:textColor="@color/cp_overview_un_subbutton_text_color"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/magazine_describe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/magazine_view"
+        android:layout_below="@+id/magazine_view"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:textColor="@color/color_9"
+        android:textSize="13sp"
+        tools:text="搜狐视频是搜狐旗下专业的综合视频网站,提供正版高清电影。" />
+
+</RelativeLayout>

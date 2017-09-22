@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bai"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/hot_zutu_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="6dp"
+        android:textColor="@color/hot_item_title_color"
+        android:textSize="16sp"
+        android:singleLine="true"
+        tools:text="诺曼底地区：味蕾之路" />
+
+    <LinearLayout
+        android:id="@+id/hot_zutu_img_layout"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:id="@+id/hot_zutu_img1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:background="@color/hei_50" />
+
+        <ImageView
+            android:id="@+id/hot_zutu_img2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            tools:background="@color/hei_50" />
+
+        <ImageView
+            android:id="@+id/hot_zutu_img3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            tools:background="@color/hei_50" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/hot_zutu_img4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:background="@color/hei_50" />
+
+            <View
+                android:id="@+id/hot_zutu_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/hei_50" />
+
+            <TextView
+                android:id="@+id/hot_zutu_img_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="4dp"
+                android:drawableRight="@drawable/icon_home_arrow"
+                android:textColor="@color/bai"
+                android:textSize="13sp"
+                tools:text="15张" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+
+        <TextView
+            android:id="@+id/hot_zutu_lable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/hot_item_bottomtext_color"
+            android:textSize="11sp"
+            tools:text="@好看新闻" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/hot_zutu_zan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/hot_item_bottomtext_color"
+            android:textSize="11sp"
+            tools:text="520人赞过" />
+
+    </RelativeLayout>
+
+</LinearLayout>

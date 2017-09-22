@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@color/hei_40"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/gesture_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_down"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="125dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_gesture_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/gesture_down"
+            android:layout_marginLeft="10dp"
+            android:layout_alignBottom="@id/gesture_down"
+            android:text="@string/down_close"
+            android:textSize="20sp"
+            android:textColor="@color/bai"
+            />
+
+        <ImageView
+            android:id="@+id/gesture_hand"
+            android:layout_below="@id/gesture_down"
+            android:layout_marginTop="54dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/icon_hand"
+            android:layout_alignLeft="@id/gesture_down"
+            />
+
+        <ImageView
+            android:visibility="invisible"
+            android:id="@+id/gesture_up"
+            android:layout_below="@id/gesture_hand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_up"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            />
+
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/tv_gesture_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/gesture_down"
+            android:layout_marginRight="10dp"
+            android:layout_alignTop="@id/gesture_up"
+            android:text="@string/up_switch"
+            android:textSize="20sp"
+            android:textColor="@color/bai"
+            />
+</RelativeLayout>
