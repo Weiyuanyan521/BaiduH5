@@ -29,7 +29,6 @@ import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
-import com.haokan.baiduh5.util.UpdateUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -367,7 +366,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
                 int localVersionCode = App.APP_VERSION_CODE;
                 LogHelper.d(TAG, "checkUpdata onDataSucess localVersionCode= " + localVersionCode + ", remotecode = " + ver_code);
                 if (ver_code > localVersionCode) {
-                    UpdateUtils.showUpdateDialog(ActivityMain.this, updateBean);
+                    //UpdateUtils.showUpdateDialog(ActivityMain.this, updateBean);
                 }
             }
 
