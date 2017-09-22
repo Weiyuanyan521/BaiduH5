@@ -19,9 +19,11 @@ import com.haokan.baiduh5.cachesys.ACache;
 import com.haokan.baiduh5.util.JsonUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.Values;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import rx.Scheduler;
 import rx.functions.Action0;
@@ -115,6 +117,10 @@ public class FragmentVideoPage extends FragmentBase implements View.OnClickListe
                 i.putExtra(ActivityEditChannel.KEY_INTENT_CURRENTNAME, typeBean.name);
                 mActivity.startActivityForResult(i, 103);
                 mActivity.overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
+
+                HashMap<String,String> map = new HashMap<String,String>();
+                map.put("tabtype", "视频");
+                MobclickAgent.onEvent(mActivity, "clickEditChannel", map);
                 break;
             default:
                 break;

@@ -15,8 +15,10 @@ android {
         applicationId "com.haokanhaokan.news"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 422
-        versionName "4.2.2"
+        versionCode 430
+        versionName "4.3.0"
+
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -73,7 +75,7 @@ android {
 dependencies {
     compile project(':WzxLibrary:UmShareLibrary')
     compile project(':WzxLibrary:UmPush')
-//    compile project(':WzxLibrary:LockScreen')
+    compile project(':HkLockScreenStandard:lockapplication')
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.1.0'
@@ -112,6 +114,7 @@ dependencies {
 }
 
 android {
+    //199     自升级
 //    200       华为应用市场
 //    201       金立应用市场
 //    202       oppo应用市场
@@ -144,6 +147,9 @@ android {
 //    241      老版好看升级
 
     productFlavors {
+        pid199 {
+            manifestPlaceholders = [CHANNEL_NAME: "199"]
+        }
         pid200 {
             manifestPlaceholders = [CHANNEL_NAME: "200"]
         }

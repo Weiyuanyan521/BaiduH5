@@ -5,7 +5,7 @@ include ':WzxLibrary:UmShareLibrary'
 include ':WzxLibrary:UmPush'
 include ':HkLockScreenStandard'
 project(':HkLockScreenStandard').projectDir = new File('../HkLockScreenStandard/')
-//include ':HkLockScreenStandard:app'
+include ':HkLockScreenStandard:lockappbase'
 include ':HkLockScreenStandard:lockapplication'
 include ':Hk-public-library'
 project(':Hk-public-library').projectDir = new File('../Hk-public-library/')
