@@ -73,6 +73,34 @@
         android:layout_height="match_parent">
     </FrameLayout>
 
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/layout_startlock"
+        android:background="@color/hei_50"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/iv_image"
+            android:src="@drawable/ic_startlockbg"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_below="@id/iv_image"
+            android:src="@drawable/ic_lockclose"
+            android:scaleType="centerInside"
+            android:layout_centerHorizontal="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
+        <View
+            android:id="@+id/startlock"
+            android:layout_alignBottom="@id/iv_image"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="140dp"
+            android:layout_height="50dp"/>
+    </RelativeLayout>
+
     <!--<RelativeLayout-->
         <!--android:visibility="gone"-->
         <!--android:id="@+id/adwrapper"-->

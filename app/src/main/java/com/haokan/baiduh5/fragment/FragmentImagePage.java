@@ -38,7 +38,7 @@ public class FragmentImagePage extends FragmentBase implements View.OnClickListe
     private ArrayList<TypeBean> mDataList = new ArrayList<>();
     private TabLayout mHomepageTabLayout;
     private ViewPager mHomepageViewpager;
-    //    private final String[] mFenLei = new String[] {"推荐", "娱乐", "体育", "旅游", "美食", "时尚", "汽车", "游戏"};
+//    private final String[] mFenLei = new String[] {"推荐", "娱乐", "体育", "旅游", "美食", "时尚", "汽车", "游戏"};
 //    private final String[] mFLIds  = new String[] {"1068", "1071", "1072","1073", "1074", "1075", "1076", "1077"};
 
     @Override

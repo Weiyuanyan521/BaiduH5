@@ -2,11 +2,13 @@ package com.haokan.baiduh5.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -30,6 +32,7 @@ import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.StatusBarUtil;
 import com.haokan.baiduh5.util.ToastManager;
 import com.haokan.baiduh5.util.UpdateUtils;
+import com.haokan.baiduh5.util.Values;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -52,6 +55,8 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     private FragmentPersonpagePage mPersonPage;
     private FragmentBase mCurrentFragment;
     private FragmentManager mFragmentManager;
+    private View mLayoutStartLock;
+    private View mBtnStartLock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,231 +86,139 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             mTabVideopage.setVisibility(View.GONE);
         }
 
+        mLayoutStartLock = findViewById(R.id.layout_startlock);
+        mBtnStartLock = mLayoutStartLock.findViewById(R.id.startlock);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean aBoolean = preferences.getBoolean(Values.PreferenceKey.KEY_SP_STARTLOCK, true);
+        if (aBoolean) {
+            SharedPreferences.Editor edit = preferences.edit();
+            edit.putBoolean(Values.PreferenceKey.KEY_SP_STARTLOCK, false).apply();
+
+            mLayoutStartLock.setVisibility(View.VISIBLE);
+            mBtnStartLock.setOnClickListener(this);
+        }
+
         onClick(mTabHomepage);
     }
 
     @Override
     public void onClick(View v) {
-        if (v == mTabHomepage) {
-            if (mCurrentFragment != null && mHomePage == mCurrentFragment) {
-                return;
-            }
-            FragmentTransaction fragmentTransaction =  mFragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction =  mFragmentManager.beginTransaction();
+        switch (v.getId()) {
+            case R.id.startlock:
+                try {
+                    Intent intent = new Intent("com.haokan.start.alarm.action");
+                    sendBroadcast(intent);
+                    LogHelper.d("sendlock", "success");
+                } catch (Exception e) {
+                    LogHelper.d("sendlock", "Exception");
+                    e.printStackTrace();
+                }
+                mLayoutStartLock.setVisibility(View.GONE);
+                break;
+            case R.id.tab_homepage:
+                if (mCurrentFragment != null && mHomePage == mCurrentFragment) {
+                    return;
+                }
 
-            //隐藏当前页
-            if (mCurrentFragment != null) {
-                fragmentTransaction.hide(mCurrentFragment);
-            }
+                //隐藏当前页
+                if (mCurrentFragment != null) {
+                    fragmentTransaction.hide(mCurrentFragment);
+                }
 
-            //显示新页
-            if (mHomePage == null) {
-                mHomePage = new FragmentHomePage();
-                fragmentTransaction.add(R.id.fragment_container, mHomePage);
-            } else {
-                fragmentTransaction.show(mHomePage);
-            }
-            fragmentTransaction.commitNowAllowingStateLoss();
-            mCurrentFragment = mHomePage;
+                //显示新页
+                if (mHomePage == null) {
+                    mHomePage = new FragmentHomePage();
+                    fragmentTransaction.add(R.id.fragment_container, mHomePage);
+                } else {
+                    fragmentTransaction.show(mHomePage);
+                }
+                fragmentTransaction.commitNowAllowingStateLoss();
+                mCurrentFragment = mHomePage;
 
-            mTabHomepage.setSelected(true);
-            mTabVideopage.setSelected(false);
-            mTabImagepage.setSelected(false);
-            mTabPersonpage.setSelected(false);
-        } else if (v == mTabVideopage) {
-            if (mCurrentFragment != null && mVideoPage == mCurrentFragment) {
-                return;
-            }
+                mTabHomepage.setSelected(true);
+                mTabVideopage.setSelected(false);
+                mTabImagepage.setSelected(false);
+                mTabPersonpage.setSelected(false);
+                break;
+            case R.id.tab_vidopage:
+                if (mCurrentFragment != null && mVideoPage == mCurrentFragment) {
+                    return;
+                }
 
-            FragmentTransaction fragmentTransaction =  mFragmentManager.beginTransaction();
-            if (mCurrentFragment != null) {
-                fragmentTransaction.hide(mCurrentFragment);
-            }
+                if (mCurrentFragment != null) {
+                    fragmentTransaction.hide(mCurrentFragment);
+                }
 
-            if (mVideoPage == null) {
-                mVideoPage = new FragmentVideoPage();
-                fragmentTransaction.add(R.id.fragment_container, mVideoPage);
-            } else {
-                fragmentTransaction.show(mVideoPage);
-            }
-            fragmentTransaction.commitNowAllowingStateLoss();
-            mCurrentFragment = mVideoPage;
+                if (mVideoPage == null) {
+                    mVideoPage = new FragmentVideoPage();
+                    fragmentTransaction.add(R.id.fragment_container, mVideoPage);
+                } else {
+                    fragmentTransaction.show(mVideoPage);
+                }
+                fragmentTransaction.commitNowAllowingStateLoss();
+                mCurrentFragment = mVideoPage;
 
-            mTabHomepage.setSelected(false);
-            mTabVideopage.setSelected(true);
-            mTabImagepage.setSelected(false);
-            mTabPersonpage.setSelected(false);
-        } else if (v == mTabImagepage) {
-            if (mCurrentFragment != null && mImagePage == mCurrentFragment) {
-                return;
-            }
+                mTabHomepage.setSelected(false);
+                mTabVideopage.setSelected(true);
+                mTabImagepage.setSelected(false);
+                mTabPersonpage.setSelected(false);
+                break;
+            case R.id.tab_imagepage:
+                if (mCurrentFragment != null && mImagePage == mCurrentFragment) {
+                    return;
+                }
 
-            FragmentTransaction fragmentTransaction =  mFragmentManager.beginTransaction();
-            if (mCurrentFragment != null) {
-                fragmentTransaction.hide(mCurrentFragment);
-            }
+                if (mCurrentFragment != null) {
+                    fragmentTransaction.hide(mCurrentFragment);
+                }
 
-            if (mImagePage == null) {
+                if (mImagePage == null) {
 //                TypeBean bean = new TypeBean();
 //                bean.name = "图集";
 //                bean.id = "1003";
 //                mImagePage = FragmentWebview.newInstance(bean);
 
-                mImagePage = new FragmentImagePage();
-                fragmentTransaction.add(R.id.fragment_container, mImagePage);
-            } else {
-                fragmentTransaction.show(mImagePage);
-            }
-            fragmentTransaction.commitNowAllowingStateLoss();
-            mCurrentFragment = mImagePage;
+                    mImagePage = new FragmentImagePage();
+                    fragmentTransaction.add(R.id.fragment_container, mImagePage);
+                } else {
+                    fragmentTransaction.show(mImagePage);
+                }
+                fragmentTransaction.commitNowAllowingStateLoss();
+                mCurrentFragment = mImagePage;
 
-            mTabHomepage.setSelected(false);
-            mTabVideopage.setSelected(false);
-            mTabImagepage.setSelected(true);
-            mTabPersonpage.setSelected(false);
-        } else if (v == mTabPersonpage) {
-            if (mCurrentFragment != null && mPersonPage == mCurrentFragment) {
-                return;
-            }
-            FragmentTransaction fragmentTransaction =  mFragmentManager.beginTransaction();
-            if (mCurrentFragment != null) {
-                fragmentTransaction.hide(mCurrentFragment);
-            }
+                mTabHomepage.setSelected(false);
+                mTabVideopage.setSelected(false);
+                mTabImagepage.setSelected(true);
+                mTabPersonpage.setSelected(false);
+                break;
+            case R.id.tab_personpage:
+                if (mCurrentFragment != null && mPersonPage == mCurrentFragment) {
+                    return;
+                }
+                if (mCurrentFragment != null) {
+                    fragmentTransaction.hide(mCurrentFragment);
+                }
 
-            if (mPersonPage == null) {
-                mPersonPage = new FragmentPersonpagePage();
-                fragmentTransaction.add(R.id.fragment_container, mPersonPage);
-            } else {
-                fragmentTransaction.show(mPersonPage);
-            }
-            mPersonPage.updataCacheSize();
-            fragmentTransaction.commitNowAllowingStateLoss();
-            mCurrentFragment = mPersonPage;
+                if (mPersonPage == null) {
+                    mPersonPage = new FragmentPersonpagePage();
+                    fragmentTransaction.add(R.id.fragment_container, mPersonPage);
+                } else {
+                    fragmentTransaction.show(mPersonPage);
+                }
+                mPersonPage.updataCacheSize();
+                fragmentTransaction.commitNowAllowingStateLoss();
+                mCurrentFragment = mPersonPage;
 
-            mTabHomepage.setSelected(false);
-            mTabVideopage.setSelected(false);
-            mTabImagepage.setSelected(false);
-            mTabPersonpage.setSelected(true);
+                mTabHomepage.setSelected(false);
+                mTabVideopage.setSelected(false);
+                mTabImagepage.setSelected(false);
+                mTabPersonpage.setSelected(true);
+                break;
+            default:
+                break;
         }
-//        else if (v.getId() == R.id.ad_close || v.getId() == R.id.adwrapper) {
-//            mAdWrapper.setVisibility(View.GONE);
-//        }
     }
-
-//    boolean mIsQequestAd = false;
-//    private void showBaiduInsertAd() {
-//        if (mIsQequestAd) {
-//            return;
-//        }
-//
-//        new BaiduAdManager().fillAdView(this, mAdWrapper, "首页", "美女",  0, 0);
-//        if (true) {
-//            return;
-//        }
-//
-////        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-////        String dat = preferences.getString(Values.PreferenceKey.KEY_SP_BAIDU_INSERTAD_TIME, "--");
-////        if (!dat.equals(mTodayData) || true) {
-////            //信息流轮播模板
-////            /**
-////             * Step 1. 创建BaiduNative对象，参数分别为：
-////             * 上下文context，广告位ID, BaiduNativeNetworkListener监听（监听广告请求的成功与失败）
-////             *  注意：请将YOUR_AD_PALCE_ID 替换为自己的广告位ID
-////             */
-////            BaiduNative baidu = new BaiduNative(this, "4655722",
-////                    new BaiduNative.BaiduNativeNetworkListener() {
-////                        @Override
-////                        public void onNativeFail(NativeErrorCode arg0) {
-////                            LogHelper.d("ListViewActivity", "onNativeFail reason:" + arg0.name());
-////                        }
-////                        @Override
-////                        public void onNativeLoad(List<NativeResponse> arg0) {
-////                            if (arg0 != null && arg0.size() > 0) {
-////                                NativeResponse response = arg0.get(0);
-////                                if (response.getMaterialType() == NativeResponse.MaterialType.HTML) {
-////                                    mAdWrapper.setVisibility(View.VISIBLE);
-////                                    preferences.edit().putString(Values.PreferenceKey.KEY_SP_BAIDU_INSERTAD_TIME, mTodayData).apply();
-////                                    WebView webView = response.getWebView();
-////                                    mAdWrapperChild.addView(webView);
-////                                }
-////                            }
-////                        }
-////                    });
-////
-////            baidu.setNativeEventListener(new BaiduNative.BaiduNativeEventListener() {
-////                @Override
-////                public void onImpressionSended() {
-////                    LogHelper.d("ListViewActivity", "onImpressionSended");
-////                }
-////
-////                @Override
-////                public void onClicked() {
-////                    LogHelper.d("ListViewActivity", "onClicked");
-////                }
-////            });
-////
-////            /**
-////             * Step 2. 创建requestParameters对象，并将其传给baidu.makeRequest来请求广告
-////             */
-////            float density = getResources().getDisplayMetrics().density;
-////            RequestParameters requestParameters = new RequestParameters.Builder()
-////                    .setWidth((int) (360 * density)) //  需要设置请求模板的宽与高（物理像素值 ）
-////                    .setHeight((int) (300 * density))
-////                    .downloadAppConfirmPolicy(RequestParameters.DOWNLOAD_APP_CONFIRM_ALWAYS)
-////                    .build();
-////            baidu.makeRequest(requestParameters);
-//
-//            /**
-//             * Step 1. 创建 BaiduNative 对象，参数分别为：
-//             * 上下文 context，广告位 ID，BaiduNativeNetworkListener 监听（监听广告请求的成功与失
-//             败）
-//             *  注意：请将 YOUR_AD_PALCE_ID  替换为自己的代码位 ID ，不填写无法请求到广告
-//             */
-////            BaiduNative baidu = new BaiduNative(this, "4655655",
-////                    new BaiduNative.BaiduNativeNetworkListener() {
-////                        @Override
-////                        public void onNativeFail(NativeErrorCode arg0) {
-////                            mIsQequestAd = false;
-////                            LogHelper.d("ListViewActivity", "onNativeFail reason:" + arg0.name());
-////                        }
-////                        @Override
-////                        public void onNativeLoad(List<NativeResponse> arg0) {
-////                            mIsQequestAd = false;
-////                            if (mIsDestory) {
-////                                return;
-////                            }
-////                            if (arg0 != null && arg0.size() > 0) {
-////                                mAdWrapper.setVisibility(View.VISIBLE);
-////                                preferences.edit().putString(Values.PreferenceKey.KEY_SP_BAIDU_INSERTAD_TIME, mTodayData).apply();
-////
-////                                final NativeResponse nativeResponse = arg0.get(0);
-////                                mNativxeAdResponse = null;
-////
-////                                String imageUrl = nativeResponse.getImageUrl();
-////                                Glide.with(ActivityMain.this).load(imageUrl).into(mAdImage);
-////
-////                                nativeResponse.recordImpression(mAdWrapper);//  警告：调用该函数来发送展现，勿漏！
-////                                mAdWrapper.setOnClickListener(new View.OnClickListener() {
-////                                    @Override
-////                                    public void onClick(View view) {
-////                                        nativeResponse.handleClick(view);//  点击响应
-////                                        mAdWrapper.setVisibility(View.GONE);
-////                                    }
-////                                });
-////                            }
-////                        }
-////                    });
-////
-////            /**
-////             * Step 2. 创建requestParameters对象，并将其传给baidu.makeRequest来请求广告
-////             */
-////            RequestParameters requestParameters = new RequestParameters.Builder()
-////                    .downloadAppConfirmPolicy(RequestParameters.DOWNLOAD_APP_CONFIRM_ALWAYS)
-////                    .build();
-////            baidu.makeRequest(requestParameters);
-////            mIsQequestAd = true;
-////            LogHelper.d("ListViewActivity", "request ad");
-////        }
-//    }
 
     protected long mExitTime;
     @Override
@@ -422,6 +335,13 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
                 return;
             }
             sUrlSchemePullTime = time;
+
+            HashMap<String,String> map = new HashMap<String,String>();
+            map.put("eid", App.eid);
+            map.put("suffix", App.sUrlSuffix);
+            map.put("host", host);
+            MobclickAgent.onEvent(this, "schemepull", map);
+
             if (!TextUtils.isEmpty(eid)) {
                 App.sUrlSuffix = "e24b3745"; //通过拉起的计费路径
                 App.eid = eid;
@@ -433,10 +353,6 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
                 App.sUrlSuffix = suffix;
             }
 
-            HashMap<String,String> map = new HashMap<String,String>();
-            map.put("eid", App.eid);
-            map.put("suffix", App.sUrlSuffix);
-            MobclickAgent.onEvent(this, "schemepull", map);
 
             if ("webview".equals(host)) {
                 String decode = Uri.decode(url);
@@ -454,6 +370,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
                 return;
             }
             sUrlSchemePushTime = time;
+
             Intent web = new Intent(this, ActivityWebview.class);
             web.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, url);
             startActivity(web);

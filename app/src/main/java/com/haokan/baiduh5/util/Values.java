@@ -138,6 +138,11 @@ public class Values {
         public static final String KEY_SP_DETAILAD = "detailad";
 
         /**
+         * 是否是用户初次使用本软件, 用来开启锁屏功能的提示
+         */
+        public static final String KEY_SP_STARTLOCK = "startlock";
+
+        /**
          * 3.2用户忽略的升级版本
          */
         public static final String KEY_SP_IGNORE_UPDATA_VERSION_CODE = "ver_code";

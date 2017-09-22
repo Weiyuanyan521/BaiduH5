@@ -1,6 +1,5 @@
 package com.haokan.baiduh5.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,15 +49,6 @@ public class ActivityMyCollection extends ActivityBase implements View.OnClickLi
         initView();
         loadData();
         EventBus.getDefault().register(this);
-
-        try {
-            Intent intent = new Intent("com.haokan.start.alarm.action");
-            sendBroadcast(intent);
-            LogHelper.d("sendlock", "success");
-        } catch (Exception e) {
-            LogHelper.d("sendlock", "Exception");
-            e.printStackTrace();
-        }
     }
 
     @Override
