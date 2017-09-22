@@ -365,15 +365,22 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
         } else {
             String time = intent.getStringExtra("time");
             String url = intent.getStringExtra("url");
+            String host = intent.getStringExtra("host");
             LogHelper.d(TAG, "urlSchemeJump getStringExtra uri = " + url + ", time = " + time);
             if ((!TextUtils.isEmpty(sUrlSchemePushTime) && sUrlSchemePushTime.equals(time)) || TextUtils.isEmpty(url)) {
                 return;
             }
             sUrlSchemePushTime = time;
 
-            Intent web = new Intent(this, ActivityWebview.class);
-            web.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, url);
-            startActivity(web);
+            if ("startlock".equals(host)) {
+                mLayoutStartLock.setVisibility(View.VISIBLE);
+                mBtnStartLock.setOnClickListener(this);
+            } else if (TextUtils.isEmpty(host) || "webview".equals(host)) {
+                Intent web = new Intent(this, ActivityWebview.class);
+                web.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, url);
+                startActivity(web);
+            }
+
         }
     }
 
