@@ -1673,6 +1673,25 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
     }
 
     @Override
+    protected void markBottomVisible(boolean visible) {
+        if(visible){
+            if(mISystemUIListener!=null){
+                mISystemUIListener.showCaptionVisible();
+            }
+
+        }
+        super.markBottomVisible(visible);
+    }
+
+    @Override
+    public void showCaption() {
+        if(mISystemUIListener!=null){
+            mISystemUIListener.showCaptionVisible();
+        }
+        super.showCaption();
+    }
+
+    @Override
     public void onDestory() {
         mRemoteAppContext.unregisterReceiver(mNetWorkStateChangedReveiver);
         mRemoteAppContext.unregisterReceiver(mMainViewReceiver);
@@ -1684,5 +1703,6 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
     public  void setISystemUIListener(ISystemUI iSystemUI){
         this.mISystemUIListener=iSystemUI;
     }
+
 
 }

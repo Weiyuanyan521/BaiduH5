@@ -2369,7 +2369,9 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
             HaokanStatistics.getInstance(mRemoteAppContext).setAction(22, "-1", "").start();
         }
     }
+   protected void markBottomVisible(boolean visible){
 
+   }
     protected void startMarkBottomAnim(boolean isFade){
         if(mMainBottomLayout==null||!mIsCaptionShow){
             return;
@@ -2386,6 +2388,8 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
                 public void onAnimationEnd(Animation animation) {
                     mMainBottomLayout.setVisibility(VISIBLE);
                     mRlMainTop.setVisibility(VISIBLE);
+
+                    markBottomVisible(true);
                 }
 
                 @Override

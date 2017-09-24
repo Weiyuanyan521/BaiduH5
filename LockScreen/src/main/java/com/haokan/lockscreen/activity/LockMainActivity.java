@@ -115,6 +115,7 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
         if(mTimeBottomLy==null){
             return;
         }
+        LogHelper.e("times","setTimeVisible--visible="+visible);
         if(visible){
             if(mHaokanLockView!=null&&mHaokanLockView.isShowCaption()){
                 mHaokanLockView.hideCaption();
@@ -284,6 +285,15 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
     @Override
     public void setNotificationVisible(boolean visible) {
         setTimeVisible(visible);
+    }
+
+    @Override
+    public void showCaptionVisible() {
+        LogHelper.e("times","showCaptionVisible---");
+        if(mTimeBottomLy==null){
+            return;
+        }
+        mTimeBottomLy.setVisibility(View.GONE);
     }
 
     private class TimeReceiver extends BroadcastReceiver {
