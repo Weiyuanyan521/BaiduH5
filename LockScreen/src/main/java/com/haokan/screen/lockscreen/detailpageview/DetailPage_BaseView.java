@@ -2385,6 +2385,7 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     mMainBottomLayout.setVisibility(VISIBLE);
+                    mRlMainTop.setVisibility(VISIBLE);
                 }
 
                 @Override

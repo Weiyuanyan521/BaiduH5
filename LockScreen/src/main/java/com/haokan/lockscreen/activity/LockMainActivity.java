@@ -116,9 +116,15 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
             return;
         }
         if(visible){
+            if(mHaokanLockView!=null&&mHaokanLockView.isShowCaption()){
+                mHaokanLockView.hideCaption();
+            }
             mTimeBottomLy.setVisibility(View.VISIBLE);
         }else{
             mTimeBottomLy.setVisibility(View.GONE);
+            if(mHaokanLockView!=null&&!mHaokanLockView.isShowCaption()){
+                mHaokanLockView.showCaption();
+            }
         }
 
     }
