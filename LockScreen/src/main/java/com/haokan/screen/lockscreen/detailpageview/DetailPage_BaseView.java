@@ -166,7 +166,7 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
 
     @Override
     public void onDestory() {
-        mRemoteAppContext.unregisterReceiver(mBaseReceiver);
+        unRegisterBaseReceiver();
         mIsDestory = true;
         super.onDestory();
     }
@@ -324,6 +324,19 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
 
         setVpAdapter();
 
+        registerBaseReceiver();
+
+    }
+    private boolean mIsRegisterReceiver=false;
+    private  void unRegisterBaseReceiver(){
+        mRemoteAppContext.unregisterReceiver(mBaseReceiver);
+        mIsRegisterReceiver=false;
+    }
+    private  void registerBaseReceiver(){
+        if(mIsRegisterReceiver){
+            return;
+        }
+        mIsRegisterReceiver=true;
         mBaseReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -572,6 +585,7 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
                 mImgSwitch.clearAnimation();
                 return;
             }
+            LogHelper.e("times","R.id.tv_switch onClick");
 
             boolean wifi = HttpStatusManager.isWifi(mRemoteAppContext);
             if (!wifi && !PreferenceManager.getDefaultSharedPreferences(mLocalResContext).getBoolean(Values.PreferenceKey.KEY_SP_SWITCH_WIFI, false)) {
