@@ -116,6 +116,10 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
                     Intent intent = new Intent(this, LockScreenService.class);
                     startService(intent);
                     LogHelper.d("startLockService", "success");
+
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                    SharedPreferences.Editor edit = preferences.edit();
+                    edit.putBoolean(Values.PreferenceKey.KEY_SP_SWLOCKSCREEN, true).apply();
                 } catch (Exception e) {
                     LogHelper.d("startLockService", "Exception");
                     e.printStackTrace();

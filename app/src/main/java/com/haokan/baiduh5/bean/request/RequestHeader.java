@@ -31,8 +31,8 @@ public class RequestHeader<RequestBody> {
      * companyId : 厂商id
      *
      * languageCode	STRING	10	是	语言码
-     countryCode	STRING	10	是	国家码
-     did	STRING	32	是	用户唯一标识
+     * countryCode	STRING	10	是	国家码
+     * did	STRING	32	是	用户唯一标识
      */
     private String messageID;
     private String timeStamp;
