@@ -258,10 +258,10 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
     @Override
     protected void onDestroy() {
         if (mHaokanLockView != null) {
-            ViewParent parent = mHaokanLockView.getParent();
-            if (parent != null) {
-                ((ViewGroup)parent).removeView(mHaokanLockView);
-            }
+//            ViewParent parent = mHaokanLockView.getParent();
+//            if (parent != null) {
+//                ((ViewGroup)parent).removeView(mHaokanLockView);
+//            }
         }
         if (mTimeTickReceiver != null) {
             unregisterReceiver(mTimeTickReceiver);

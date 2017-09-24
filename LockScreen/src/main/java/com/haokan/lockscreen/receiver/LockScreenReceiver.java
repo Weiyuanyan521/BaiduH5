@@ -30,6 +30,9 @@ public class LockScreenReceiver extends BroadcastReceiver {
 //                Intent servie = new Intent(context, LockScreenService.class);
 //                servie.putExtra(LockScreenService.SERVICE_TYPE, 5);//亮屏type
 //                context.startService(servie);
+                if (LockScreenService.sHaokanLockView != null) {
+                    LockScreenService.sHaokanLockView.onScreenOn();
+                }
                 break;
             }
             case Intent.ACTION_TIME_TICK:

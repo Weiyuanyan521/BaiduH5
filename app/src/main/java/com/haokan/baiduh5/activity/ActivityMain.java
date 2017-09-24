@@ -79,6 +79,11 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
         } else {
             boolean sw = preferences.getBoolean(Values.PreferenceKey.KEY_SP_SWLOCKSCREEN, false);
             LockScreenService.sLockEnable = sw;
+            if (sw) {
+                Intent intent = new Intent(this, LockScreenService.class);
+                intent.putExtra("type", 1);
+                startService(intent);
+            }
         }
 
         mFragmentManager = getSupportFragmentManager();
