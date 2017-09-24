@@ -5,8 +5,7 @@ package com.haokan.screen.util;
  */
 public class Values {
     //应用包名
-//    public static final String PACKAGE_NAME = "com.levect.innjoo";
-    public static final String PACKAGE_NAME = "com.levect.lc.qingcheng";
+    public static final String PACKAGE_NAME = "com.haokanhaokan.news";
     /**
      * 获取数量
      */

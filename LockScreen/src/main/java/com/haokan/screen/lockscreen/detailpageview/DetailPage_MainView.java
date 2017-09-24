@@ -81,6 +81,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
     private NetWorkStateChangedReveiver mNetWorkStateChangedReveiver = new NetWorkStateChangedReveiver();
     private ISystemUiViewImpl mISystemUiView = new ISystemUiViewImpl();
     private BroadcastReceiver mMainViewReceiver;
+    private Context mCurrentContext;
 
     public DetailPage_MainView(Context context) {
         this(context, context);
@@ -95,7 +96,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
      */
     public DetailPage_MainView(Context context, Context remoteApplicationContext) {
         super(context, remoteApplicationContext);
-
+        mCurrentContext=context;
         ViewStub stub1 = (ViewStub) findViewById(R.id.iv_unlockimage);
         View unlock = stub1.inflate();
         mUnLockImg = (ImageView) unlock;
@@ -275,19 +276,21 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
             } catch (Exception e) {
 
             }
-            if (isSecure) {
-                i.setPackage(Values.PACKAGE_NAME);
+//            if (isSecure) {
+//                i.setPackage(Values.PACKAGE_NAME);
                 i.addCategory("android.intent.category.DEFAULT");
                 i.setAction("com.haokan.webview");
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra(ActivityWebView.KEY_INTENT_WEB_URL, mCurrentImgBean.getUrl_click());
-                mRemoteAppContext.startActivity(i);
-            } else {
-                i.setAction(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(mCurrentImgBean.getUrl_click()));
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startHaokanActivity(i);
-            }
+              mCurrentContext.startActivity(i);
+
+//                mRemoteAppContext.startActivity(i);
+//            } else {
+//                i.setAction(Intent.ACTION_VIEW);
+//                i.setData(Uri.parse(mCurrentImgBean.getUrl_click()));
+//                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startHaokanActivity(i);
+//            }
 
             HaokanStatistics.getInstance(mRemoteAppContext)
                     .setAction(7, mCurrentImgBean.getCp_id(), null)

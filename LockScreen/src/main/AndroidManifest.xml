@@ -57,6 +57,19 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="com.haokan.screen.lockscreen.offline.AlarmOfflineService"
+            android:exported="true"
+            android:process=":haokanofflineservice">
+            <intent-filter>
+                <action android:name="com.haokan.service.offline" />
+            </intent-filter>
+        </service>
+        <provider
+            android:name="com.haokan.screen.lockscreen.provider.HaokanProvider"
+            android:authorities="${applicationId}.haokan.provider"
+            android:exported="true"
+            />
         <activity
             android:name="com.haokan.screen.lockscreen.activity.ActivitySetting"
             android:launchMode="singleTask"
