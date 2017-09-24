@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.haokan.lockscreen.activity.LockMainActivity;
+import com.haokan.lockscreen.service.LockScreenService;
 import com.haokan.lockscreen.util.LogHelper;
 
 
@@ -19,11 +20,11 @@ public class LockScreenReceiver extends BroadcastReceiver {
         switch (action) {
             case Intent.ACTION_SCREEN_OFF:
                 LogHelper.e("times","BootService---ScreenStatusReceiver--onScreenSleep");
-//                if (!LockMainActivity.sIsActivityExists) {
+                if (LockScreenService.sLockEnable) {
                     Intent intent1 = new Intent(context, LockMainActivity.class);
                     intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent1);
-//                }
+                }
                 break;
             case Intent.ACTION_SCREEN_ON: { //亮屏，初始化一些锁屏上的东西
 //                Intent servie = new Intent(context, LockScreenService.class);

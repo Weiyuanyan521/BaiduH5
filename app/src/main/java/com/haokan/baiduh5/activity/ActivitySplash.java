@@ -81,6 +81,8 @@ public class ActivitySplash extends ActivityBase implements View.OnClickListener
                 edit.putString(Values.PreferenceKey.KEY_SP_EXTRANAME, updateBean.getKd_extraname()).apply();
                 edit.putString(Values.PreferenceKey.KEY_SP_EXTRAURL, updateBean.getKd_extraurl()).apply();
                 edit.putString(Values.PreferenceKey.KEY_SP_SHOWIMGAD, updateBean.getKd_localad()).apply();
+                String kd_lockscreen = updateBean.getKd_lockscreen();
+                edit.putString(Values.PreferenceKey.KEY_SP_DISABLELOCKSCREEN, kd_lockscreen).apply();
             }
 
             @Override

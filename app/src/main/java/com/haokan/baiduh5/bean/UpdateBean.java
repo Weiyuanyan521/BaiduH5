@@ -17,6 +17,15 @@ public class UpdateBean implements Parcelable {
     private String kd_extraname; //额外条目名称
     private String kd_extraurl; //额外条目链接
     private String kd_localad; //是否显示本地广告, 默认0显示,1不显示
+    private String kd_lockscreen; //是否强制关闭锁屏功能, 默认0显示,1关闭
+
+    public String getKd_lockscreen() {
+        return kd_lockscreen;
+    }
+
+    public void setKd_lockscreen(String kd_lockscreen) {
+        this.kd_lockscreen = kd_lockscreen;
+    }
 
     public String getKd_localad() {
         return kd_localad;

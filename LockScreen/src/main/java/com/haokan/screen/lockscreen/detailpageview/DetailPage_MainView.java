@@ -1503,13 +1503,16 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
         }
         App.mMainHanlder.postDelayed(mSwitchImageRunnable, 300);
 
-        ViewGroup viewGroup = (ViewGroup) getParent();
-        int childCount = viewGroup.getChildCount();
-        if (childCount > 1) {
-            for (int i = 0; i < childCount; i++) {
-                View childAt = viewGroup.getChildAt(i);
-                if (childAt != this && childAt instanceof BaseView) {
-                    ((BaseView) childAt).onScreenOff();
+
+        if (getParent() != null) {
+            ViewGroup viewGroup = (ViewGroup) getParent();
+            int childCount = viewGroup.getChildCount();
+            if (childCount > 1) {
+                for (int i = 0; i < childCount; i++) {
+                    View childAt = viewGroup.getChildAt(i);
+                    if (childAt != this && childAt instanceof BaseView) {
+                        ((BaseView) childAt).onScreenOff();
+                    }
                 }
             }
         }

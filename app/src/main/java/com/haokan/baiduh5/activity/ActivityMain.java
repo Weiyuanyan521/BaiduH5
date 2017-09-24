@@ -62,6 +62,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
+        LogHelper.d("ActivityMain", "onCreate = " + this);
         App.sUrlSuffix = "c92936a5"; //通过点击图标进入的计费路径
         setContentView(R.layout.activity_main);
         StatusBarUtil.setStatusBarBgColor(this, R.color.hong);
@@ -71,6 +72,15 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
     }
 
     private void initView() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String swServer = preferences.getString(Values.PreferenceKey.KEY_SP_DISABLELOCKSCREEN, "0");
+        if (swServer.equals("1")) {
+            LockScreenService.sLockEnable = false;
+        } else {
+            boolean sw = preferences.getBoolean(Values.PreferenceKey.KEY_SP_SWLOCKSCREEN, false);
+            LockScreenService.sLockEnable = sw;
+        }
+
         mFragmentManager = getSupportFragmentManager();
 
         mTabHomepage = (TextView) findViewById(R.id.tab_homepage);
@@ -89,16 +99,17 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
 
         mLayoutStartLock = findViewById(R.id.layout_startlock);
         mBtnStartLock = mLayoutStartLock.findViewById(R.id.startlock);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean aBoolean = preferences.getBoolean(Values.PreferenceKey.KEY_SP_STARTLOCK, true);
-        if (aBoolean || true) {
-            SharedPreferences.Editor edit = preferences.edit();
-            edit.putBoolean(Values.PreferenceKey.KEY_SP_STARTLOCK, false).apply();
+        if (!swServer.equals("1")) {
+            if (aBoolean || true) {
+                SharedPreferences.Editor edit = preferences.edit();
+                edit.putBoolean(Values.PreferenceKey.KEY_SP_STARTLOCK, false).apply();
 
-            mLayoutStartLock.setVisibility(View.VISIBLE);
-            mBtnStartLock.setOnClickListener(this);
-            mLayoutStartLock.setOnClickListener(this);
-            mLayoutStartLock.findViewById(R.id.iv_closestartlock).setOnClickListener(this);
+                mLayoutStartLock.setVisibility(View.VISIBLE);
+                mBtnStartLock.setOnClickListener(this);
+                mLayoutStartLock.setOnClickListener(this);
+                mLayoutStartLock.findViewById(R.id.iv_closestartlock).setOnClickListener(this);
+            }
         }
 
         onClick(mTabHomepage);
@@ -113,13 +124,14 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
                 break;
             case R.id.startlock:
                 try {
-                    Intent intent = new Intent(this, LockScreenService.class);
-                    startService(intent);
-                    LogHelper.d("startLockService", "success");
-
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                     SharedPreferences.Editor edit = preferences.edit();
                     edit.putBoolean(Values.PreferenceKey.KEY_SP_SWLOCKSCREEN, true).apply();
+                    LockScreenService.sLockEnable = true;
+
+                    Intent intent = new Intent(this, LockScreenService.class);
+                    startService(intent);
+                    LogHelper.d("startLockService", "success");
                 } catch (Exception e) {
                     LogHelper.d("startLockService", "Exception");
                     e.printStackTrace();
@@ -383,8 +395,12 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
             sUrlSchemePushTime = time;
 
             if ("startlock".equals(host)) {
-                mLayoutStartLock.setVisibility(View.VISIBLE);
-                mBtnStartLock.setOnClickListener(this);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                String swServer = preferences.getString(Values.PreferenceKey.KEY_SP_DISABLELOCKSCREEN, "0");
+                if (!swServer.equals("1")) {
+                    mLayoutStartLock.setVisibility(View.VISIBLE);
+                    mBtnStartLock.setOnClickListener(this);
+                }
             } else if (TextUtils.isEmpty(host) || "webview".equals(host)) {
                 Intent web = new Intent(this, ActivityWebview.class);
                 web.putExtra(ActivityWebview.KEY_INTENT_WEB_URL, url);

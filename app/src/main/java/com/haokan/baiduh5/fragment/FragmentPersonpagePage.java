@@ -22,6 +22,7 @@ import com.haokan.baiduh5.cachesys.CacheManager;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.ToastManager;
 import com.haokan.baiduh5.util.Values;
+import com.haokan.lockscreen.service.LockScreenService;
 import com.haokan.screen.lockscreen.activity.ActivitySetting;
 
 import rx.Observable;
@@ -84,18 +85,22 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
         mSwLockScreen.setChecked(sw);
         if (sw) {
             mSetLockScreen.setVisibility(View.VISIBLE);
+            LockScreenService.sLockEnable = true;
         } else {
             mSetLockScreen.setVisibility(View.GONE);
+            LockScreenService.sLockEnable = false;
         }
 
         mSwLockScreen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    LockScreenService.sLockEnable = true;
                     mSetLockScreen.setVisibility(View.VISIBLE);
                     SharedPreferences.Editor edit = sp.edit();
                     edit.putBoolean(Values.PreferenceKey.KEY_SP_SWLOCKSCREEN, true).apply();
                 } else {
+                    LockScreenService.sLockEnable = false;
                     mSetLockScreen.setVisibility(View.GONE);
                     SharedPreferences.Editor edit = sp.edit();
                     edit.putBoolean(Values.PreferenceKey.KEY_SP_SWLOCKSCREEN, false).apply();

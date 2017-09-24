@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 
 import com.haokan.lockscreen.activity.LockMainActivity;
 import com.haokan.lockscreen.receiver.LockScreenReceiver;
 import com.haokan.lockscreen.util.LogHelper;
+import com.haokan.screen.lockscreen.detailpageview.DetailPage_MainView;
 
 
 public class LockScreenService extends Service {
@@ -20,7 +20,8 @@ public class LockScreenService extends Service {
     public static final String SERVICE_TYPE = "service_type";
     private LockScreenReceiver mReceiver;
     private final String TAG = "LockScreenService";
-    public static View sHaokanLockView;
+    public static DetailPage_MainView sHaokanLockView;
+    public static boolean sLockEnable = false;
 
     @Override
     public void onCreate() {
@@ -60,18 +61,21 @@ public class LockScreenService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand  " + LockMainActivity.sIsActivityExists);
-//        if (!LockMainActivity.sIsActivityExists) {
+        Log.d(TAG, "onStartCommand");
+        if (sLockEnable) {
             Intent intent1 = new Intent(this, LockMainActivity.class);
             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent1);
-//        }
+        }
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
 //        stopForeground(true);// 停止前台服务--参数：表示是否移除之前的通知
+        if (sHaokanLockView != null) {
+            sHaokanLockView.onDestory();
+        }
         sHaokanLockView = null;
         unregisterReceiver(mReceiver);
     }

@@ -43,7 +43,6 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        sIsActivityExists = true;
         super.onCreate(savedInstanceState);
         disableKeyGuard();
         StatusBarUtil.setStatusBarTransparnet(this);
@@ -63,9 +62,9 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
         if (LockScreenService.sHaokanLockView == null) {
             LockScreenService.sHaokanLockView = new DetailPage_MainView(this);
         } else {
-            mHaokanLockView.onScreenOff();
+            LockScreenService.sHaokanLockView.onScreenOff();
         }
-        mHaokanLockView = (DetailPage_MainView) LockScreenService.sHaokanLockView;
+        mHaokanLockView = LockScreenService.sHaokanLockView;
         ViewParent parent = mHaokanLockView.getParent();
         if (parent != null) {
             ((ViewGroup)parent).removeView(mHaokanLockView);
@@ -252,7 +251,6 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
 
     @Override
     protected void onDestroy() {
-        sIsActivityExists = false;
         if (mHaokanLockView != null) {
             ViewParent parent = mHaokanLockView.getParent();
             if (parent != null) {
