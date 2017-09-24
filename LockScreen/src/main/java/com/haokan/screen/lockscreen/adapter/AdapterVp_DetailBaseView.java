@@ -32,8 +32,8 @@ public class AdapterVp_DetailBaseView extends PagerAdapter implements View.OnCli
 
     public AdapterVp_DetailBaseView(Context context, Context remoteContext, ArrayList<MainImageBean> data
             , View.OnClickListener onClickListener, View.OnLongClickListener longClickListener) {
-        mContext = context;
-        mRemoteContext = remoteContext;
+        mContext = context.getApplicationContext();
+        mRemoteContext = remoteContext.getApplicationContext();
         mData = data;
         mOnClickListener = onClickListener;
         mOnLongClickListener = longClickListener;
