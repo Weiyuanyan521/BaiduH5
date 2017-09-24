@@ -282,7 +282,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
                 i.setAction("com.haokan.webview");
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra(ActivityWebView.KEY_INTENT_WEB_URL, mCurrentImgBean.getUrl_click());
-              mCurrentContext.startActivity(i);
+                mCurrentContext.startActivity(i);
 
 //                mRemoteAppContext.startActivity(i);
 //            } else {

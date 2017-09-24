@@ -48,11 +48,11 @@ public class LockScreenService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand  " + LockMainActivity.sIsActivityExists);
-        if (!LockMainActivity.sIsActivityExists) {
+//        if (!LockMainActivity.sIsActivityExists) {
             Intent intent1 = new Intent(this, LockMainActivity.class);
             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent1);
-        }
+//        }
         return START_STICKY;
     }
 

@@ -29,6 +29,7 @@
         >
 
         <activity android:name="com.haokan.lockscreen.activity.LockMainActivity"
+                  android:launchMode="singleInstance"
                   android:screenOrientation="portrait">
         </activity>
 

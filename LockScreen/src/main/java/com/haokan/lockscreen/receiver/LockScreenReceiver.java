@@ -19,11 +19,11 @@ public class LockScreenReceiver extends BroadcastReceiver {
         switch (action) {
             case Intent.ACTION_SCREEN_OFF:
                 LogHelper.e("times","BootService---ScreenStatusReceiver--onScreenSleep");
-                if (!LockMainActivity.sIsActivityExists) {
+//                if (!LockMainActivity.sIsActivityExists) {
                     Intent intent1 = new Intent(context, LockMainActivity.class);
                     intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent1);
-                }
+//                }
                 break;
             case Intent.ACTION_SCREEN_ON: { //亮屏，初始化一些锁屏上的东西
 //                Intent servie = new Intent(context, LockScreenService.class);
