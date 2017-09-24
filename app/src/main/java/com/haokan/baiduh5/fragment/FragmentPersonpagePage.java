@@ -7,8 +7,10 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.haokan.baiduh5.R;
@@ -36,6 +38,8 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
     private LinearLayout mClearcache;
     private LinearLayout mExtra;
     private View mExtraDivider;
+    private View mSetLockScreen;
+    private Switch mSwLockScreen;
     private LinearLayout mAboutus;
     private TextView mTvCacheSize;
     private ProgressBar mCacheProgressBar;
@@ -57,8 +61,10 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
         mTvCacheSize = (TextView) mClearcache.findViewById(R.id.cachesize);
         mCacheProgressBar = (ProgressBar) mClearcache.findViewById(R.id.progress);
         mAboutus = (LinearLayout) mView.findViewById(R.id.aboutus);
+        mSetLockScreen = mView.findViewById(R.id.set_lockscreen);
+        mSwLockScreen = (Switch) mView.findViewById(R.id.sw_lockscreen);
 
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mActivity);
         String show = sp.getString(Values.PreferenceKey.KEY_SP_SHOWEXTRA, "0");
         if ("1".equals(show)) {
             mExtraUrl = sp.getString(Values.PreferenceKey.KEY_SP_EXTRAURL, "http://m.baidu.com");
@@ -73,11 +79,34 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
             mExtraDivider.setVisibility(View.VISIBLE);
         }
 
+        boolean sw = sp.getBoolean(Values.PreferenceKey.KEY_SP_SWLOCKSCREEN, false);
+        mSwLockScreen.setChecked(sw);
+        if (sw) {
+            mSetLockScreen.setVisibility(View.VISIBLE);
+        } else {
+            mSetLockScreen.setVisibility(View.GONE);
+        }
+
+        mSwLockScreen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mSetLockScreen.setVisibility(View.VISIBLE);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putBoolean(Values.PreferenceKey.KEY_SP_SWLOCKSCREEN, true).apply();
+                } else {
+                    mSetLockScreen.setVisibility(View.GONE);
+                    SharedPreferences.Editor edit = sp.edit();
+                    edit.putBoolean(Values.PreferenceKey.KEY_SP_SWLOCKSCREEN, false).apply();
+                }
+            }
+        });
 
         mCollection.setOnClickListener(this);
         mClearcache.setOnClickListener(this);
         mAboutus.setOnClickListener(this);
         mHistory.setOnClickListener(this);
+        mSetLockScreen.setOnClickListener(this);
 
         updataCacheSize();
     }

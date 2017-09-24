@@ -143,6 +143,11 @@ public class Values {
         public static final String KEY_SP_STARTLOCK = "startlock";
 
         /**
+         * 是否开启了锁屏功能
+         */
+        public static final String KEY_SP_SWLOCKSCREEN = "swlock";
+
+        /**
          * 3.2用户忽略的升级版本
          */
         public static final String KEY_SP_IGNORE_UPDATA_VERSION_CODE = "ver_code";
