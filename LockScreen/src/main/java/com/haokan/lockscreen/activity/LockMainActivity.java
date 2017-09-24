@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -19,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.haokan.lockscreen.R;
+import com.haokan.lockscreen.service.LockScreenService;
 import com.haokan.screen.lockscreen.detailpageview.DetailPage_MainView;
 import com.haokan.screen.util.LogHelper;
 import com.haokan.screen.util.StatusBarUtil;
@@ -53,12 +56,20 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
         filter.addAction(Intent.ACTION_TIME_TICK);
         registerReceiver(mTimeTickReceiver, filter);
     }
-   private FrameLayout mFrameLayout;
+    private FrameLayout mFrameLayout;
     private void intiViews() {
 //        mHaokanLockView = (DetailPage_MainView) findViewById(R.id.hklockview);
         mFrameLayout= (FrameLayout) findViewById(R.id.hklockview);
-        mHaokanLockView=new DetailPage_MainView(LockMainActivity.this);
-
+        if (LockScreenService.sHaokanLockView == null) {
+            LockScreenService.sHaokanLockView = new DetailPage_MainView(this);
+        } else {
+            mHaokanLockView.onScreenOff();
+        }
+        mHaokanLockView = (DetailPage_MainView) LockScreenService.sHaokanLockView;
+        ViewParent parent = mHaokanLockView.getParent();
+        if (parent != null) {
+            ((ViewGroup)parent).removeView(mHaokanLockView);
+        }
         mFrameLayout.addView(mHaokanLockView);
 
         mTimeBottomLy= (LinearLayout) findViewById(R.id.bottom_time_ly);
@@ -84,6 +95,15 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
         }else{
             LogHelper.e("times","mHaoKanLockView==null");
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (mHaokanLockView != null) {
+            mHaokanLockView.onScreenOff();
+        }
+        LogHelper.e("times","LockMainA onNewIntent");
     }
 
     private void registerExitReceiver(){
@@ -234,7 +254,10 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
     protected void onDestroy() {
         sIsActivityExists = false;
         if (mHaokanLockView != null) {
-            mHaokanLockView.onDestory();
+            ViewParent parent = mHaokanLockView.getParent();
+            if (parent != null) {
+                ((ViewGroup)parent).removeView(mHaokanLockView);
+            }
         }
         if (mTimeTickReceiver != null) {
             unregisterReceiver(mTimeTickReceiver);

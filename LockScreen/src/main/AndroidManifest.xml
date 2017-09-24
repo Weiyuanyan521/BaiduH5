@@ -30,6 +30,7 @@
 
         <activity android:name="com.haokan.lockscreen.activity.LockMainActivity"
                   android:launchMode="singleInstance"
+                  android:theme="@style/myTransparent"
                   android:screenOrientation="portrait">
         </activity>
 
@@ -44,7 +45,7 @@
             android:exported="true">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>

@@ -22,6 +22,7 @@ import com.haokan.baiduh5.cachesys.CacheManager;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.ToastManager;
 import com.haokan.baiduh5.util.Values;
+import com.haokan.screen.lockscreen.activity.ActivitySetting;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -118,6 +119,11 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
         }
         int id = v.getId();
         switch (id) {
+            case R.id.set_lockscreen:
+                Intent intentSet = new Intent(mActivity, ActivitySetting.class);
+                mActivity.startActivity(intentSet);
+                mActivity.overridePendingTransition(R.anim.activity_in_right2left, R.anim.activity_out_right2left);
+                break;
             case R.id.collection:
                 Intent iCollect = new Intent(mActivity, ActivityMyCollection.class);
                 mActivity.startActivity(iCollect);
