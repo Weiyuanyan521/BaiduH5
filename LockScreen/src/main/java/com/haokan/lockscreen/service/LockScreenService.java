@@ -61,11 +61,18 @@ public class LockScreenService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand");
-        if (sLockEnable) {
-            Intent intent1 = new Intent(this, LockMainActivity.class);
-            intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent1);
+        int type = 0;
+        if (intent != null) {
+            type = intent.getIntExtra("type", 0);
+        }
+
+        Log.d(TAG, "onStartCommand type = " + type);
+        if (type == 0) {
+            if (sLockEnable) {
+                Intent intent1 = new Intent(this, LockMainActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent1);
+            }
         }
         return START_STICKY;
     }

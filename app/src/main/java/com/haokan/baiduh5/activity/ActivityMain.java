@@ -101,7 +101,7 @@ public class ActivityMain extends ActivityBase implements View.OnClickListener {
         mBtnStartLock = mLayoutStartLock.findViewById(R.id.startlock);
         boolean aBoolean = preferences.getBoolean(Values.PreferenceKey.KEY_SP_STARTLOCK, true);
         if (!swServer.equals("1")) {
-            if (aBoolean || true) {
+            if (aBoolean) {
                 SharedPreferences.Editor edit = preferences.edit();
                 edit.putBoolean(Values.PreferenceKey.KEY_SP_STARTLOCK, false).apply();
 

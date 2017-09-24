@@ -20,6 +20,7 @@ import com.haokan.baiduh5.activity.ActivityMyCollection;
 import com.haokan.baiduh5.activity.ActivityWebview;
 import com.haokan.baiduh5.cachesys.CacheManager;
 import com.haokan.baiduh5.util.CommonUtil;
+import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.ToastManager;
 import com.haokan.baiduh5.util.Values;
 import com.haokan.lockscreen.service.LockScreenService;
@@ -99,6 +100,11 @@ public class FragmentPersonpagePage extends FragmentBase implements View.OnClick
                     mSetLockScreen.setVisibility(View.VISIBLE);
                     SharedPreferences.Editor edit = sp.edit();
                     edit.putBoolean(Values.PreferenceKey.KEY_SP_SWLOCKSCREEN, true).apply();
+
+                    Intent intent = new Intent(mActivity, LockScreenService.class);
+                    intent.putExtra("type", 1);
+                    mActivity.startService(intent);
+                    LogHelper.d("startLockService", "success");
                 } else {
                     LockScreenService.sLockEnable = false;
                     mSetLockScreen.setVisibility(View.GONE);
