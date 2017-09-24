@@ -14,12 +14,16 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.haokan.lockscreen.R;
 import com.haokan.screen.lockscreen.detailpageview.DetailPage_MainView;
+import com.haokan.screen.util.LogHelper;
 import com.haokan.screen.util.StatusBarUtil;
 import com.haokan.screen.util.Values;
+import com.orangecat.reflectdemo.activity.ISystemUI;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -27,11 +31,12 @@ import java.text.SimpleDateFormat;
 /**
  * Created by wangzixu on 2017/3/2.
  */
-public class LockMainActivity extends Activity implements View.OnClickListener{
+public class LockMainActivity extends Activity implements View.OnClickListener,ISystemUI{
     public static boolean sIsActivityExists = false;
     private DetailPage_MainView mHaokanLockView;
     private TextView mTvTime, mTvData, mTvTitle, mTvClickMore;
     private TimeReceiver mTimeTickReceiver;
+    private LinearLayout mTimeBottomLy;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,9 +53,15 @@ public class LockMainActivity extends Activity implements View.OnClickListener{
         filter.addAction(Intent.ACTION_TIME_TICK);
         registerReceiver(mTimeTickReceiver, filter);
     }
-
+   private FrameLayout mFrameLayout;
     private void intiViews() {
-        mHaokanLockView = (DetailPage_MainView) findViewById(R.id.hklockview);
+//        mHaokanLockView = (DetailPage_MainView) findViewById(R.id.hklockview);
+        mFrameLayout= (FrameLayout) findViewById(R.id.hklockview);
+        mHaokanLockView=new DetailPage_MainView(LockMainActivity.this);
+
+        mFrameLayout.addView(mHaokanLockView);
+
+        mTimeBottomLy= (LinearLayout) findViewById(R.id.bottom_time_ly);
 
         mTvTitle = (TextView) findViewById(R.id.tv_title);
         mTvClickMore = (TextView) findViewById(R.id.tv_click_more);
@@ -66,12 +77,31 @@ public class LockMainActivity extends Activity implements View.OnClickListener{
         mTvTime = (TextView) findViewById(R.id.tv_time);
         mTvData = (TextView) findViewById(R.id.tv_data);;
         setTime();
+
+        if(mHaokanLockView!=null) {
+            LogHelper.e("times","mHaoKanLockView!=null");
+            mHaokanLockView.setISystemUIListener(LockMainActivity.this);
+        }else{
+            LogHelper.e("times","mHaoKanLockView==null");
+        }
     }
 
     private void registerExitReceiver(){
         IntentFilter filter = new IntentFilter();
         filter.addAction(Values.RECEIVER_CLOSE_LOCK_ACTION);
         this.registerReceiver(this.mCloseCurrentReceiver, filter);
+    }
+
+    private void setTimeVisible(boolean visible){
+        if(mTimeBottomLy==null){
+            return;
+        }
+        if(visible){
+            mTimeBottomLy.setVisibility(View.VISIBLE);
+        }else{
+            mTimeBottomLy.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -223,6 +253,11 @@ public class LockMainActivity extends Activity implements View.OnClickListener{
             overridePendingTransition(0,0);
         }
     };
+
+    @Override
+    public void setNotificationVisible(boolean visible) {
+        setTimeVisible(visible);
+    }
 
     private class TimeReceiver extends BroadcastReceiver {
         @Override

@@ -44,6 +44,7 @@ import com.haokan.screen.util.ToastManager;
 import com.haokan.screen.util.Values;
 import com.haokan.statistics.HaokanStatistics;
 import com.orangecat.reflectdemo.activity.IHaoKanView;
+import com.orangecat.reflectdemo.activity.ISystemUI;
 import com.orangecat.reflectdemo.activity.ISystemUiViewImpl;
 
 import java.io.File;
@@ -323,6 +324,9 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
     protected void enterDetailState(final int type) {
         mIsLocked = false;
         mISystemUiView.setNotificationUpperVisible(false);
+        if(mISystemUIListener!=null) {
+            mISystemUIListener.setNotificationVisible(false);
+        }
         mUnLockImg.setVisibility(GONE);
 
         if ((type == 1 || type == 3) && mIsFirstLoad) { //左滑解锁
@@ -1356,6 +1360,9 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
         App.mMainHanlder.removeCallbacks(mPageSelectedDelayRunnable);
 
         mISystemUiView.setNotificationUpperVisible(true);
+        if(mISystemUIListener!=null) {
+            mISystemUIListener.setNotificationVisible(true);
+        }
         //图说恢复高度
         mTvDescDantu.setVisibility(View.VISIBLE);
         mTvDescDantu_all.setVisibility(View.GONE);
@@ -1447,6 +1454,10 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
         }
 
         mISystemUiView.setNotificationUpperVisible(true);
+
+        if(mISystemUIListener!=null) {
+            mISystemUIListener.setNotificationVisible(true);
+        }
         //图说恢复高度
         mTvDescDantu.setVisibility(View.VISIBLE);
         mTvDescDantu_all.setVisibility(View.GONE);
@@ -1662,4 +1673,10 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
         super.onDestory();
     }
     //**********app作为服务端, 供systemui客户端view反射调用的方法, end************
+
+    private ISystemUI  mISystemUIListener;
+    public  void setISystemUIListener(ISystemUI iSystemUI){
+        this.mISystemUIListener=iSystemUI;
+    }
+
 }
