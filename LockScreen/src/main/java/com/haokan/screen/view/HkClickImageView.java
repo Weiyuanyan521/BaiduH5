@@ -151,9 +151,9 @@ public class HkClickImageView extends ImageView {
                 if (mMoveY > event.getY()+DisplayUtil.dip2px(context, 5)) {//向上滑动
                     isAnimation=true;
                     if (mDownY - event.getY() > DisplayUtil.dip2px(context, 150)) {
-                        startAnim(mDisplayRect.bottom, 0,true);
+                        startAnim(mDisplayRect.bottom, 0);
                     } else {
-                        startAnim(mDisplayRect.bottom, mHeight,false);
+                        startAnim(mDisplayRect.bottom, mHeight);
                     }
                 }
                 break;
@@ -227,33 +227,30 @@ public class HkClickImageView extends ImageView {
 
     @Override
     public void setImageBitmap(Bitmap bm) {
-        if(bm==null){
+        if (bm == null) {
             return;
         }
         try {
-
 //            Bitmap bitmap=Bitmap.createBitmap(bm,0,0, mWidth,mHeight);
-            Bitmap bitmap=bm;
+            Bitmap bitmap = bm;
             super.setImageBitmap(bitmap);
-        if(bitmap!=null) {
-            this.mImageBitmap = bitmap;
-            mBitmapH = mImageBitmap.getHeight();
-            mBitmapW = mImageBitmap.getWidth();
+            if (bitmap != null) {
+                this.mImageBitmap = bitmap;
+                mBitmapH = mImageBitmap.getHeight();
+                mBitmapW = mImageBitmap.getWidth();
 
-            if (bm != null && !bm.isRecycled()&&bm!= bitmap) {
-                bm.recycle();
-                LogHelper.e("times","------setImageBitmap=recycle");
-                bm = null;
+                if (bm != null && !bm.isRecycled() && bm != bitmap) {
+                    bm.recycle();
+                    LogHelper.e("times", "------setImageBitmap=recycle");
+                    bm = null;
+                }
+            } else {
+                LogHelper.e("times", "setImageBitmap--bm=null");
             }
-        }else{
-            LogHelper.e("times","setImageBitmap--bm=null");
-        }
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
-
-
     }
 
     private int passType = 0;
@@ -284,6 +281,9 @@ public class HkClickImageView extends ImageView {
         // 其实就是我们根据透明半径创建的mBlurRect大小， mBlurRect.set(0, 0, mWidth, mRadius)，
         // 我们在画时动态的向下移动canvas即可，移动的距离即：
         mBlurRectTransY = foreGroundbottom;
+        if (mOnUnLockListener != null) {
+            mOnUnLockListener.onUnLocking(mBlurRectTransY * 1.0f / mHeight);
+        }
 
         // 3，原图的上半部分，原图的宽高为mBitmapH, mBitmapW,左上都是0，右边是宽，我们只需要计算下边就可以，即：
         float bottom = mBitmapH * ((float) mBlurRectTransY / mHeight); // ----根据目标屏幕上半部分的比例，来计算原图大小。
@@ -294,8 +294,7 @@ public class HkClickImageView extends ImageView {
         mBlurRegionInBitmap.set(0, (int) bottom, mBitmapW, (int) (bottom + radiusInBitmap));
     }
 
-    private void startAnim(int start, int end,final boolean cloaseMain) {
-        LogHelper.e("times","------startAnim-----cloaseMain="+cloaseMain);
+    private void startAnim(int start, final int end) {
         ValueAnimator anim = ValueAnimator.ofInt(start, end);
         int d = (Math.min(300, mDisplayRect.bottom >> 2) > 0) ? Math.min(300, mDisplayRect.bottom >> 2) : 0;
         anim.setDuration(d);
@@ -311,7 +310,14 @@ public class HkClickImageView extends ImageView {
             @Override
             public void onAnimationEnd(Animator animation) {
                 isTouch = false;
-                if(cloaseMain){
+                if (mOnUnLockListener != null) {
+                    if (end == 0) {
+                        mOnUnLockListener.onUnLockSuccess();
+                    } else {
+                        mOnUnLockListener.onUnLockFailed();
+                    }
+                }
+                if(end == 0){
                     setVisibility(View.INVISIBLE);
                     postDelayed(new Runnable() {
                         @Override
@@ -319,7 +325,6 @@ public class HkClickImageView extends ImageView {
                             setVisibility(View.VISIBLE);
                         }
                     }, 500);
-                    context.sendBroadcast(new Intent().setAction(Values.RECEIVER_CLOSE_LOCK_ACTION));
                 }
                 super.onAnimationEnd(animation);
             }
@@ -334,8 +339,6 @@ public class HkClickImageView extends ImageView {
         } else {
             super.onDraw(canvas);
         }
-
-
     }
 
     private void drawForeGround(Canvas canvas) {
@@ -351,4 +354,15 @@ public class HkClickImageView extends ImageView {
         canvas.restore();
     }
 
+    public interface onUnLockListener {
+        void onUnLockSuccess();
+        void onUnLockFailed();
+        void onUnLocking(float f);
+    }
+
+    private onUnLockListener mOnUnLockListener;
+
+    public void setOnUnLockListener(onUnLockListener onUnLockListener) {
+        mOnUnLockListener = onUnLockListener;
+    }
 }

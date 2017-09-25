@@ -72,6 +72,7 @@ public class AdapterVp_DetailBaseView extends PagerAdapter implements View.OnCli
             ViewHolder holder = (ViewHolder) tag;
             mHolders.remove(holder);
             holder.image.setImageBitmap(null);
+            holder.image.setOnUnLockListener(null);
             holder.mCurrentBitmap = null;
             holder.position = -1;
             LogHelper.d(TAG, "----destroyItem position, holder = " + position + ", " + holder);
@@ -220,6 +221,9 @@ public class AdapterVp_DetailBaseView extends PagerAdapter implements View.OnCli
             loadingView = root.findViewById(R.id.layout_loading);
             image.setOnClickListener(mOnClickListener);
             image.setOnLongClickListener(mOnLongClickListener);
+            if (mOnClickListener instanceof HkClickImageView.onUnLockListener) {
+                image.setOnUnLockListener((HkClickImageView.onUnLockListener) mOnClickListener);
+            }
         }
     }
 

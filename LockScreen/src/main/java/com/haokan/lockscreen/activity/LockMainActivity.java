@@ -49,10 +49,10 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
         setContentView(R.layout.activity_lockmain);
         intiViews();
 
-        mTimeTickReceiver = new TimeReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_TIME_TICK);
-        registerReceiver(mTimeTickReceiver, filter);
+//        mTimeTickReceiver = new TimeReceiver();
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(Intent.ACTION_TIME_TICK);
+//        registerReceiver(mTimeTickReceiver, filter);
     }
     private FrameLayout mFrameLayout;
     private void intiViews() {
@@ -85,14 +85,14 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
 
         mTvTime = (TextView) findViewById(R.id.tv_time);
         mTvData = (TextView) findViewById(R.id.tv_data);;
-        setTime();
+//        setTime();
 
-        if(mHaokanLockView!=null) {
-            LogHelper.e("times","mHaoKanLockView!=null");
-            mHaokanLockView.setISystemUIListener(LockMainActivity.this);
-        }else{
-            LogHelper.e("times","mHaoKanLockView==null");
-        }
+//        if(mHaokanLockView!=null) {
+//            LogHelper.e("times","mHaoKanLockView!=null");
+//            mHaokanLockView.setISystemUIListener(LockMainActivity.this);
+//        }else{
+//            LogHelper.e("times","mHaoKanLockView==null");
+//        }
     }
 
     @Override

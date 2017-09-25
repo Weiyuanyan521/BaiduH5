@@ -327,32 +327,31 @@
                 android:textSize="13sp"
                 android:typeface="normal"/>
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <TextView
+                android:id="@+id/tv_description_all"
                 android:layout_below="@id/title_dan_ly"
                 android:layout_gravity="center_horizontal"
-                android:scrollbars="none">
-
-                <TextView
-                    android:id="@+id/tv_description_all"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="8dp"
-                    android:clickable="false"
-                    android:ellipsize="none"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:includeFontPadding="false"
-                    android:lineSpacingExtra="3dp"
-                    android:text=""
-                    android:textColor="@color/bai"
-                    android:textSize="13sp"
-                    android:typeface="normal"
-                    android:visibility="gone"/>
-            </ScrollView>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="8dp"
+                android:clickable="false"
+                android:ellipsize="none"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="3dp"
+                android:text=""
+                android:textColor="@color/bai"
+                android:textSize="13sp"
+                android:typeface="normal"
+                android:visibility="gone"/>
+            <!--<ScrollView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:scrollbars="none">-->
+            <!--</ScrollView>-->
         </RelativeLayout>
     </RelativeLayout>
 
@@ -390,6 +389,66 @@
             android:layout_toLeftOf="@id/tv_switch"
             android:src="@drawable/icon_change"/>
     </RelativeLayout>
+
+    <!--底部显示时间的区域-->
+    <LinearLayout
+        android:id="@+id/bottom_time_ly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:paddingLeft="15dp">
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center|left"
+            android:textColor="#FFFFFF"
+            android:textSize="46sp" />
+
+        <TextView
+            android:id="@+id/tv_data"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center|left"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="120dp"
+            android:layout_height="1dp"
+            android:background="#FFFFFF" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp">
+
+            <!--android:text="挪威斯瓦尔巴群岛"-->
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center|left"
+                android:singleLine="true"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+            <!--android:text="查看详情"-->
+            <TextView
+                android:id="@+id/tv_click_more"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@id/tv_title"
+                android:autoLink="all"
+                android:gravity="center|left"
+                android:minWidth="50dp"
+                android:singleLine="true"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
 
     <include
         android:id="@+id/layout_loading"

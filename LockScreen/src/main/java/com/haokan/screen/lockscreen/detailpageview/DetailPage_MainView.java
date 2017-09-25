@@ -1,26 +1,31 @@
 package com.haokan.screen.lockscreen.detailpageview;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Process;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.ViewStub;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -30,7 +35,6 @@ import com.haokan.screen.App;
 import com.haokan.screen.bean.LockImageBean;
 import com.haokan.screen.bean_old.MainImageBean;
 import com.haokan.screen.ga.GaManager;
-import com.haokan.screen.lockscreen.activity.ActivityWebView;
 import com.haokan.screen.lockscreen.adapter.AdapterVp_DetailMainView;
 import com.haokan.screen.lockscreen.model.ModelLocalImage;
 import com.haokan.screen.lockscreen.model.ModelLockImage;
@@ -38,16 +42,17 @@ import com.haokan.screen.lockscreen.model.ModelOffline;
 import com.haokan.screen.lockscreen.offline.AlarmUtil;
 import com.haokan.screen.lockscreen.receiver.NetWorkStateChangedReveiver;
 import com.haokan.screen.model.interfaces.onDataResponseListener;
-import com.haokan.screen.util.DisplayUtil;
 import com.haokan.screen.util.LogHelper;
 import com.haokan.screen.util.ToastManager;
 import com.haokan.screen.util.Values;
+import com.haokan.screen.view.HkClickImageView;
 import com.haokan.statistics.HaokanStatistics;
 import com.orangecat.reflectdemo.activity.IHaoKanView;
-import com.orangecat.reflectdemo.activity.ISystemUI;
 import com.orangecat.reflectdemo.activity.ISystemUiViewImpl;
 
 import java.io.File;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -61,7 +66,7 @@ import rx.schedulers.Schedulers;
  * Created by wangzixu on 2017/3/3.
  */
 public class DetailPage_MainView extends DetailPage_BaseView implements View.OnClickListener, ViewPager.OnPageChangeListener
-        , View.OnLongClickListener, IHaoKanView {
+        , View.OnLongClickListener, IHaoKanView, HkClickImageView.onUnLockListener {
     private final ImageView mUnLockImg;
 
     /**
@@ -82,6 +87,11 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
     private ISystemUiViewImpl mISystemUiView = new ISystemUiViewImpl();
     private BroadcastReceiver mMainViewReceiver;
     private Context mCurrentContext;
+    private LinearLayout mTimeBottomLy;
+    private TextView mTvTimeTitle;
+    private TextView mTvTimeClickMore;
+    private TextView mTvTime;
+    private TextView mTvData;
 
     public DetailPage_MainView(Context context) {
         this(context, context);
@@ -91,8 +101,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
         this(context, context);
     }
 
-    /**
-     * 用来供其他进程调用的构造方法
+    /**tv_title
      */
     public DetailPage_MainView(Context context, Context remoteApplicationContext) {
         super(context, remoteApplicationContext);
@@ -128,7 +137,45 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
         GaManager.getInstance().build()
                 .screenname("锁屏主页")
                 .sendScreen(mRemoteAppContext);
+
+        //底部时间显示布局begin
+        mTimeBottomLy = (LinearLayout) findViewById(R.id.bottom_time_ly);
+
+        mTvTimeTitle = (TextView)mTimeBottomLy.findViewById(R.id.tv_title);
+        mTvTimeClickMore = (TextView) mTimeBottomLy.findViewById(R.id.tv_click_more);
+        mTvTimeClickMore.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+        mTvTimeClickMore.getPaint().setAntiAlias(true);//抗锯齿
+        mTvTimeClickMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickLink();
+            }
+        });
+
+        mTvTime = (TextView) findViewById(R.id.tv_time);
+        mTvData = (TextView) findViewById(R.id.tv_data);;
+        setTime();
+        //底部时间显示布局end
     }
+
+    private void setTime() {
+        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+
+        ContentResolver cv = mLocalResContext.getContentResolver();
+        String strTimeFormat = Settings.System.getString(cv, Settings.System.TIME_12_24);
+        String strF = "hh:mm";
+        if ("24".equals(strTimeFormat)) {
+            strF = "HH:mm";
+        }
+        SimpleDateFormat fTime = new SimpleDateFormat(strF);
+        String time = fTime.format(curDate);
+        mTvTime.setText("" + time);
+
+        SimpleDateFormat fData = new SimpleDateFormat("E  MM月dd日");
+        String data = fData.format(curDate);
+        mTvData.setText(data);
+    }
+
     private boolean mRegistedReceiverMainVew=false;
     private void unRegisterMainReceiver(){
         mRegistedReceiverMainVew=false;
@@ -145,7 +192,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
 //        filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
 //        filter.addAction("android.net.wifi.STATE_CHANGE");
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-//        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        filter.addAction(Intent.ACTION_TIME_TICK);
         mRemoteAppContext.registerReceiver(mNetWorkStateChangedReveiver, filter);
         LogHelper.d("WifiRequestReveiver", "mainview pid = " + Process.myPid());
 
@@ -180,6 +227,8 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
 //                        startHaokanActivity(Intent.createChooser(i,getResources().getString(R.string.please_choice)));
 //                        mISystemUiView.dismissKeyguard();
                     }
+                } else if (Intent.ACTION_TIME_TICK.equals(action)) {
+                    setTime();
                 }
             }
         };
@@ -275,45 +324,47 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
 
     @Override
     protected void onClickLink() {
-        ViewParent parent = getParent();
-        if (parent != null && mCurrentImgBean != null) {
-            Intent i = new Intent();
-            boolean isSecure = true;
-            try {
-                isSecure = mISystemUiView.isSecure();
-            } catch (Exception e) {
+        super.onClickLink();
 
-            }
-//            if (isSecure) {
-                i.setPackage(Values.PACKAGE_NAME);
-                i.addCategory("android.intent.category.DEFAULT");
-                i.setAction("com.haokan.webview");
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra(ActivityWebView.KEY_INTENT_WEB_URL, mCurrentImgBean.getUrl_click());
-                mCurrentContext.startActivity(i);
-
-//                mRemoteAppContext.startActivity(i);
-//            } else {
-//                i.setAction(Intent.ACTION_VIEW);
-//                i.setData(Uri.parse(mCurrentImgBean.getUrl_click()));
-//                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startHaokanActivity(i);
+//        ViewParent parent = getParent();
+//        if (parent != null && mCurrentImgBean != null) {
+//            Intent i = new Intent();
+//            boolean isSecure = true;
+//            try {
+//                isSecure = mISystemUiView.isSecure();
+//            } catch (Exception e) {
+//
 //            }
-
-            HaokanStatistics.getInstance(mRemoteAppContext)
-                    .setAction(7, mCurrentImgBean.getCp_id(), null)
-                    .setImageIDs(mCurrentImgBean.getImage_id(), null, null, null, mCurrentImgBean.getId(), mCurrentImgBean.getTrace_id())
-                    .start();
-
-            GaManager.getInstance().build()
-                    .category("clcik_url")
-                    .value1(mCurrentImgBean.title)
-                    .value2(mCurrentImgBean.type_name)
-                    .value3(mCurrentImgBean.cp_name)
-                    .value4(Build.MODEL)
-                    .value5(App.APP_VERSION_NAME)
-                    .send(mRemoteAppContext);
-        }
+////            if (isSecure) {
+//                i.setPackage(Values.PACKAGE_NAME);
+//                i.addCategory("android.intent.category.DEFAULT");
+//                i.setAction("com.haokan.webview");
+//                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                i.putExtra(ActivityWebView.KEY_INTENT_WEB_URL, mCurrentImgBean.getUrl_click());
+//                mCurrentContext.startActivity(i);
+//
+////                mRemoteAppContext.startActivity(i);
+////            } else {
+////                i.setAction(Intent.ACTION_VIEW);
+////                i.setData(Uri.parse(mCurrentImgBean.getUrl_click()));
+////                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+////                startHaokanActivity(i);
+////            }
+//
+//            HaokanStatistics.getInstance(mRemoteAppContext)
+//                    .setAction(7, mCurrentImgBean.getCp_id(), null)
+//                    .setImageIDs(mCurrentImgBean.getImage_id(), null, null, null, mCurrentImgBean.getId(), mCurrentImgBean.getTrace_id())
+//                    .start();
+//
+//            GaManager.getInstance().build()
+//                    .category("clcik_url")
+//                    .value1(mCurrentImgBean.title)
+//                    .value2(mCurrentImgBean.type_name)
+//                    .value3(mCurrentImgBean.cp_name)
+//                    .value4(Build.MODEL)
+//                    .value5(App.APP_VERSION_NAME)
+//                    .send(mRemoteAppContext);
+//        }
     }
 
     @Override
@@ -334,10 +385,12 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
      */
     protected void enterDetailState(final int type) {
         mIsLocked = false;
-        mISystemUiView.setNotificationUpperVisible(false);
-        if(mISystemUIListener!=null) {
-            mISystemUIListener.setNotificationVisible(false);
-        }
+//        mISystemUiView.setNotificationUpperVisible(false);
+        mTimeBottomLy.setVisibility(GONE);
+        showCaption();
+//        if(mISystemUIListener!=null) {
+//            mISystemUIListener.setNotificationVisible(false);
+//        }
         mUnLockImg.setVisibility(GONE);
 
         if ((type == 1 || type == 3) && mIsFirstLoad) { //左滑解锁
@@ -580,42 +633,41 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
             });
         }
     }
-    private float  movePointY = 0;
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        final int action = event.getActionMasked();
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                movePointY = event.getY();
-                mAllowLongClick=true;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (movePointY > event.getY()) {
-                    mAllowLongClick = false;
-                }else {
-                    mAllowLongClick = true;
-                }
-                if(movePointY - event.getY() > DisplayUtil.dip2px(mRemoteAppContext, 5)){
-                    LogHelper.e("times","-------MotionEvent.ACTION_MOVE");
-                    startMarkBottomAnim(true);
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                mAllowLongClick=false;
-                if (movePointY > event.getY()+DisplayUtil.dip2px(mRemoteAppContext, 3)) {//向上滑动
-                    if (movePointY - event.getY() < DisplayUtil.dip2px(mRemoteAppContext, 150)) {
-                        LogHelper.e("times", "-------MotionEvent.ACTION_UP");
-                        startMarkBottomAnim(false);
-                    }
-                }
-                break;
-            default:
-                mAllowLongClick=false;
-                break;
-        }
-        return super.dispatchTouchEvent(event);
-    }
+//    private float  movePointY = 0;
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent event) {
+//        final int action = event.getActionMasked();
+//        switch (action) {
+//            case MotionEvent.ACTION_DOWN:
+//                movePointY = event.getY();
+//                mAllowLongClick=true;
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                if (movePointY > event.getY()) {
+//                    mAllowLongClick = false;
+//                }else {
+//                    mAllowLongClick = true;
+//                }
+//                if(movePointY - event.getY() > DisplayUtil.dip2px(mRemoteAppContext, 5)){
+//                    LogHelper.e("times","-------MotionEvent.ACTION_MOVE");
+//                    startMarkBottomAnim(true);
+//                }
+//                break;
+//            case MotionEvent.ACTION_UP:
+//                mAllowLongClick=false;
+//                if (movePointY > event.getY()+DisplayUtil.dip2px(mRemoteAppContext, 3)) {//向上滑动
+//                    if (movePointY - event.getY() < DisplayUtil.dip2px(mRemoteAppContext, 150)) {
+//                        LogHelper.e("times", "-------MotionEvent.ACTION_UP");
+//                        startMarkBottomAnim(false);
+//                    }
+//                }
+//                break;
+//            default:
+//                mAllowLongClick=false;
+//                break;
+//        }
+//        return super.dispatchTouchEvent(event);
+//    }
 
 
 
@@ -1365,7 +1417,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
 
     /**
      * 正常的finish会结束掉自己, 这里覆盖了父类实现
-     * 这是个从浏览大图状态回到锁屏通知状态的方法, 并且不换图片,
+     * 这是个从浏览大图状态回到显示锁屏时间和通知状态的方法, 并且不换图片,
      * 按返回键, 点击本地大图, 等需要从当前图片立即进入锁屏通知状态时调用
      */
     @Override
@@ -1374,10 +1426,12 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
         mIsLocked = true;
         App.mMainHanlder.removeCallbacks(mPageSelectedDelayRunnable);
 
-        mISystemUiView.setNotificationUpperVisible(true);
-        if(mISystemUIListener!=null) {
-            mISystemUIListener.setNotificationVisible(true);
-        }
+//        mISystemUiView.setNotificationUpperVisible(true);
+        mTimeBottomLy.setVisibility(VISIBLE);
+//        if(mISystemUIListener!=null) {
+//            mISystemUIListener.setNotificationVisible(true);
+//        }
+
         //图说恢复高度
         mTvDescDantu.setVisibility(View.VISIBLE);
         mTvDescDantu_all.setVisibility(View.GONE);
@@ -1399,6 +1453,8 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
 
         if (mCurrentImgBean.type == 3) {
             mISystemUiView.setTitleAndUrl("", "");
+            mTvTimeClickMore.setVisibility(INVISIBLE);
+            mTvTimeTitle.setVisibility(GONE);
         } else {
             String linkTitle = mCurrentImgBean.url_title;
             if (TextUtils.isEmpty(mCurrentImgBean.getUrl_click())) {
@@ -1408,7 +1464,16 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
                     linkTitle = mLocalResContext.getResources().getString(R.string.look_more);
                 }
             }
-            mISystemUiView.setTitleAndUrl(mCurrentImgBean.getTitle(), linkTitle);
+            if (TextUtils.isEmpty(linkTitle)) {
+                mTvTimeClickMore.setVisibility(INVISIBLE);
+                mTvTimeTitle.setVisibility(GONE);
+            } else {
+                mTvTimeClickMore.setVisibility(VISIBLE);
+                mTvTimeClickMore.setText(linkTitle);
+                mTvTimeTitle.setVisibility(VISIBLE);
+                mTvTimeTitle.setText(mCurrentImgBean.getTitle());
+            }
+//            mISystemUiView.setTitleAndUrl(mCurrentImgBean.getTitle(), linkTitle);
         }
     }
 
@@ -1468,11 +1533,12 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
             return;
         }
 
-        mISystemUiView.setNotificationUpperVisible(true);
+//        mISystemUiView.setNotificationUpperVisible(true);
+        mTimeBottomLy.setVisibility(VISIBLE);
+//        if(mISystemUIListener!=null) {
+//            mISystemUIListener.setNotificationVisible(true);
+//        }
 
-        if(mISystemUIListener!=null) {
-            mISystemUIListener.setNotificationVisible(true);
-        }
         //图说恢复高度
         mTvDescDantu.setVisibility(View.VISIBLE);
         mTvDescDantu_all.setVisibility(View.GONE);
@@ -1511,7 +1577,17 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
                     linkTitle = mLocalResContext.getResources().getString(R.string.look_more);
                 }
             }
-            mISystemUiView.setTitleAndUrl(mCurrentImgBean.getTitle(), linkTitle);
+            if (TextUtils.isEmpty(linkTitle)) {
+                mTvTimeClickMore.setVisibility(INVISIBLE);
+                mTvTimeTitle.setVisibility(GONE);
+            } else {
+                mTvTimeClickMore.setVisibility(VISIBLE);
+                mTvTimeClickMore.setText(linkTitle);
+                mTvTimeTitle.setVisibility(VISIBLE);
+                mTvTimeTitle.setText(mCurrentImgBean.getTitle());
+            }
+//            mISystemUiView.setTitleAndUrl(mCurrentImgBean.getTitle(), linkTitle);
+
         }
         App.mMainHanlder.postDelayed(mSwitchImageRunnable, 300);
 
@@ -1635,7 +1711,16 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
                     linkTitle = mLocalResContext.getResources().getString(R.string.look_more);
                 }
             }
-            mISystemUiView.setTitleAndUrl(mCurrentImgBean.getTitle(), linkTitle);
+            if (TextUtils.isEmpty(linkTitle)) {
+                mTvTimeClickMore.setVisibility(INVISIBLE);
+                mTvTimeTitle.setVisibility(GONE);
+            } else {
+                mTvTimeClickMore.setVisibility(VISIBLE);
+                mTvTimeClickMore.setText(linkTitle);
+                mTvTimeTitle.setVisibility(VISIBLE);
+                mTvTimeTitle.setText(mCurrentImgBean.getTitle());
+            }
+//            mISystemUiView.setTitleAndUrl(mCurrentImgBean.getTitle(), linkTitle);
         }
     };
 
@@ -1684,22 +1769,20 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
                 .sendScreen(mRemoteAppContext);
     }
 
-    @Override
-    protected void markBottomVisible(boolean visible) {
-        if(visible){
-            if(mISystemUIListener!=null){
-                mISystemUIListener.showCaptionVisible();
-            }
-
-        }
-        super.markBottomVisible(visible);
-    }
+//    @Override
+//    protected void markBottomVisible(boolean visible) {
+//        if(visible){
+//            if(mISystemUIListener!=null){
+//                mISystemUIListener.showCaptionVisible();
+//            }
+//
+//        }
+//        super.markBottomVisible(visible);
+//    }
 
     @Override
     public void showCaption() {
-        if(mISystemUIListener!=null){
-            mISystemUIListener.showCaptionVisible();
-        }
+        mTimeBottomLy.setVisibility(GONE);
         super.showCaption();
     }
 
@@ -1708,12 +1791,38 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
         unRegisterMainReceiver();
         super.onDestory();
     }
-    //**********app作为服务端, 供systemui客户端view反射调用的方法, end************
 
-    private ISystemUI  mISystemUIListener;
-    public  void setISystemUIListener(ISystemUI iSystemUI){
-        this.mISystemUIListener=iSystemUI;
+    @Override
+    public void onUnLockSuccess() {
+        Log.i("wangzixu", "onUnLockSuccess ");
+        mLocalResContext.sendBroadcast(new Intent().setAction(Values.RECEIVER_CLOSE_LOCK_ACTION));
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mTimeBottomLy.setAlpha(1.0f);
+                mMainBottomLayout.setAlpha(1.0f);
+            }
+        }, 500);
     }
 
+    @Override
+    public void onUnLockFailed() {
+        Log.i("wangzixu", "onUnLockFailed ");
+        mTimeBottomLy.setAlpha(1.0f);
+        mMainBottomLayout.setAlpha(1.0f);
+    }
 
+    @Override
+    public void onUnLocking(float f) {
+        Log.i("wangzixu", "onUnLocking f = " + f);
+        float ff = 3.3f * f - 2.3f;
+        mTimeBottomLy.setAlpha(ff);
+        mMainBottomLayout.setAlpha(ff);
+    }
+    //**********app作为服务端, 供systemui客户端view反射调用的方法, end************
+
+//    private ISystemUI  mISystemUIListener;
+//    public  void setISystemUIListener(ISystemUI iSystemUI){
+//        this.mISystemUIListener=iSystemUI;
+//    }
 }

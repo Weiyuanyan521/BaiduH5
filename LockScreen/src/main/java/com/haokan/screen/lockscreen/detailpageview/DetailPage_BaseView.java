@@ -190,15 +190,16 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
 
         //单图区域
         mDantuPart = mMainBottomLayout.findViewById(R.id.rl_dantu_part);
-        mDantuPart.setOnClickListener(this);
         mTvDescDantu = (TextView) mDantuPart.findViewById(R.id.tv_description);
+        mTvDescDantu.setOnClickListener(this);
         mTvDescDantu_all = (TextView) mDantuPart.findViewById(R.id.tv_description_all);
+        mTvDescDantu_all.setOnClickListener(this);
         mTvTitleDantu = (TextView) mDantuPart.findViewById(R.id.title_dantu);
         mTvLinkDantu = (TextView) mDantuPart.findViewById(R.id.tv_link);
 
         mLinkTxtLy = (LinearLayout) mDantuPart.findViewById(R.id.tv_link_exly);
         mLinkTxtLy.setOnClickListener(this);
-        mTvTitleDantu.setOnClickListener(this);
+//        mTvTitleDantu.setOnClickListener(this);
 
 //        mTvLinkDantuParent = mDantuPart.findViewById(R.id.ll_link);
         mTvLinkDantuParent = mTvLinkDantu;
@@ -493,7 +494,6 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
         } else if (id == R.id.bottom_back) {
             hideCaption();
             finish();
-
         } else if (id == R.id.bottom_collect) {
             processCollect(mCurrentImgBean, v);
 
@@ -684,16 +684,22 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
                 e.printStackTrace();
             }
 
-        } else if (id == R.id.rl_dantu_part) {
-            if (mTvDescDantu_all.getVisibility() == View.GONE) {
-                mTvDescDantu_all.setVisibility(View.VISIBLE);
-                mTvDescDantu.setVisibility(View.GONE);
-            } else {
-                mTvDescDantu_all.setVisibility(View.GONE);
-                mTvDescDantu.setVisibility(View.VISIBLE);
-            }
-
-        } else {
+        } else if (id == R.id.tv_description) {
+            mTvDescDantu_all.setVisibility(View.VISIBLE);
+            mTvDescDantu.setVisibility(View.GONE);
+//            if (mTvDescDantu_all.getVisibility() == View.GONE) {
+//            } else {
+//                mTvDescDantu_all.setVisibility(View.GONE);
+//                mTvDescDantu.setVisibility(View.VISIBLE);
+//            }
+        } else if (id == R.id.tv_description_all){
+//            if (mTvDescDantu_all.getVisibility() == View.GONE) {
+//                mTvDescDantu_all.setVisibility(View.VISIBLE);
+//                mTvDescDantu.setVisibility(View.GONE);
+//            } else {
+//            }
+            mTvDescDantu_all.setVisibility(View.GONE);
+            mTvDescDantu.setVisibility(View.VISIBLE);
         }
     }
 
@@ -1295,8 +1301,6 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
 
         mMainBottomLayout.setVisibility(View.VISIBLE);
         mRlMainTop.setVisibility(View.VISIBLE);
-
-
 
         Animation aTop = AnimationUtils.loadAnimation(mLocalResContext, R.anim.mainview_topin);
         mRlMainTop.startAnimation(aTop);
@@ -2385,36 +2389,36 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
             HaokanStatistics.getInstance(mRemoteAppContext).setAction(22, "-1", "").start();
         }
     }
-   protected void markBottomVisible(boolean visible){
-
-   }
-    protected void startMarkBottomAnim(boolean isFade){
-        if(mMainBottomLayout==null||!mIsCaptionShow){
-            return;
-        }
-        LogHelper.e("times","------isFade="+isFade);
-        if(isFade) {
-            mMainBottomLayout.setVisibility(INVISIBLE);
-        }else{
-            Animation aBottom = AnimationUtils.loadAnimation(mLocalResContext, R.anim.mainview_bottomin);
-            aBottom.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    mMainBottomLayout.setVisibility(VISIBLE);
-                    mRlMainTop.setVisibility(VISIBLE);
-
-                    markBottomVisible(true);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
-            mMainBottomLayout.startAnimation(aBottom);
-        }
+//   protected void markBottomVisible(boolean visible){
+//
+//   }
+//    protected void startMarkBottomAnim(boolean isFade){
+//        if(mMainBottomLayout==null||!mIsCaptionShow){
+//            return;
+//        }
+//        LogHelper.e("times","------isFade="+isFade);
+//        if(isFade) {
+//            mMainBottomLayout.setVisibility(INVISIBLE);
+//        }else{
+//            Animation aBottom = AnimationUtils.loadAnimation(mLocalResContext, R.anim.mainview_bottomin);
+//            aBottom.setAnimationListener(new Animation.AnimationListener() {
+//                @Override
+//                public void onAnimationStart(Animation animation) {
+//                }
+//                @Override
+//                public void onAnimationEnd(Animation animation) {
+//                    mMainBottomLayout.setVisibility(VISIBLE);
+//                    mRlMainTop.setVisibility(VISIBLE);
+//
+//                    markBottomVisible(true);
+//                }
+//
+//                @Override
+//                public void onAnimationRepeat(Animation animation) {
+//                }
+//            });
+//            mMainBottomLayout.startAnimation(aBottom);
+//        }
 //        Animation aBottom = AnimationUtils.loadAnimation(mLocalResContext, R.anim.mainview_bottomout);
 //        aBottom.setAnimationListener(new Animation.AnimationListener() {
 //            @Override
@@ -2432,5 +2436,5 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
 //            }
 //        });
 //        mMainBottomLayout.startAnimation(aBottom);
-    }
+//    }
 }
