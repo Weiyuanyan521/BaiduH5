@@ -441,11 +441,9 @@ public class ModelOffline {
 //                                    LogHelper.e("times",i+"i---filePah="+filepath+",--"+file.getAbsolutePath());
 //                                    LogHelper.e("times","i--------,11111111111111"+FileUtil.isFileExist(file.getAbsolutePath()));
 
-                                    if (getNoAllowUseMobileNet(context)) {
-                                        break;
-                                    }
-
-
+//                                    if (getNoAllowUseMobileNet(context)) {
+//                                        break;
+//                                    }
                                     if (!FileUtil.isFileExist(file.getPath())) {//文件不存在则下载
 
                                         Bitmap bitmap = null;

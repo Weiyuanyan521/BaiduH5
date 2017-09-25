@@ -14,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import com.haokan.screen.App;
-import com.haokan.lockscreen.R;
 import com.haokan.screen.bean.CpBean;
 import com.haokan.screen.database.bean.LockScreenFollowCp;
 import com.haokan.screen.database.MyDatabaseHelper;
@@ -49,6 +48,7 @@ public class AlarmOfflineService extends Service {
         LogHelper.d("AlarmOfflineService", "onStartCommand called, pid = " + Process.myPid());
         if (mIsSwitching) {
             LogHelper.d("AlarmOfflineService", "当前正在更新, return");
+            LogHelper.e("times","--onStartCommand--mIsSwitching=return");
             return super.onStartCommand(intent, flags, startId);
         }
         HaokanStatistics.getInstance(getApplicationContext()).setAction(70,"0","0").start();
@@ -165,7 +165,14 @@ public class AlarmOfflineService extends Service {
                 return;
             }
         }
+        LogHelper.e("times","--switchOfflineData--mIsSwitching="+mIsSwitching);
         if (!mIsSwitching) {
+
+            Intent intent = new Intent();
+            intent.setAction(Values.Action.RECEIVER_UPDATA_OFFLINE);
+            intent.putExtra("start", true);
+            sendBroadcast(intent);
+
             mIsSwitching = true;
             App.sWorker.post(new Runnable() {
                 @Override
@@ -239,7 +246,7 @@ public class AlarmOfflineService extends Service {
                 intent.setAction(Values.Action.RECEIVER_UPDATA_OFFLINE);
                 intent.putExtra("start", false);
                 intent.putExtra("success", false);
-                intent.putExtra("errmsg", getResources().getString(R.string.gridimg_no_more));
+//                intent.putExtra("errmsg", getResources().getString(R.string.gridimg_no_more));
                 sendBroadcast(intent);
                 stopSelf();
                 System.exit(0);

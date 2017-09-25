@@ -197,7 +197,7 @@ public class FileUtil {
             return false;
         }
 
-        destBitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+        destBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
         boolean success = false;
         try {
             fos.flush();
