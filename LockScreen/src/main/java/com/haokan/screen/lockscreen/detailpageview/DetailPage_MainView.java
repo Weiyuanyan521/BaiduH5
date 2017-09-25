@@ -123,10 +123,23 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
         AlarmUtil.setOfflineAlarm(mRemoteAppContext);
         LogHelper.d(TAG, "MainView created pid = " + Process.myPid());
 
-//        HaokanStatistics.getInstance(mRemoteAppContext)
-//                .setAction(0, "2", null)
-//                .start();
 
+        registerMainReceiver();
+        GaManager.getInstance().build()
+                .screenname("锁屏主页")
+                .sendScreen(mRemoteAppContext);
+    }
+    private boolean mRegistedReceiverMainVew=false;
+    private void unRegisterMainReceiver(){
+        mRegistedReceiverMainVew=false;
+        mRemoteAppContext.unregisterReceiver(mNetWorkStateChangedReveiver);
+        mRemoteAppContext.unregisterReceiver(mMainViewReceiver);
+    }
+    private void registerMainReceiver(){
+        if(mRegistedReceiverMainVew){
+            return;
+        }
+        mRegistedReceiverMainVew=true;
         IntentFilter filter = new IntentFilter();
 //        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
 //        filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
@@ -173,12 +186,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
         IntentFilter filter1 = new IntentFilter();
         filter1.addAction(Values.Action.RECEIVER_DISSMISS_KEYGUARD);
         mRemoteAppContext.registerReceiver(mMainViewReceiver, filter1);
-
-        GaManager.getInstance().build()
-                .screenname("锁屏主页")
-                .sendScreen(mRemoteAppContext);
     }
-
     private Runnable mRefreshLockImageRunable = new Runnable() {
         @Override
         public void run() {
@@ -1697,8 +1705,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
 
     @Override
     public void onDestory() {
-        mRemoteAppContext.unregisterReceiver(mNetWorkStateChangedReveiver);
-        mRemoteAppContext.unregisterReceiver(mMainViewReceiver);
+        unRegisterMainReceiver();
         super.onDestory();
     }
     //**********app作为服务端, 供systemui客户端view反射调用的方法, end************
