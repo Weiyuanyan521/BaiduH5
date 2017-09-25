@@ -12,10 +12,10 @@
         <!--android:layout_height="match_parent">-->
     <!--</com.haokan.screen.lockscreen.detailpageview.DetailPage_MainView>  -->
     <FrameLayout
-    android:id="@+id/hklockview"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
- </FrameLayout>
+        android:id="@+id/hklockview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/bottom_time_ly"

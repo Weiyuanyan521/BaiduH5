@@ -1,7 +1,6 @@
 package com.haokan.lockscreen.activity;
 
 import android.app.Activity;
-import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -140,10 +139,10 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
-        KeyguardManager.KeyguardLock mKeyguardLock;
-        KeyguardManager km = (KeyguardManager) this.getApplication().getSystemService(Context.KEYGUARD_SERVICE);
-        mKeyguardLock = km.newKeyguardLock("keyguard");
-        mKeyguardLock.disableKeyguard();
+//        KeyguardManager.KeyguardLock mKeyguardLock;
+//        KeyguardManager km = (KeyguardManager) this.getApplication().getSystemService(Context.KEYGUARD_SERVICE);
+//        mKeyguardLock = km.newKeyguardLock("keyguard");
+//        mKeyguardLock.disableKeyguard();
     }
 
     private void setTime() {
