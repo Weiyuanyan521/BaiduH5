@@ -1,27 +1,66 @@
 {
   "project_info": {
-    "project_number": "502594913277",
-    "project_id": "lockscreen-qingcheng"
+    "project_number": "676589571303",
+    "project_id": "firebase-lockscreen-meirikandi"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:502594913277:android:b4d4ae3f7d487c2f",
+        "mobilesdk_app_id": "1:676589571303:android:df8623803f15d3f2",
         "android_client_info": {
-          "package_name": "com.haokan.lockscreen"
+          "package_name": "com.haokanhaokan.news"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "676589571303-cesgs0vmrrgd3e91c8t262uk22f38bs8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyCtATWTfyZijvJY69exliYWMXbbqS0aRqA"
+          "current_key": "AIzaSyD5mOS9lkg5_xNYx_WtGZLewWuH-mRvzQU"
         }
       ],
       "services": {
         "analytics_service": {
           "status": 2,
           "analytics_property": {
-            "tracking_id": "UA-93470137-10"
+            "tracking_id": "UA-93470137-15"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:676589571303:android:9cc46d4b5e8aeb07",
+        "android_client_info": {
+          "package_name": "com.haokan.lockscreen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "676589571303-cesgs0vmrrgd3e91c8t262uk22f38bs8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5mOS9lkg5_xNYx_WtGZLewWuH-mRvzQU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-93470137-15"
           }
         },
         "appinvite_service": {
