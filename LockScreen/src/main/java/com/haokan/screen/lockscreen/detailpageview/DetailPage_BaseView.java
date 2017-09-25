@@ -499,10 +499,10 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
 
         } else if (id == R.id.bottom_like) {
             processLike(mCurrentImgBean, v);
-
         } else if (id == R.id.bottom_share) {//                if (mShareLayout.getVisibility() != View.VISIBLE) {
 //                    showShareLayout();
 //                }
+            LogHelper.e("times","----R.id.bottom_share  onclick");
             shareAssetsImage(mCurrentImgBean);
 
             HaokanStatistics actionShare = HaokanStatistics.getInstance(mRemoteAppContext).setAction(4, "0", "");
@@ -877,8 +877,8 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
             // 目标应用选择对话框的标题
             Intent intent2 = Intent.createChooser(intent1, getResources().getString(R.string.share_to));
             intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //mRemoteAppContext.startActivity(intent2);
-            startHaokanActivity(intent2);
+            mRemoteAppContext.startActivity(intent2);
+//            startHaokanActivity(intent2);
         }
     }
 
