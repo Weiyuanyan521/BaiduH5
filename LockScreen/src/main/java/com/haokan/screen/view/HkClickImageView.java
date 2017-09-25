@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
@@ -17,12 +16,11 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
+import android.view.View;
 import android.widget.ImageView;
 
-import com.haokan.screen.App;
 import com.haokan.lockscreen.R;
 import com.haokan.screen.lockscreen.detailpageview.DetailPage_BaseView;
 import com.haokan.screen.util.DisplayUtil;
@@ -313,8 +311,14 @@ public class HkClickImageView extends ImageView {
             @Override
             public void onAnimationEnd(Animator animation) {
                 isTouch = false;
-                // setVisibility(View.GONE);
                 if(cloaseMain){
+                    setVisibility(View.INVISIBLE);
+                    postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            setVisibility(View.VISIBLE);
+                        }
+                    }, 500);
                     context.sendBroadcast(new Intent().setAction(Values.RECEIVER_CLOSE_LOCK_ACTION));
                 }
                 super.onAnimationEnd(animation);
