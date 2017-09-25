@@ -277,7 +277,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
 
             }
 //            if (isSecure) {
-//                i.setPackage(Values.PACKAGE_NAME);
+                i.setPackage(Values.PACKAGE_NAME);
                 i.addCategory("android.intent.category.DEFAULT");
                 i.setAction("com.haokan.webview");
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
