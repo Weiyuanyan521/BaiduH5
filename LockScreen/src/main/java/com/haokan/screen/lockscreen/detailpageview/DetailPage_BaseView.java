@@ -2390,6 +2390,7 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
         if(mMainBottomLayout==null||!mIsCaptionShow){
             return;
         }
+        LogHelper.e("times","------isFade="+isFade);
         if(isFade) {
             mMainBottomLayout.setVisibility(INVISIBLE);
         }else{

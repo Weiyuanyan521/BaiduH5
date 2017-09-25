@@ -589,13 +589,17 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
                     mAllowLongClick = true;
                 }
                 if(movePointY - event.getY() > DisplayUtil.dip2px(mRemoteAppContext, 5)){
+                    LogHelper.e("times","-------MotionEvent.ACTION_MOVE");
                     startMarkBottomAnim(true);
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 mAllowLongClick=false;
-                if (movePointY - event.getY() < DisplayUtil.dip2px(mRemoteAppContext, 150)) {
-                    startMarkBottomAnim(false);
+                if (movePointY > event.getY()+DisplayUtil.dip2px(mRemoteAppContext, 3)) {//向上滑动
+                    if (movePointY - event.getY() < DisplayUtil.dip2px(mRemoteAppContext, 150)) {
+                        LogHelper.e("times", "-------MotionEvent.ACTION_UP");
+                        startMarkBottomAnim(false);
+                    }
                 }
                 break;
             default:
