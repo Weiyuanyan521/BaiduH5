@@ -533,6 +533,6 @@ public class ActivityWebView extends ActivityBase implements View.OnClickListene
             mWebView = null;
         }
         super.onDestroy();
-        System.exit(0);
+//        System.exit(0);
     }
 }

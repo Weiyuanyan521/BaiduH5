@@ -461,11 +461,13 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
 //                    group.addView(view);
 //                    addAnimForNewView(R.anim.activity_in_right2left, R.anim.activity_out_right2left, view);
 
-            Intent i = new Intent();
-            i.setPackage(Values.PACKAGE_NAME);
-            i.addCategory("android.intent.category.DEFAULT");
-            i.setAction("com.haokan.webview");
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            Intent i = new Intent();
+//            i.setPackage(Values.PACKAGE_NAME);
+//            i.addCategory("android.intent.category.DEFAULT");
+//            i.setAction("com.haokan.webview");
+//            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            Intent i = new Intent(mLocalResContext, ActivityWebView.class);
             i.putExtra(ActivityWebView.KEY_INTENT_WEB_URL, mCurrentImgBean.getUrl_click());
             //startHaokanActivity(i);
             mRemoteAppContext.startActivity(i);
