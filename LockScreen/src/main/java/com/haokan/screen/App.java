@@ -45,7 +45,7 @@ public abstract class App extends Application {
     public static String sCountry_code = "CN";
     public static String sLanguage_code = "zh";
     public static String sBigImgSize = Values.ImageSize.SIZE_1080x1920;
-    public static String sLoadingImgSize = Values.ImageSize.SIZE_360x640;
+    public static String sLoadingImgSize = Values.ImageSize.SIZE_1080x1920;
     public static String sZutuThumbnailSize = Values.ImageSize.SIZE_108x192;
     public static Context sAppContext;
     public static Locale sSystemLocal;
