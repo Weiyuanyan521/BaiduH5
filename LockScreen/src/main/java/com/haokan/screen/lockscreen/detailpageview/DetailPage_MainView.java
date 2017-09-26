@@ -1058,7 +1058,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
             if (parent != null) {
                 if (((ViewGroup) parent).getVisibility() == VISIBLE) {
                     if (TextUtils.isEmpty(errmsg)) {
-                        ToastManager.showCenterToastForLockScreen(mLocalResContext, getRootView(), R.string.switch_failed);
+                        ToastManager.showCenterToastForLockScreen(mLocalResContext, getRootView(), R.string.gridimg_no_more);
                     } else {
                         ToastManager.showCenterToastForLockScreen(mLocalResContext, getRootView(), errmsg);
                     }
