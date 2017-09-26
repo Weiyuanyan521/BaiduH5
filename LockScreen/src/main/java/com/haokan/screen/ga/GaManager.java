@@ -2,10 +2,14 @@ package com.haokan.screen.ga;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
+import android.preference.PreferenceManager;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.haokan.lockscreen.R;
+import com.haokan.screen.App;
 import com.haokan.screen.util.Values;
 
 /**
@@ -145,11 +149,31 @@ public class GaManager {
         return mTracker;
     }
 
-    public void init(Context context) {
+    public void init(final Context context) {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
         analytics.setLocalDispatchPeriod(30);
         mTracker = analytics.newTracker(R.xml.global_tracker);
         mTracker.enableAutoActivityTracking(true);
         mTracker.enableExceptionReporting(true);
+
+        App.sWorker.post(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                Boolean first = sharedPreferences.getBoolean(Values.PreferenceKey.KEY_SP_FIRST, true);
+                //如果是第一次打开, 认为是一个新增用户
+                if (first) {
+                    String model = Build.MODEL;
+                    GaManager.getInstance().build()
+                            .category("register")
+                            .value4(model)
+                            .value5(App.APP_VERSION_NAME)
+                            .send(context);
+
+                    SharedPreferences.Editor edit = sharedPreferences.edit();
+                    edit.putBoolean(Values.PreferenceKey.KEY_SP_FIRST, false).commit();
+                }
+            }
+        });
     }
 }

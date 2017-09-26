@@ -211,15 +211,15 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
                         i.setData(content_url);
                         startHaokanActivity(i);
                     } else if (type == 2) {
-                        Uri uri = Uri.parse(ustring);
-                        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, ustring);
-//                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                        sendIntent.setType("text/plain");
-                        // 目标应用选择对话框的标题
-                        Intent intent2 = Intent.createChooser(sendIntent, getResources().getString(R.string.share_to));
-                        intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startHaokanActivity(intent2);
+//                        Uri uri = Uri.parse(ustring);
+//                        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+//                        sendIntent.putExtra(Intent.EXTRA_TEXT, ustring);
+////                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+//                        sendIntent.setType("text/plain");
+//                        // 目标应用选择对话框的标题
+//                        Intent intent2 = Intent.createChooser(sendIntent, getResources().getString(R.string.share_to));
+//                        intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        startHaokanActivity(intent2);
 
                     } else {
                         Uri uri = Uri.parse(ustring);
@@ -357,14 +357,14 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
 //                    .setImageIDs(mCurrentImgBean.getImage_id(), null, null, null, mCurrentImgBean.getId(), mCurrentImgBean.getTrace_id())
 //                    .start();
 //
-//            GaManager.getInstance().build()
-//                    .category("clcik_url")
-//                    .value1(mCurrentImgBean.title)
-//                    .value2(mCurrentImgBean.type_name)
-//                    .value3(mCurrentImgBean.cp_name)
-//                    .value4(Build.MODEL)
-//                    .value5(App.APP_VERSION_NAME)
-//                    .send(mRemoteAppContext);
+            GaManager.getInstance().build()
+                    .category("clcik_url")
+                    .value1(mCurrentImgBean.title)
+                    .value2(mCurrentImgBean.type_name)
+                    .value3(mCurrentImgBean.cp_name)
+                    .value4(Build.MODEL)
+                    .value5(App.APP_VERSION_NAME)
+                    .send(mRemoteAppContext);
 //        }
     }
 

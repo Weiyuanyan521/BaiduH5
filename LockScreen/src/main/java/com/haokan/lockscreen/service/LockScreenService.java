@@ -1,15 +1,19 @@
 package com.haokan.lockscreen.service;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.haokan.lockscreen.R;
 import com.haokan.lockscreen.activity.LockMainActivity;
 import com.haokan.lockscreen.receiver.LockScreenReceiver;
 import com.haokan.lockscreen.util.LogHelper;
+import com.haokan.screen.lockscreen.activity.ActivitySetting;
 import com.haokan.screen.lockscreen.detailpageview.DetailPage_MainView;
 
 
@@ -42,16 +46,16 @@ public class LockScreenService extends Service {
         note.flags |= 32;
         startForeground(42, note);
 
-//        Notification.Builder builder = new Notification.Builder(this.getApplicationContext()); //获取一个Notification构造器
-//        Intent nfIntent = new Intent(this, ActivitySetting.class);
-//        builder.setContentIntent(PendingIntent.getActivity(this, 0, nfIntent, 0)) // 设置PendingIntent
-//                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_launcher)) // 设置下拉列表中的图标(大图标)
-//                .setContentTitle("每日看点") // 设置下拉列表里的标题
-//                .setSmallIcon(R.drawable.ic_launcher) // 设置状态栏内的小图标
-//                .setContentText("锁屏设置") // 设置上下文内容
-//                .setWhen(System.currentTimeMillis()); // 设置该通知发生的时间
-//        Notification notification = builder.build(); // 获取构建好的Notification
-//        startForeground(110, notification);// 开始前台服务
+        Notification.Builder builder = new Notification.Builder(this.getApplicationContext()); //获取一个Notification构造器
+        Intent nfIntent = new Intent(this, ActivitySetting.class);
+        builder.setContentIntent(PendingIntent.getActivity(this, 0, nfIntent, 0)) // 设置PendingIntent
+                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_launcher)) // 设置下拉列表中的图标(大图标)
+                .setContentTitle("好看锁屏") // 设置下拉列表里的标题
+                .setSmallIcon(R.drawable.ic_launcher) // 设置状态栏内的小图标
+                .setContentText("正在为你展现精彩内容") // 设置上下文内容
+                .setWhen(System.currentTimeMillis()); // 设置该通知发生的时间
+        Notification notification = builder.build(); // 获取构建好的Notification
+        startForeground(110, notification);// 开始前台服务
     }
 
     @Override

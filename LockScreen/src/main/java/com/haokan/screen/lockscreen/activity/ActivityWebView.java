@@ -3,6 +3,7 @@ package com.haokan.screen.lockscreen.activity;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -14,7 +15,6 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.text.ClipboardManager;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -41,18 +41,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.haokan.screen.App;
 import com.haokan.lockscreen.R;
+import com.haokan.screen.App;
 import com.haokan.screen.activity.ActivityBase;
 import com.haokan.screen.bean.response.ResponseBody_8028;
 import com.haokan.screen.http.UrlsUtil_Java;
-import com.haokan.screen.lockscreen.model.ModelLockImage;
 import com.haokan.screen.model.ModelColumns;
 import com.haokan.screen.model.interfaces.onDataResponseListener;
 import com.haokan.screen.util.CommonUtil;
 import com.haokan.screen.util.LogHelper;
 import com.haokan.screen.util.ToastManager;
 import com.haokan.screen.util.Values;
+import com.haokan.statistics.HaokanStatistics;
 
 public class ActivityWebView extends ActivityBase implements View.OnClickListener {
     public static final String KEY_INTENT_WEB_URL = "url";
@@ -387,34 +387,40 @@ public class ActivityWebView extends ActivityBase implements View.OnClickListene
             disMissMorePop();
 
         } else if (id == R.id.copy_link) {//复制链接
-//                ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-//                clip.setText(mWebView.getUrl());
-//                ToastManager.showFollowToast(this, R.string.toast_copy_link);
-            OpenBrowser(2);
+//            ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+//            clip.setText(mWebView.getUrl());
+//            ToastManager.showFollowToast(this, R.string.toast_copy_link);
+//            OpenBrowser(2);
 
+            Uri uri = Uri.parse(mWebView.getUrl());
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, mWebView.getUrl());
+            sendIntent.setType("text/plain");
+            // 目标应用选择对话框的标题
+            Intent intent2 = Intent.createChooser(sendIntent, getResources().getString(R.string.share_to));
+            intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent2);
             disMissMorePop();
-
         } else if (id == R.id.open_with_browser) {
             if (TextUtils.isEmpty(mWebView.getUrl())) {
                 return;
             }
-            OpenBrowser(1);
+//            OpenBrowser(1);
             //用浏览器打开
-//                Intent intent = new Intent();
-//                intent.setAction("android.intent.action.VIEW");
-//                Uri url = Uri.parse(mWebView.getUrl());
-//                intent.setData(url);
-//
-//                startActivity(Intent.createChooser(intent,getResources().getString(R.string.please_choice)));
-//                startActivity(intent);
-//                HaokanStatistics.getInstance(this).setAction(27,getClass().getSimpleName(),Intent.ACTION_VIEW).start();
-            disMissMorePop();
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            Uri url = Uri.parse(mWebView.getUrl());
+            intent.setData(url);
 
+//            startActivity(Intent.createChooser(intent,getResources().getString(R.string.please_choice)));
+            startActivity(intent);
+
+            HaokanStatistics.getInstance(this).setAction(27,getClass().getSimpleName(),Intent.ACTION_VIEW).start();
+            disMissMorePop();
         } else if (id == R.id.else_online) {
             LogHelper.e("times", "------R.id.else_online");
             mWebView.loadUrl(mPopItemToUrl);
             disMissMorePop();
-
         } else {
         }
     }
