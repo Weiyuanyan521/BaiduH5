@@ -529,7 +529,8 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
 //            intentSet.setAction("com.haokan.setting");
 //            intentSet.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Intent intentSet = new Intent(mLocalResContext, ActivitySetting.class);
-            mLocalResContext.startActivity(intentSet);
+            mRemoteAppContext.startActivity(intentSet);
+
             HaokanStatistics statistics = HaokanStatistics.getInstance(mRemoteAppContext).setAction(9, "0", "");
             if (mCurrentImgBean != null) {
                 statistics.setImageIDs(mCurrentImgBean.image_id, null, null, null, mCurrentImgBean.id, null);
