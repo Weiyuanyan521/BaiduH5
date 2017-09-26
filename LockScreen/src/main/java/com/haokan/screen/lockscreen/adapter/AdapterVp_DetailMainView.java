@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -118,7 +119,7 @@ public class AdapterVp_DetailMainView extends AdapterVp_DetailBaseView implement
                 }
             });
         } else {
-            Glide.with(mContext).load(urlsmall).asBitmap().diskCacheStrategy(DiskCacheStrategy.SOURCE).dontAnimate().into((new SimpleTarget<Bitmap>() {
+            Glide.with(mContext).load(urlsmall).asBitmap().format(DecodeFormat.PREFER_ARGB_8888).asIs().dontTransform().diskCacheStrategy(DiskCacheStrategy.SOURCE).dontAnimate().into((new SimpleTarget<Bitmap>() {
                 @Override
                 public void onLoadFailed(Exception e, Drawable errorDrawable) {
                     super.onLoadFailed(e, errorDrawable);
