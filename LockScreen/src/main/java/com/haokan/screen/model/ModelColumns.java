@@ -181,7 +181,7 @@ public class ModelColumns {
 
         LogHelper.d("times", "update app called");
 
-        Observable<ResponseEntity<ResponseBody_8028>> observable = HttpRetrofitManager.getInstance().getRetrofitService().post8028(UrlsUtil_Java.URL_HOST, requestEntity);
+        Observable<ResponseEntity<ResponseBody_8028>> observable = HttpRetrofitManager.getInstance().getRetrofitService().post8028(UrlsUtil_Java.HostMethod.getJavaUrl_Lock_Config(), requestEntity);
         observable.map(new Func1<ResponseEntity<ResponseBody_8028>, ResponseEntity<ResponseBody_8028>>() {
             @Override
             public ResponseEntity<ResponseBody_8028> call(ResponseEntity<ResponseBody_8028> ResponseBody_8028) {

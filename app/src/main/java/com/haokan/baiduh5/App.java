@@ -78,6 +78,9 @@ public class App extends Application {
         LogHelper.d(TAG, "checkUpdata init APP_VERSION_CODE = " + APP_VERSION_CODE);
         DID = CommonUtil.getDid(context);
         PID = CommonUtil.getPid(context);
+
+        com.haokan.screen.App.DID=DID;
+        com.haokan.screen.App.PID=PID;
         sPhoneModel = CommonUtil.getPhoneModel(context);
         Locale systemLocal = Locale.getDefault();
         sLanguage_code = systemLocal.getLanguage();
