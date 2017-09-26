@@ -332,6 +332,7 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
     private  void unRegisterBaseReceiver(){
         mRemoteAppContext.unregisterReceiver(mBaseReceiver);
         mIsRegisterReceiver=false;
+        LogHelper.d("wangzixu", "unRegisterBaseReceiver");
     }
     private  void registerBaseReceiver(){
         if(mIsRegisterReceiver){
@@ -342,9 +343,7 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
-                if (LogHelper.DEBUG) {
-                    LogHelper.d("baseview", "onReceive action = " + action);
-                }
+                LogHelper.d("wangzixu", "mBaseReceiver onReceive action = " + action);
                 if (Values.Action.RECEIVER_SET_LOCKIMAGE.equals(action)) {
                     onReceiveLockImageChange();
                 } else if (Values.Action.RECEIVER_UPDATA_OFFLINE.equals(action)) {
@@ -398,7 +397,8 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
         filter.addAction(Values.Action.RECEIVER_LOCKSCREEN_LIKE_CHANGE);
         filter.addAction(Values.Action.RECEIVER_SET_LOCK_ADD_IMG);
 
-        mRemoteAppContext.registerReceiver(mBaseReceiver, filter);
+        mLocalResContext.registerReceiver(mBaseReceiver, filter);
+        LogHelper.d("wangzixu", "RegisterBaseReceiver");
     }
 
     protected void onReceiveCollectionChange(String imageId, boolean isAdd) {

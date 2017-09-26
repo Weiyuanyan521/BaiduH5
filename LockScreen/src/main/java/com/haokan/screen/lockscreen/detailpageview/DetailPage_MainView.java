@@ -1814,7 +1814,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
 
     @Override
     public void onUnLocking(float f) {
-        Log.i("wangzixu", "onUnLocking f = " + f);
+//        Log.i("wangzixu", "onUnLocking f = " + f);
         float ff = 3.3f * f - 2.3f;
         mTimeBottomLy.setAlpha(ff);
         mMainBottomLayout.setAlpha(ff);

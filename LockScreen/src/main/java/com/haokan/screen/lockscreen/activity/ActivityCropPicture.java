@@ -20,6 +20,7 @@ import com.haokan.screen.clipphoto.ClipPhotoManager;
 import com.haokan.screen.lockscreen.model.ModelLocalImage;
 import com.haokan.screen.model.interfaces.onDataResponseListener;
 import com.haokan.screen.util.CommonUtil;
+import com.haokan.screen.util.LogHelper;
 import com.haokan.screen.util.StatusBarUtil;
 import com.haokan.screen.util.ToastManager;
 import com.haokan.screen.util.Values;
@@ -104,6 +105,7 @@ public class ActivityCropPicture extends ActivityBase implements View.OnClickLis
                     intent1.putExtra("isAdd", true);
                     intent1.setAction(Values.Action.RECEIVER_UPDATA_LOCAL_IMAGE);
                     sendBroadcast(intent1);
+                    LogHelper.d("wangzixu", "saveLocalImage--");
 
                     dismissAllPromptLayout();
                     mIsSaving = false;

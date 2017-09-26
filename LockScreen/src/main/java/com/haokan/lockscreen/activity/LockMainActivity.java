@@ -59,7 +59,7 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
 //        mHaokanLockView = (DetailPage_MainView) findViewById(R.id.hklockview);
         mFrameLayout= (FrameLayout) findViewById(R.id.hklockview);
         if (LockScreenService.sHaokanLockView == null) {
-            LockScreenService.sHaokanLockView = new DetailPage_MainView(this);
+            LockScreenService.sHaokanLockView = new DetailPage_MainView(getApplicationContext());
         } else {
             LockScreenService.sHaokanLockView.onScreenOff();
         }
