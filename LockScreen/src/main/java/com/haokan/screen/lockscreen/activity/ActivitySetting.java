@@ -361,11 +361,11 @@ public class ActivitySetting extends ActivityBase implements View.OnClickListene
         } else {
             boolean success = intent.getBooleanExtra("success", false);
             if (success) {
-                ToastManager.showFollowToast(this, R.string.switch_success);
+//                ToastManager.showFollowToast(this, R.string.switch_success);
             } else {
                 String errmsg = intent.getStringExtra("errmsg");
                 if (TextUtils.isEmpty(errmsg)) {
-                    ToastManager.showFollowToast(this, R.string.switch_failed);
+//                    ToastManager.showFollowToast(this, R.string.switch_failed);
                 } else {
                     ToastManager.showFollowToast(this, errmsg);
                 }
