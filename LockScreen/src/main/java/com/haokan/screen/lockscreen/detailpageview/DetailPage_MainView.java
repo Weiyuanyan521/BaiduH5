@@ -19,6 +19,7 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -633,41 +634,42 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
             });
         }
     }
-//    private float  movePointY = 0;
-//    @Override
-//    public boolean dispatchTouchEvent(MotionEvent event) {
-//        final int action = event.getActionMasked();
-//        switch (action) {
-//            case MotionEvent.ACTION_DOWN:
-//                movePointY = event.getY();
-//                mAllowLongClick=true;
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                if (movePointY > event.getY()) {
-//                    mAllowLongClick = false;
-//                }else {
-//                    mAllowLongClick = true;
-//                }
+
+    private float  movePointY = 0;
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        final int action = event.getActionMasked();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                movePointY = event.getY();
+                mAllowLongClick=true;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (movePointY > event.getY()) {
+                    mAllowLongClick = false;
+                }else {
+                    mAllowLongClick = true;
+                }
 //                if(movePointY - event.getY() > DisplayUtil.dip2px(mRemoteAppContext, 5)){
 //                    LogHelper.e("times","-------MotionEvent.ACTION_MOVE");
 //                    startMarkBottomAnim(true);
 //                }
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                mAllowLongClick=false;
+                break;
+            case MotionEvent.ACTION_UP:
+                mAllowLongClick=false;
 //                if (movePointY > event.getY()+DisplayUtil.dip2px(mRemoteAppContext, 3)) {//向上滑动
 //                    if (movePointY - event.getY() < DisplayUtil.dip2px(mRemoteAppContext, 150)) {
 //                        LogHelper.e("times", "-------MotionEvent.ACTION_UP");
 //                        startMarkBottomAnim(false);
 //                    }
 //                }
-//                break;
-//            default:
-//                mAllowLongClick=false;
-//                break;
-//        }
-//        return super.dispatchTouchEvent(event);
-//    }
+                break;
+            default:
+                mAllowLongClick=false;
+                break;
+        }
+        return super.dispatchTouchEvent(event);
+    }
 
 
 
