@@ -93,6 +93,36 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
 //        }else{
 //            LogHelper.e("times","mHaoKanLockView==null");
 //        }
+        hideNavigation();
+    }
+
+    /**
+     * 设置状态栏和导航栏
+     * <p>
+     * 参考Android ApiDemos中的View - System UI Visibility - System UI Modes
+     * 源码地址：https://github.com/android/platform_development/tree/master/samples/ApiDemos 具体类：SystemUIModes
+     * 源码项目运营不了，我是用的模拟器自带的API Demos，对照着源码处理写的
+     */
+    private void hideNavigation() {
+        super.onResume();
+
+        int visibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+        visibility |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+        visibility |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;//隐藏导航栏
+        visibility |= View.SYSTEM_UI_FLAG_IMMERSIVE;//view获取焦点后导航栏别显示
+        visibility |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;//view全屏
+        getWindow().getDecorView().setSystemUiVisibility(visibility);
+
+        //设置状态栏透明
+//        Window win = getWindow();
+//        WindowManager.LayoutParams winParams = win.getAttributes();
+//        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+//        if (true) {
+//            winParams.flags |= bits;
+//        } else {
+//            winParams.flags &= ~bits;
+//        }
+//        win.setAttributes(winParams);
     }
 
     @Override

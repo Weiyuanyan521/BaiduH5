@@ -6,12 +6,10 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.haokan.screen.App;
 import com.haokan.screen.http.HttpStatusManager;
 import com.haokan.screen.util.LogHelper;
 import com.haokan.screen.util.Values;
@@ -77,13 +75,15 @@ public class GaServices extends Service {
                 if (value != -99l) {
                     builder.setValue(value);
                 }
-//                Tracker t = ((App)getApplication()).getDefaultTracker();
-                Tracker t = null;
+                Tracker t = GaManager.getInstance().getDefaultTracker();
+//                Tracker t = null;
                 if (LogHelper.DEBUG) {
                     LogHelper.d("GaService", "ga事件上报 category = " + category
                             + ", action = " + action
                             + ", label = " + label
-                            + ", value = " + value);
+                            + ", value = " + value
+                            + ", t = " + t
+                    );
                 }
                 if (t != null) {
                     t.send(builder.build());
@@ -91,8 +91,8 @@ public class GaServices extends Service {
             } else if (type == 1) {
                 String screenName = intent.getStringExtra("screenname");
                 if (!TextUtils.isEmpty(screenName)) {
-//                    Tracker t = ((App)getApplication()).getDefaultTracker();
-                    Tracker t = null;
+                    Tracker t = GaManager.getInstance().getDefaultTracker();
+//                    Tracker t = null;
                     if (LogHelper.DEBUG) {
                         LogHelper.d("GaService", "ga屏幕上报 screenName = " + screenName
                                 + ", t = " + t);

@@ -388,7 +388,9 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
         mIsLocked = false;
 //        mISystemUiView.setNotificationUpperVisible(false);
         mTimeBottomLy.setVisibility(GONE);
-        showCaption();
+        if (mCurrentImgBean.type != 3) {
+            showCaption();
+        }
 //        if(mISystemUIListener!=null) {
 //            mISystemUIListener.setNotificationVisible(false);
 //        }

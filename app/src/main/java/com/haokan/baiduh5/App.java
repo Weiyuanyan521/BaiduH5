@@ -16,6 +16,7 @@ import com.haokan.baiduh5.model.onDataResponseListener;
 import com.haokan.baiduh5.util.CommonUtil;
 import com.haokan.baiduh5.util.LogHelper;
 import com.haokan.baiduh5.util.Values;
+import com.haokan.screen.ga.GaManager;
 import com.sohu.cyan.android.sdk.api.Config;
 import com.sohu.cyan.android.sdk.api.CyanSdk;
 import com.sohu.cyan.android.sdk.exception.CyanException;
@@ -66,6 +67,8 @@ public class App extends Application {
         initCY();
 
         initPush();
+
+        GaManager.getInstance().init(this);
         //友盟推送end
     }
 

@@ -3,6 +3,9 @@ package com.haokan.screen.ga;
 import android.content.Context;
 import android.content.Intent;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+import com.haokan.lockscreen.R;
 import com.haokan.screen.util.Values;
 
 /**
@@ -134,4 +137,19 @@ public class GaManager {
         }
     }
 
+
+    //初始化逻辑, 代理了在app中初始化, 程序开始请调用这个方法
+    private Tracker mTracker;
+
+    public Tracker getDefaultTracker() {
+        return mTracker;
+    }
+
+    public void init(Context context) {
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(context);
+        analytics.setLocalDispatchPeriod(30);
+        mTracker = analytics.newTracker(R.xml.global_tracker);
+        mTracker.enableAutoActivityTracking(true);
+        mTracker.enableExceptionReporting(true);
+    }
 }

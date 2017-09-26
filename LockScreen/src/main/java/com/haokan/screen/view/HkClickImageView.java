@@ -10,12 +10,14 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -210,10 +212,17 @@ public class HkClickImageView extends ImageView {
 
 
     public void init() {
-        mWidth = DisplayUtil.screenWidth(context);
-//        mHeight = DisplayUtil.screenHeight(context)-130;
-        mHeight = DisplayUtil.screenHeight(context);
-        LogHelper.e("times","mWidth="+mWidth+"---,--mHeight="+mHeight);
+//        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+//        mHeight = metrics.heightPixels;
+        Point screenPoint = DisplayUtil.getRealScreenPoint(context);
+        mWidth = screenPoint.x;
+        mHeight = screenPoint.y;
+//        LogHelper.e("times","oriH = "+oriH+"---,--mHeight = "+mHeight);
+
+//        if () {
+//
+//        }
+
         mBlurRect.set(0, 0, mWidth, mRadius);
         mLinearGradient = new LinearGradient(0, 0, 0, mRadius, 0xFFFFFFFF, 0x00FFFFFF, Shader.TileMode.MIRROR);
         mXFermode = new PorterDuffXfermode(PorterDuff.Mode.DST_ATOP);

@@ -466,10 +466,10 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
 //            i.setPackage(Values.PACKAGE_NAME);
 //            i.addCategory("android.intent.category.DEFAULT");
 //            i.setAction("com.haokan.webview");
-//            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             Intent i = new Intent(mLocalResContext, ActivityWebView.class);
             i.putExtra(ActivityWebView.KEY_INTENT_WEB_URL, mCurrentImgBean.getUrl_click());
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             //startHaokanActivity(i);
             mRemoteAppContext.startActivity(i);
             HaokanStatistics.getInstance(mRemoteAppContext)
@@ -527,8 +527,8 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
 //            intentSet.setPackage(Values.PACKAGE_NAME);
 //            intentSet.addCategory("android.intent.category.DEFAULT");
 //            intentSet.setAction("com.haokan.setting");
-//            intentSet.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Intent intentSet = new Intent(mLocalResContext, ActivitySetting.class);
+            intentSet.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mRemoteAppContext.startActivity(intentSet);
 
             HaokanStatistics statistics = HaokanStatistics.getInstance(mRemoteAppContext).setAction(9, "0", "");

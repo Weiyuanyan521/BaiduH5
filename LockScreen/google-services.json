@@ -1,59 +1,25 @@
 {
   "project_info": {
-    "project_number": "676589571303",
-    "project_id": "firebase-lockscreen-meirikandi"
+    "project_number": "282363519907",
+    "project_id": "lockscreen-mrkd-4f5ab"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:676589571303:android:df8623803f15d3f2",
-        "android_client_info": {
-          "package_name": "com.haokanhaokan.news"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "676589571303-cesgs0vmrrgd3e91c8t262uk22f38bs8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyD5mOS9lkg5_xNYx_WtGZLewWuH-mRvzQU"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": "UA-93470137-15"
-          }
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 1
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:676589571303:android:9cc46d4b5e8aeb07",
+        "mobilesdk_app_id": "1:282363519907:android:9cc46d4b5e8aeb07",
         "android_client_info": {
           "package_name": "com.haokan.lockscreen"
         }
       },
       "oauth_client": [
         {
-          "client_id": "676589571303-cesgs0vmrrgd3e91c8t262uk22f38bs8.apps.googleusercontent.com",
+          "client_id": "282363519907-bavfd0f5mltmvc6no4h66e2kmp72h4ji.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD5mOS9lkg5_xNYx_WtGZLewWuH-mRvzQU"
+          "current_key": "AIzaSyCMlVDvkyu7TeuE3xU3VHPS1Kz_QJx4uXU"
         }
       ],
       "services": {

@@ -125,6 +125,15 @@
         <!--android:enabled="true"-->
         <!--android:exported="false"/>-->
 
+        <service
+            android:name="com.haokan.screen.ga.GaServices"
+            android:exported="true"
+            android:label="HkGaMaiDian">
+            <intent-filter>
+                <action android:name="com.haokan.service.gaservice" />
+            </intent-filter>
+        </service>
+
         <!--阿里云热修复  各个产品id需要不一样防止更新错误-->
         <meta-data
             android:name="com.taobao.android.hotfix.IDSECRET"
