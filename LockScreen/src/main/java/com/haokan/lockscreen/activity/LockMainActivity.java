@@ -33,7 +33,7 @@ import java.text.SimpleDateFormat;
 /**
  * Created by wangzixu on 2017/3/2.
  */
-public class LockMainActivity extends Activity implements View.OnClickListener,ISystemUI{
+public class LockMainActivity extends Activity implements View.OnClickListener,ISystemUI, View.OnSystemUiVisibilityChangeListener {
     public static boolean sIsActivityExists = false;
     private DetailPage_MainView mHaokanLockView;
     private TextView mTvTime, mTvData, mTvTitle, mTvClickMore;
@@ -93,6 +93,7 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
 //        }else{
 //            LogHelper.e("times","mHaoKanLockView==null");
 //        }
+        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(this);
         hideNavigation();
     }
 
@@ -105,9 +106,9 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
      */
     private void hideNavigation() {
         super.onResume();
-
-        int visibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        visibility |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+        int visibility = 0;
+//        int visibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+//        visibility |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
         visibility |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;//隐藏导航栏
         visibility |= View.SYSTEM_UI_FLAG_IMMERSIVE;//view获取焦点后导航栏别显示
         visibility |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;//view全屏
@@ -323,6 +324,11 @@ public class LockMainActivity extends Activity implements View.OnClickListener,I
             return;
         }
         mTimeBottomLy.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+        hideNavigation();
     }
 
     private class TimeReceiver extends BroadcastReceiver {
