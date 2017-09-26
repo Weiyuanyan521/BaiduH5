@@ -42,6 +42,7 @@ public class RequestHeader<RequestBody> {
     private String companyId;
     private String countryCode;
     private String languageCode;
+    private String did;
 
     /**
      * @param transType 接口编号
@@ -51,7 +52,7 @@ public class RequestHeader<RequestBody> {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         timeStamp = sdf.format(new Date(System.currentTimeMillis()));
         messageID = timeStamp + UrlsUtil_Java.getSerialCode();
-        transactionType = transType;
+//        transactionType = transType;
 
         TreeMap<String, Object> treeMap = beanToMap(body);
         JSONStringer stringer = new JSONStringer();
@@ -73,7 +74,8 @@ public class RequestHeader<RequestBody> {
         String bodyStr = stringer.toString();
 //        LogHelper.e("times","before---bodyStr="+bodyStr);
         StringBuilder sb = new StringBuilder();
-        String sign_temp = sb.append(messageID).append(timeStamp).append(transactionType).append(UrlsUtil_Java.SECRET_KEY).append(bodyStr).toString();
+//        String sign_temp = sb.append(messageID).append(timeStamp).append(transactionType).append(UrlsUtil_Java.SECRET_KEY).append(bodyStr).toString();
+        String sign_temp = sb.append(messageID).append(timeStamp).append(UrlsUtil_Java.SECRET_KEY).append(bodyStr).toString();
 //        LogHelper.e("times","before---sign_temp="+sign_temp);
         sign = SecurityUtil.md5(sign_temp);
 //        LogHelper.e("times","afeter---sign="+sign);
@@ -83,6 +85,7 @@ public class RequestHeader<RequestBody> {
         companyId = UrlsUtil_Java.COMPANYID;
         languageCode = App.sLanguage_code;
         countryCode = App.sCountry_code;
+        did=App.DID;
     }
 
     public static TreeMap<String, Object> beanToMap(Object object){
@@ -191,5 +194,13 @@ public class RequestHeader<RequestBody> {
 
     public void setLanguageCode(String languageCode) {
         this.languageCode = languageCode;
+    }
+
+    public String getDid() {
+        return did;
+    }
+
+    public void setDid(String did) {
+        this.did = did;
     }
 }

@@ -347,6 +347,7 @@
                 android:layout_height="1px"
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="14dp"
+                android:visibility="gone"
                 android:background="#d8d8d8" />
 
             <RelativeLayout
@@ -356,6 +357,7 @@
                 android:background="@drawable/bg_selector_bai"
                 android:minHeight="@dimen/setting_itemh"
                 android:paddingEnd="14dp"
+                android:visibility="gone"
                 android:paddingStart="14dp">
 
                 <ImageView

@@ -62,13 +62,9 @@ public class UrlsUtil {
          * 用来获取首页数据，tag也数据，cp页数据的host
          */
         public static final String URL_HOST_2 = "http://levect.com";
-//        public static final String URL_HOST_2 = "http://haokan.dev.levect.com";
-//        public static final String URL_HOST_2 = "http://haokan.demo.levect.com";
-//        public static final String URL_HOST_2 = "http://haokan.gray.levect.com";
-
 
         public static final String URL_JAVA = "http://magiapi.levect.com/hk-protocol/app";//java接口正式地址
-//        public static final String URL_JAVA = "http://192.168.0.236:18080/hk-protocol/app";//java接口测试地址
+
 
         public static String COMPANYID = "10000";
         public static String SECRET_KEY = "GVed-Y~of0pLBjlDzN66V5Q)iipr!x5@";
@@ -77,9 +73,7 @@ public class UrlsUtil {
 
         //*********注册登录相关接口 begin************************
         public static final String URL_HOST_user = "https://user.levect.com";
-//        public static final String URL_HOST_user = "http://user.dev.levect.com";
-//        public static final String URL_HOST_user = "http://user.demo.levect.com";
-//        public static final String URL_HOST_user = "http://user.gray.levect.com";
+
         //注册登录
         public static final String URL_apiUserLogin_c = "apiUserLogin";
         public static final String URL_sendsms_a = "SendSms"; //发送短信,获取验证码

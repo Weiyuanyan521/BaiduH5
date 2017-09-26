@@ -4,21 +4,17 @@ package com.haokan.screen.http;
  * 用于生成访问网络的url地址的工具类
  */
 public class UrlsUtil_Java {
-//    public static String COMPANYID = "10000";
-//    public static String SECRET_KEY = "GVed-Y~of0pLBjlDzN66V5Q)iipr!x5@";
 
-//    public static String COMPANYID = "10039";
-//    public static String SECRET_KEY = "amHSjRYf4b6cJKQ4k8";
 
     //青橙策略
-    public static String COMPANYID = "10092";
-    public static String SECRET_KEY = "xiFa5zCumnw7uHaq";
-    public static String COMPANYEID = "133001";
+//    public static String COMPANYID = "10092";
+//    public static String SECRET_KEY = "xiFa5zCumnw7uHaq";
+//    public static String COMPANYEID = "133001";
 
-//    //闻泰策略
-//    public static String COMPANYID = "10061";
-//    public static String SECRET_KEY = "NfYQKxtmkpEmx4GFeK";
-//    public static String COMPANYEID = "116001";
+//    //每日看点锁屏策略
+    public static String COMPANYID = "10000";
+    public static String SECRET_KEY = "GVed-Y~of0pLBjlDzN66V5Q)iipr!x5@";
+    public static String COMPANYEID = "138001";
 
 
     public static String COMPANYPID = "0";
@@ -28,10 +24,7 @@ public class UrlsUtil_Java {
 //    public static String SECRET_KEY = "jQfDRCB3h3VqzDsZ";
 
 
-    /*
-    http://192.168.0.236:18080/hk-protocol/app
-    https://magiapi.levect.com/hk-protocol/app
-    */
+
 //    private static final String URL_HOST_BASE_1 = "http://192.168.0.236:18080/hk-protocol";
 //    private static final String URL_HOST_BASE_1 = "http://protocol.gray.levect.com/hk-protocol";
 //    private static final String URL_HOST_BASE_1 = "http://101.37.112.138/hk-protocol";
@@ -40,7 +33,11 @@ public class UrlsUtil_Java {
 //    private static final String URL_HOST_BASE_1 = "http://192.168.0.48:31004/hk-protocol";//测试用
 //    private static final String URL_HOST_BASE_1 = "http://protocol.gray.levect.com/hk-protocol";//测试用
 
-    private static final String URL_HOST_BASE_1 = "http://magiapi.levect.com/hk-protocol";//国内正式
+//    private static final String URL_HOST_BASE_1 = "http://magiapi.levect.com/hk-protocol";//国内正式
+
+    public static final String URL_HOST_BASE = "http://srapi.levect.com";//旺旺新写
+
+    public static final String URL_HOST_BASE_1 = URL_HOST_BASE+"/lockscreen";//旺旺新写  ivvif3,mrkd,kubi
 
     private static final String URL_HOST_BASE_2 = "http://192.168.0.236:18080/hk-protocol";
 
@@ -50,6 +47,8 @@ public class UrlsUtil_Java {
     public static String URL_HOST_APP = URL_HOST_BASE_Current +  "/app";
 
     private static long sSerialNum = 0000000001; //流水号从0000000001开始计数，步长为1，最大取值为9999999999，循环使用。
+
+    private static final String CURRENT_COMPANY_SPLICE="/mrkd";//每日看点厂商
 
     public static void setAnotherHost() {
         if (URL_HOST_BASE_1.equals(URL_HOST_BASE_Current)) {
@@ -63,7 +62,7 @@ public class UrlsUtil_Java {
         return URL_HOST_BASE_Current;
     }
 
-    //java接口----begin----
+
     public interface TransactionType{
         /**
          * 热度/分类CP查询（8010）
@@ -90,7 +89,7 @@ public class UrlsUtil_Java {
         String TYPE_8018 = "8018";
 
         /**
-         * 收藏接口 /appbase 8015
+         * 订阅 /appbase 8015
          */
         String TYPE_8015 = "8015";
 
@@ -113,24 +112,42 @@ public class UrlsUtil_Java {
      */
     public static class HostMethod{
         /**
-         * 默认cp列表, injoo: /injoo/findCp, 闻泰:/v2/wentai/findCp, 青橙:/v2/greenorange/findCp
+         * 默认cp列表
          */
         public static String getJavaUrl_Default_Cplist() {
-            return URL_HOST_BASE_Current + "/v2/greenorange/findCp";
+            return URL_HOST_BASE_Current + CURRENT_COMPANY_SPLICE+"/cplist ";
         }
 
         /**
-         * 换一换离线图片接口, injoo: /injoo/findCp, 闻泰:/v2/wentai/findCp
+         * 换一换接口推荐最新的
          */
         public static String getJavaUrl_Switch_Offline() {
-            return URL_HOST_BASE_Current + "/v2/greenorange/findCp";
+            return URL_HOST_BASE_Current + CURRENT_COMPANY_SPLICE+"/autoupdate";
+        }
+        /**
+         * 换一换接口
+         */
+        public static String getJavaUrl_Switch_Change() {
+            return URL_HOST_BASE_Current + CURRENT_COMPANY_SPLICE+"/change";
+        }
+        /**
+         * 订阅取消订阅  subscription
+         */
+        public static String getJavaUrl_Switch_Followed() {
+            return URL_HOST_BASE_Current + CURRENT_COMPANY_SPLICE+"/followed";
         }
 
+        /**
+         * 配置接口
+         */
+        public static String getJavaUrl_Lock_Config() {
+            return URL_HOST_BASE+"/api/app/configure";
+        }
         /**
          * APP升级接口
          */
         public static String getJavaUrl_8011() {
-            return URL_HOST_BASE_Current + "/app";
+            return URL_HOST_BASE_Current + CURRENT_COMPANY_SPLICE+"/checkversion";
         }
     }
 

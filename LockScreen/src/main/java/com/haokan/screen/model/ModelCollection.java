@@ -249,7 +249,7 @@ public class ModelCollection {
         requestEntity.setHeader(header);
 
         listener.onStart();
-        Observable<ResponseEntity> observable = HttpRetrofitManager.getInstance().getRetrofitService().changeCollection(UrlsUtil_Java.URL_HOST, requestEntity);
+        Observable<ResponseEntity> observable = HttpRetrofitManager.getInstance().getRetrofitService().changeCollection(UrlsUtil_Java.HostMethod.getJavaUrl_Switch_Followed(), requestEntity);
         observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -319,7 +319,7 @@ public class ModelCollection {
         requestEntity.setHeader(header);
 
         listener.onStart();
-        Observable<ResponseEntity> observable = HttpRetrofitManager.getInstance().getRetrofitService().changeCollection(UrlsUtil_Java.URL_HOST, requestEntity);
+        Observable<ResponseEntity> observable = HttpRetrofitManager.getInstance().getRetrofitService().changeCollection(UrlsUtil_Java.HostMethod.getJavaUrl_Switch_Followed(), requestEntity);
         observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

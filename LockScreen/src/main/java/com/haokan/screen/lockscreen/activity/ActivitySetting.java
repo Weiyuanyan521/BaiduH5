@@ -158,6 +158,9 @@ public class ActivitySetting extends ActivityBase implements View.OnClickListene
     }
 
     private void initAfterCheckPermission(final Context context) {
+          if(true) //检查更新屏蔽
+            return;
+
         if (!HttpStatusManager.isWifi(context)) {
             return;
         }

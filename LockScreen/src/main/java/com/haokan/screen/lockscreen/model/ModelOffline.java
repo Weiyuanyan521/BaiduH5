@@ -388,10 +388,12 @@ public class ModelOffline {
         body.isRecommend = "" + auto_rem_swtich;
         body.page = changePageIndex;
 
+        String requestURL=UrlsUtil_Java.HostMethod.getJavaUrl_Switch_Offline();
         String urlTransctionType = UrlsUtil_Java.TransactionType.TYPE_SWITCH_OFFLINE;
 
         if (!useDefaultInterface) {
             urlTransctionType = UrlsUtil_Java.TransactionType.TYPE_SWITCH_OFFLINE_CHANGE;
+             requestURL=UrlsUtil_Java.HostMethod.getJavaUrl_Switch_Change();
         }
         LogHelper.e("times", "urlTransctionType = " + urlTransctionType);
         RequestHeader<RequestBody_Switch_Offline> header = new RequestHeader(urlTransctionType, body);//TYPE_SWITCH_OFFLINE
@@ -399,7 +401,7 @@ public class ModelOffline {
         requestEntity.setBody(body);
 
         LogHelper.d("wangzixu", "switchOfflineData is called");
-        Observable<ResponseEntity<ResponseBody_Switch_Offline>> offlineData = HttpRetrofitManager.getInstance().getRetrofitService().postSwitchOffline(UrlsUtil_Java.HostMethod.getJavaUrl_Switch_Offline(), requestEntity);
+        Observable<ResponseEntity<ResponseBody_Switch_Offline>> offlineData = HttpRetrofitManager.getInstance().getRetrofitService().postSwitchOffline(requestURL, requestEntity);
         offlineData
                 .map(new Func1<ResponseEntity<ResponseBody_Switch_Offline>, ArrayList<NewImageBean>>() {
                     @Override
