@@ -24,7 +24,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="false"
             android:layout_marginBottom="20dp"
-            android:text="@string/app_copyright"
+            android:text="Copyright 2017 BeijingAngelRing IT. All rights reserved."
             android:textColor="#999999"
             android:textSize="10sp" />
         <LinearLayout
