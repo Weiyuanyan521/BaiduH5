@@ -189,11 +189,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
         }
         mRegistedReceiverMainVew=true;
         IntentFilter filter = new IntentFilter();
-//        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-//        filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
-//        filter.addAction("android.net.wifi.STATE_CHANGE");
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-        filter.addAction(Intent.ACTION_TIME_TICK);
         mRemoteAppContext.registerReceiver(mNetWorkStateChangedReveiver, filter);
         LogHelper.d("WifiRequestReveiver", "mainview pid = " + Process.myPid());
 
@@ -217,7 +213,7 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
 ////                        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
 //                        sendIntent.setType("text/plain");
 //                        // 目标应用选择对话框的标题
-//                        Intent intent2 = Intent.createChooser(sendIntent, getResources().getString(R.string.share_to));
+//                        Intent intent2 Intent.createChooser(sendIntent, getResources().getString(R.string.share_to));
 //                        intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                        startHaokanActivity(intent2);
 
@@ -233,8 +229,10 @@ public class DetailPage_MainView extends DetailPage_BaseView implements View.OnC
                 }
             }
         };
+
         IntentFilter filter1 = new IntentFilter();
         filter1.addAction(Values.Action.RECEIVER_DISSMISS_KEYGUARD);
+        filter1.addAction(Intent.ACTION_TIME_TICK);
         mRemoteAppContext.registerReceiver(mMainViewReceiver, filter1);
     }
     private Runnable mRefreshLockImageRunable = new Runnable() {
