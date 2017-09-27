@@ -156,22 +156,22 @@ public class NetWorkStateChangedReveiver extends BroadcastReceiver {
                 switch (wifiBean.type) {
                     case 100: //点赞/取消赞
                         LogHelper.d("WifiRequestReveiver", "sendBaseRequest url = " + wifiBean.url);
-                        ModelBase.sendBaseRequest(mContext, wifiBean.url, new onDataResponseListenerAdapter() {
-                            @Override
-                            public void onDataSucess(Object o) {
-                                LogHelper.d("WifiRequestReveiver", "sendBaseRequest success");
-                            }
-                        });
+//                        ModelBase.sendBaseRequest(mContext, wifiBean.url, new onDataResponseListenerAdapter() {
+//                            @Override
+//                            public void onDataSucess(Object o) {
+//                                LogHelper.d("WifiRequestReveiver", "sendBaseRequest success");
+//                            }
+//                        });
                         //删除掉刚才发的请求
                         mContext.getContentResolver().delete(HaokanProvider.URI_PROVIDER_WIFI_REQUEST, "_id=?", new String[]{String.valueOf(wifiBean._id)});
                         break;
                     case 8015: //点收藏,取消收藏
                         LogHelper.d("WifiRequestReveiver", "sendBaseRequest type = 8015");
                         String reqBody = wifiBean.reqBody;
-                        if (!TextUtils.isEmpty(reqBody)) {
-                            RequestBody_8015 body_8015 = JsonUtil.fromJson(reqBody, RequestBody_8015.class);
-                            ModelCollection.add_del_CollectionImageToServer(mContext, body_8015);
-                        }
+//                        if (!TextUtils.isEmpty(reqBody)) {
+//                            RequestBody_8015 body_8015 = JsonUtil.fromJson(reqBody, RequestBody_8015.class);
+//                            ModelCollection.add_del_CollectionImageToServer(mContext, body_8015);
+//                        }
                         //删除掉刚才发的请求
                         mContext.getContentResolver().delete(HaokanProvider.URI_PROVIDER_WIFI_REQUEST, "_id=?", new String[]{String.valueOf(wifiBean._id)});
                         break;

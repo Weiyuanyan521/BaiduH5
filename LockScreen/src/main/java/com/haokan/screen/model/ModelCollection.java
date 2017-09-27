@@ -67,48 +67,48 @@ public class ModelCollection {
         String url = UrlsUtil.getCollection(mContext, "", page, pageSize, 6, App.sBigImgSize, Values.ImageSize.SIZE_360x640);
         Observable<DataResponse<List<MainImageBean>>> observable = HttpRetrofitManager.getInstance().getRetrofitService().getCollectionImages(url);
         observable.map(new Func1<DataResponse<List<MainImageBean>>, DataResponse<List<MainImageBean>>>() {
-                @Override
-                public DataResponse<List<MainImageBean>> call(DataResponse<List<MainImageBean>> listDataResponse) {
-                    DataResponse<List<MainImageBean>> response = HttpStatusManager.checkResponseSuccess(listDataResponse);
-                    if (response.getCode() == 200 && response.getData() != null
-                            && response.getData()!= null && response.getData().size() > 0) {
-                        List<MainImageBean> list = response.getData();
-                        ImgAndTagWallManager imgAndTagWallManager = ImgAndTagWallManager.getInstance(mContext);
-                        imgAndTagWallManager.initTagsPosition(list);
+            @Override
+            public DataResponse<List<MainImageBean>> call(DataResponse<List<MainImageBean>> listDataResponse) {
+                DataResponse<List<MainImageBean>> response = HttpStatusManager.checkResponseSuccess(listDataResponse);
+                if (response.getCode() == 200 && response.getData() != null
+                        && response.getData() != null && response.getData().size() > 0) {
+                    List<MainImageBean> list = response.getData();
+                    ImgAndTagWallManager imgAndTagWallManager = ImgAndTagWallManager.getInstance(mContext);
+                    imgAndTagWallManager.initTagsPosition(list);
+                }
+                return response;
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<DataResponse<List<MainImageBean>>>() {
+                    @Override
+                    public void onCompleted() {
                     }
-                    return response;
-                }
-            })
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Subscriber<DataResponse<List<MainImageBean>>>() {
-                @Override
-                public void onCompleted() {
-                }
 
-                @Override
-                public void onError(Throwable e) {
-                    listener.onDataFailed(e.getMessage());
-                }
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onDataFailed(e.getMessage());
+                    }
 
-                @Override
-                public void onNext(DataResponse<List<MainImageBean>> listDataResponse) {
-                    if (listDataResponse.getCode() == 200) {
-                        if (listDataResponse.getData() == null || listDataResponse.getData().size() == 0) {
-                            listener.onDataEmpty();
+                    @Override
+                    public void onNext(DataResponse<List<MainImageBean>> listDataResponse) {
+                        if (listDataResponse.getCode() == 200) {
+                            if (listDataResponse.getData() == null || listDataResponse.getData().size() == 0) {
+                                listener.onDataEmpty();
+                            } else {
+                                listener.onDataSucess(listDataResponse.getData());
+                            }
                         } else {
-                            listener.onDataSucess(listDataResponse.getData());
+                            listener.onDataFailed(listDataResponse.getMessage());
                         }
-                    } else {
-                        listener.onDataFailed(listDataResponse.getMessage());
                     }
-                }
 
-                @Override
-                public void onStart() {
-                    listener.onStart();
-                }
-            });
+                    @Override
+                    public void onStart() {
+                        listener.onStart();
+                    }
+                });
     }
 
     public static void getCollectedZutuData(final Context mContext, int page, int pageSize, final onDataResponseListener listener) {
@@ -184,7 +184,7 @@ public class ModelCollection {
     }
 
 
-    public static void addCollection_Dantu_Zutu(Context context,@NonNull MainImageBean bean, @NonNull final onDataResponseListener listener) {
+    public static void addCollection_Dantu_Zutu(Context context, @NonNull MainImageBean bean, @NonNull final onDataResponseListener listener) {
         String url = UrlsUtil.addCollection(context, bean.getType() == 2 ? 5 : 1, bean.getImage_id());
         ModelBase.sendBaseRequest(context, url, listener);
     }
@@ -225,7 +225,7 @@ public class ModelCollection {
         });
     }
 
-    public static void addCollectionCp(Context context,@NonNull String cpId, @NonNull final onDataResponseListener listener) {
+    public static void addCollectionCp(Context context, @NonNull String cpId, @NonNull final onDataResponseListener listener) {
 //        String url = UrlsUtil.addCollection(context, 3, cpId);
 //        ModelBase.sendBaseRequest(context, url, listener);
         if (listener == null) {
@@ -277,7 +277,7 @@ public class ModelCollection {
                 });
     }
 
-    public static void delCollectionCp(Context context,@NonNull ArrayList<CpBean> cps, @NonNull final onDataResponseListener listener) {
+    public static void delCollectionCp(Context context, @NonNull ArrayList<CpBean> cps, @NonNull final onDataResponseListener listener) {
         List<RequestBeanDelCollection> requestList = new ArrayList<>();
         for (int i = 0; i < cps.size(); i++) {
             RequestBeanDelCollection bean1 = new RequestBeanDelCollection();
@@ -289,7 +289,7 @@ public class ModelCollection {
         ModelBase.sendBaseRequest(context, url, listener);
     }
 
-    public static void delCollectionCp(Context context,@NonNull String cpId, @NonNull final onDataResponseListener listener) {
+    public static void delCollectionCp(Context context, @NonNull String cpId, @NonNull final onDataResponseListener listener) {
 //        List<RequestBeanDelCollection> requestList = new ArrayList<>();
 //        RequestBeanDelCollection bean1 = new RequestBeanDelCollection();
 //        bean1.setType("3");
@@ -403,7 +403,7 @@ public class ModelCollection {
         ModelBase.sendBaseRequest(mContext, url, listener);
     }
 
-    public static void delCollectionTag(Context mContext,@NonNull String tagId, @NonNull final onDataResponseListener listener) {
+    public static void delCollectionTag(Context mContext, @NonNull String tagId, @NonNull final onDataResponseListener listener) {
         RequestBeanDelCollection bean = new RequestBeanDelCollection();
         List<RequestBeanDelCollection> list = new ArrayList<>();
         bean.setType("2");
@@ -463,12 +463,12 @@ public class ModelCollection {
     }
 
     /**
-     *   private String cIds;//逗号分隔,,,
-     *   private int op;//1表示收藏 0表示取消,,,
-     *   private int type;// 1单图，2标签，3CP，4分类，5组图
+     * private String cIds;//逗号分隔,,,
+     * private int op;//1表示收藏 0表示取消,,,
+     * private int type;// 1单图，2标签，3CP，4分类，5组图
      */
-    public static void addCollectionImage(final Context context, final MainImageBean bean, final onDataResponseListener listener){
-        if(listener==null){
+    public static void addCollectionImage(final Context context, final MainImageBean bean, final onDataResponseListener listener) {
+        if (listener == null) {
             return;
         }
 
@@ -571,7 +571,7 @@ public class ModelCollection {
                         values.put("reqBody", JsonUtil.toJson(body));
                         values.put("create_time", System.currentTimeMillis());
 
-                        context.getContentResolver().insert(HaokanProvider.URI_PROVIDER_WIFI_REQUEST,  values);
+                        context.getContentResolver().insert(HaokanProvider.URI_PROVIDER_WIFI_REQUEST, values);
                         subscriber.onNext(null);
                         subscriber.onCompleted();
                         LogHelper.d("addCollectionImage", "存网络请求 成功");
@@ -590,8 +590,10 @@ public class ModelCollection {
         add_del_CollectionImageToServer(context, body);
     }
 
-    public static void add_del_CollectionImageToServer(final Context context, final RequestBody_8015 body){
-        if(body == null || context == null){
+    public static void add_del_CollectionImageToServer(final Context context, final RequestBody_8015 body) {
+        if (true)   //屏蔽
+            return;
+        if (body == null || context == null) {
             return;
         }
 
@@ -627,12 +629,12 @@ public class ModelCollection {
     }
 
     /**
-     *   private String cIds;//逗号分隔,,,
-     *   private int op;//1表示收藏 0表示取消,,,
-     *   private int type;// 1单图，2标签，3CP，4分类，5组图
+     * private String cIds;//逗号分隔,,,
+     * private int op;//1表示收藏 0表示取消,,,
+     * private int type;// 1单图，2标签，3CP，4分类，5组图
      */
-    public static void delCollectionImage(final Context context, final MainImageBean bean, final onDataResponseListener listener){
-        if(listener==null){
+    public static void delCollectionImage(final Context context, final MainImageBean bean, final onDataResponseListener listener) {
+        if (listener == null) {
             return;
         }
         //本地
@@ -641,12 +643,12 @@ public class ModelCollection {
             public void call(Subscriber<? super Object> subscriber) {
                 synchronized (ModelCollection.class) {
                     try {
-                        context.getContentResolver().delete(HaokanProvider.URI_PROVIDER_LOCK_COLLECT,  "imageId=?", new String[]{bean.image_id});
+                        context.getContentResolver().delete(HaokanProvider.URI_PROVIDER_LOCK_COLLECT, "imageId=?", new String[]{bean.image_id});
                         subscriber.onNext(null);
                         subscriber.onCompleted();
                     } catch (Exception e) {
-    //                    subscriber.onNext(null);
-    //                    subscriber.onCompleted();
+                        //                    subscriber.onNext(null);
+                        //                    subscriber.onCompleted();
                         subscriber.onError(e);
                     }
                 }
@@ -698,7 +700,7 @@ public class ModelCollection {
                         values.put("reqBody", JsonUtil.toJson(body));
                         values.put("create_time", System.currentTimeMillis());
 
-                        context.getContentResolver().insert(HaokanProvider.URI_PROVIDER_WIFI_REQUEST,  values);
+                        context.getContentResolver().insert(HaokanProvider.URI_PROVIDER_WIFI_REQUEST, values);
                         subscriber.onNext(null);
                         subscriber.onCompleted();
                         LogHelper.d("delCollectionImage", "存网络请求 成功");
@@ -720,7 +722,7 @@ public class ModelCollection {
     /**
      * 批量删除
      */
-    public static void delCollectionImageBatch(final Context context, final List<NewImageBean> list, final onDataResponseListener listener){
+    public static void delCollectionImageBatch(final Context context, final List<NewImageBean> list, final onDataResponseListener listener) {
         if (list == null || listener == null) {
             return;
         }
@@ -731,7 +733,7 @@ public class ModelCollection {
             public void call(Subscriber<? super Object> subscriber) {
                 try {
                     for (int i = 0; i < list.size(); i++) {
-                        context.getContentResolver().delete(HaokanProvider.URI_PROVIDER_LOCK_COLLECT,  "imageId=?", new String[]{list.get(i).imgId});
+                        context.getContentResolver().delete(HaokanProvider.URI_PROVIDER_LOCK_COLLECT, "imageId=?", new String[]{list.get(i).imgId});
                     }
                     subscriber.onNext(null);
                     subscriber.onCompleted();
@@ -775,7 +777,7 @@ public class ModelCollection {
         for (int i = 0; i < list.size(); i++) {
             cid = cid + list.get(i).imgId + ",";
         }
-        cid = cid.substring(0,cid.lastIndexOf(","));
+        cid = cid.substring(0, cid.lastIndexOf(","));
         body.setcIds(cid);
         body.setOp(0);
         body.setType(1);
@@ -792,7 +794,7 @@ public class ModelCollection {
                         values.put("reqBody", JsonUtil.toJson(body));
                         values.put("create_time", System.currentTimeMillis());
 
-                        context.getContentResolver().insert(HaokanProvider.URI_PROVIDER_WIFI_REQUEST,  values);
+                        context.getContentResolver().insert(HaokanProvider.URI_PROVIDER_WIFI_REQUEST, values);
                         subscriber.onNext(null);
                         subscriber.onCompleted();
                         LogHelper.d("delCollectionImage", "存网络请求 成功");
@@ -858,7 +860,7 @@ public class ModelCollection {
                             File file = new File(bean.imgBigUrl);
                             if (!file.exists() || file.isDirectory()) { //这条数据不是图片或者不存在,删除
                                 tempList.add(bean);
-                                context.getContentResolver().delete(HaokanProvider.URI_PROVIDER_LOCK_COLLECT,  "imageId=?", new String[]{bean.imgId});
+                                context.getContentResolver().delete(HaokanProvider.URI_PROVIDER_LOCK_COLLECT, "imageId=?", new String[]{bean.imgId});
                             }
                         }
                         if (tempList.size() > 0) {
@@ -913,7 +915,7 @@ public class ModelCollection {
     /**
      * //1:单图，5：组图，6：单图和组图
      */
-    public static void getCollections(final Context mContext, int type, int pageIndex, int pageSize,final onDataResponseListener<List<NewImageBean>> listener) {
+    public static void getCollections(final Context mContext, int type, int pageIndex, int pageSize, final onDataResponseListener<List<NewImageBean>> listener) {
         if (listener == null) {
             return;
         }
@@ -925,14 +927,14 @@ public class ModelCollection {
 
         final RequestEntity<RequestBody_8018> requestEntity = new RequestEntity<>();
         RequestBody_8018 body = new RequestBody_8018();
-        body.dId=App.DID;
-        body.eId=Integer.valueOf(App.eid);
+        body.dId = App.DID;
+        body.eId = Integer.valueOf(App.eid);
         body.type = type;//1:单图，5：组图，6：单图和组图
         body.pageIndex = pageIndex;
         body.pageSize = pageSize;
-        body.childSize=App.sZutuThumbnailSize;
-        body.imageSize=App.sBigImgSize;
-        body.loadingSize=App.sLoadingImgSize;
+        body.childSize = App.sZutuThumbnailSize;
+        body.imageSize = App.sBigImgSize;
+        body.loadingSize = App.sLoadingImgSize;
         body.language = App.sLanguage_code;
         RequestHeader<RequestBody_8018> header = new RequestHeader(UrlsUtil_Java.TransactionType.TYPE_8018, body);
         requestEntity.setHeader(header);
