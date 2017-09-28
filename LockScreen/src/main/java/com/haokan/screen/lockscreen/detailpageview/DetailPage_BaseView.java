@@ -151,6 +151,7 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
     private TextView mTxtSetWallpager, mTxtCancle, mTxtSaveImg,mTxtDeleteImg;  //修复频繁切换语言
 
     private LinearLayout mLinkTxtLy;
+    private LinearLayout mBottomTitleLy;
 
     /**
      * 无密码，上滑时候下方虚的效果
@@ -199,6 +200,8 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
 
         mLinkTxtLy = (LinearLayout) mDantuPart.findViewById(R.id.tv_link_exly);
         mLinkTxtLy.setOnClickListener(this);
+
+        mBottomTitleLy=(LinearLayout) mDantuPart.findViewById(R.id.title_dan_ly);
 //        mTvTitleDantu.setOnClickListener(this);
 
 //        mTvLinkDantuParent = mDantuPart.findViewById(R.id.ll_link);
@@ -1786,10 +1789,6 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
         }
 
 
-        mTvTitleDantu.setText(mCurrentImgBean.getTitle());
-        mTvTitleDantu.setVisibility(VISIBLE);
-
-
 //        startShakeByViewAnim(mTvDescDantu,0.1f,1f,10f,400);
 //        startShakeByViewAnim(mTvDescDantu_all,0.1f,1f,10f,400);
 
@@ -1799,6 +1798,12 @@ public class DetailPage_BaseView extends BaseView implements View.OnClickListene
         } else {
             mTvLinkDantu.setText(mCurrentImgBean.getUrl_title());
         }
+        mTvTitleDantu.setMaxWidth(mBottomTitleLy.getMeasuredWidth()-mLinkTxtLy.getMeasuredWidth());
+        mTvTitleDantu.setText(mCurrentImgBean.getTitle());
+        mTvTitleDantu.setVisibility(VISIBLE);
+
+
+
         GradientDrawable gd = new GradientDrawable();
         gd.setColor(Color.parseColor(CommonUtil.getRandomColor()));
         gd.setCornerRadius(2);
